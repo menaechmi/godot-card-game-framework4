@@ -59,8 +59,9 @@ func reshuffle_all_in_pile(pile: Pile = cfc.NMAP.deck):
 			await get_tree().create_timer(0.1).timeout
 	# Last card in, is the top card of the pile
 	var last_card : Card = pile.get_top_card()
-	if last_card._tween and last_card._tween.is_running():
-		await last_card._tween.finished
+	var tween : Tween = last_card._tween.get_object()
+	if tween.is_running():
+		await tween.finished
 	await get_tree().create_timer(0.2).timeout
 	pile.shuffle_cards()
 
