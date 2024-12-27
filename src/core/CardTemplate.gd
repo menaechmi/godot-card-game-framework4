@@ -2029,17 +2029,16 @@ func _determine_board_position_from_mouse() -> Vector2:
 func _determine_target_position_from_mouse() -> void:
 	_target_position = _determine_board_position_from_mouse()
 
+	var dest := _target_position + card_size * play_area_scale
+
 	# The below ensures the card doesn't leave the viewport dimentions
-	if _target_position.x + card_size.x * play_area_scale \
-			> get_viewport().size.x:
-		_target_position.x = get_viewport().size.x \
-				- card_size.x \
-				* play_area_scale
-	if _target_position.y + card_size.y * play_area_scale \
-			> get_viewport().size.y:
-		_target_position.y = get_viewport().size.y \
-				- card_size.y \
-				* play_area_scale
+	var safety_pos = (get_viewport().size
+			- card_size
+			* play_area_scale)
+	if dest.x > get_viewport().size.x:
+		_target_position.x = safety_pos.x
+	if dest.y > get_viewport().size.y:
+		_target_position.y = safety_pos.y
 
 
 # Instructs the card to move aside for another card enterring focus
