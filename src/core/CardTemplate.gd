@@ -1998,15 +1998,14 @@ func _organize_attachments() -> void:
 
 			# We don't want to try and move it if it's still tweening.
 			# But if it isn't, we make sure it always follows its parent is_running()
-			if not (card._tween.is_running()) and \
-					card.state in \
-					[CardState.ON_PLAY_BOARD,CardState.FOCUSED_ON_BOARD]:
-				card.global_position = global_position + \
-						Vector2(
-						(attach_index + 1) * card_size.x
-						* CFConst.ATTACHMENT_OFFSET[attachment_offset].x,
-						(attach_index + 1) * card_size.y \
-						* CFConst.ATTACHMENT_OFFSET[attachment_offset].y)
+			var tween : Tween = card._tween.get_object()
+			if (not (tween and tween.is_running())
+				and card.state in [CardState.ON_PLAY_BOARD,CardState.FOCUSED_ON_BOARD]
+				):
+				card.global_position = (global_position +
+					Vector2(
+						(attach_index + 1) * card_size.x * CFConst.ATTACHMENT_OFFSET[attachment_offset].x,
+						(attach_index + 1) * card_size.y * CFConst.ATTACHMENT_OFFSET[attachment_offset].y))
 
 # Returns the global mouse position but ensures it does not exit the
 # viewport limits when including the card rect
