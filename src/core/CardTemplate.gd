@@ -1998,15 +1998,13 @@ func _organize_attachments() -> void:
 
 			# We don't want to try and move it if it's still tweening.
 			# But if it isn't, we make sure it always follows its parent is_running()
-			if not (card._tween.is_running()) and \
-					card.state in \
-					[CardState.ON_PLAY_BOARD,CardState.FOCUSED_ON_BOARD]:
-				card.global_position = global_position + \
-						Vector2(
-						(attach_index + 1) * card_size.x
-						* CFConst.ATTACHMENT_OFFSET[attachment_offset].x,
-						(attach_index + 1) * card_size.y \
-						* CFConst.ATTACHMENT_OFFSET[attachment_offset].y)
+			if (not card._tween.is_running()
+				and card.state in [CardState.ON_PLAY_BOARD,CardState.FOCUSED_ON_BOARD]
+				):
+				card.global_position = (global_position +
+					Vector2(
+						(attach_index + 1) * card_size.x * CFConst.ATTACHMENT_OFFSET[attachment_offset].x,
+						(attach_index + 1) * card_size.y * CFConst.ATTACHMENT_OFFSET[attachment_offset].y))
 
 # Returns the global mouse position but ensures it does not exit the
 # viewport limits when including the card rect
@@ -2031,17 +2029,16 @@ func _determine_board_position_from_mouse() -> Vector2:
 func _determine_target_position_from_mouse() -> void:
 	_target_position = _determine_board_position_from_mouse()
 
+	var dest := _target_position + card_size * play_area_scale
+
 	# The below ensures the card doesn't leave the viewport dimentions
-	if _target_position.x + card_size.x * play_area_scale \
-			> get_viewport().size.x:
-		_target_position.x = get_viewport().size.x \
-				- card_size.x \
-				* play_area_scale
-	if _target_position.y + card_size.y * play_area_scale \
-			> get_viewport().size.y:
-		_target_position.y = get_viewport().size.y \
-				- card_size.y \
-				* play_area_scale
+	var safety_pos = (get_viewport().size
+			- card_size
+			* play_area_scale)
+	if dest.x > get_viewport().size.x:
+		_target_position.x = safety_pos.x
+	if dest.y > get_viewport().size.y:
+		_target_position.y = safety_pos.y
 
 
 # Instructs the card to move aside for another card enterring focus
@@ -2728,8 +2725,8 @@ func _process_card_state() -> void:
 			set_control_mouse_filters(false)
 			buttons.set_active(false)
 			#is_running()
-			if not (tween and tween.is_running())\
-					and not scale.is_equal_approx(Vector2(1,1)):
+			if (not (tween and tween.is_running())
+					and not scale.is_equal_approx(Vector2(1,1))):
 				tween = create_tween()
 				tween.stop()
 				_tween = weakref(tween)
@@ -2758,9 +2755,9 @@ func _get_angle_by_index(index_diff = null) -> float:
 	# When foucs hand, the card needs to be offset by a certain angle
 	# The current practice is just to find a suitable expression function, if there is a better function, please replace this function: - sign(index_diff) * (1.95-0.3*index_diff*index_diff) * min(card_angle,5)
 	if index_diff != null:
-		return 90 + (half - index) * card_angle \
-				- sign(index_diff) * (1.95 - 0.3 * index_diff * index_diff) \
-				* min(card_angle, 5)
+		return (90 + (half - index) * card_angle
+				- sign(index_diff) * (1.95 - 0.3 * index_diff * index_diff)
+				* min(card_angle, 5))
 	else:
 		return 90 + (half - index) * card_angle
 
