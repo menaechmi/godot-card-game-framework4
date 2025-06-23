@@ -49,9 +49,9 @@ var font_thread: Thread
 # Set a label node's text.
 # As the string becomes longer, the font size becomes smaller
 func set_label_text(node: Label, value, scale: float = 1):
-#	while font_thread and font_thread.is_active():
-#		yield(get_tree(), "idle_frame")
-#	font_thread = Thread.new()
+	while font_thread and font_thread.is_alive():
+		await get_tree().process_frame
+	font_thread = Thread.new()
 ## warning-ignore:return_value_discarded
 #	font_thread.start(self, "_set_label_text", [node,value], Thread.PRIORITY_LOW)
 	if node in resizing_labels:
@@ -194,7 +194,7 @@ func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false,
 		while bbcode_height == 0 or bbcode_height > 1000:
 			_retries += 1
 #			print_debug("{0} BBcode height:{1} retrying: {2}".format([card_owner.canonical_name, bbcode_height, _retries]))
-			await get_tree().idle_frame
+			await get_tree().process_frame
 			bbcode_height = node.get_content_height()
 #			print_debug(["Retry", _retries, "Code Height", bbcode_height])
 			if _retries >= 10:
@@ -232,7 +232,7 @@ func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false,
 			while bbcode_height == 0 or bbcode_height > 1000:
 				_retries += 1
 #				print_debug("BBcode height:" + str(bbcode_height) + " retrying: " + str(_retries))
-				await get_tree().idle_frame
+				await get_tree().process_frame
 				bbcode_height = node.get_content_height()
 				if _retries >= 10:
 					break
@@ -245,6 +245,7 @@ func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false,
 	#			_set_card_rtl_fonts(node, label_fonts, starting_font_size + font_adjustment)
 	#			_assign_bbcode_text(node, value, starting_font_size + font_adjustment)
 	#			yield(get_tree(), "idle_frame")
+	#			await get_tree().process_frame
 	#			bbcode_height = node.get_content_height()
 			if starting_font_size + font_adjustment == 6:
 				if small_size_retries <= 2:
@@ -288,9 +289,12 @@ func _capture_original_font_size(label) -> void:
 		font_sizes[label.name] = original_font_sizes[label.name]
 
 
-func _assign_bbcode_text(rtlabel: RichTextLabel, text : String, font_size: int) -> void:
+func _assign_bbcode_text(rtlabel: RichTextLabel, bbcode_text : String, font_size: int) -> void:
 	var format = _get_bbcode_format()
+	#TODO: Godot 4.3 has fixed a bug where append_text doesn't append the text
+	#Currently any call to rtlabel.text = "", and you need to call get_parsed_text()
 	rtlabel.clear()
+	rtlabel.text = ""
 	var bbcode_format := {}
 	var icon_size = font_size - 2
 	bbcode_format["icon_size"] = '{icon_size}x{icon_size}'.format({"icon_size":icon_size})
@@ -298,13 +302,16 @@ func _assign_bbcode_text(rtlabel: RichTextLabel, text : String, font_size: int) 
 		format[key] = format[key].format(bbcode_format)
 	if rtlabel == card_labels["Name"]:
 		_add_title_bbcode(rtlabel)
+	#TODO: Godot 4.3 has fixed a bug where append_text doesn't actually add the text
 	rtlabel.bbcode_enabled = true
+	rtlabel.append_text("[center]")
+	rtlabel.append_text(bbcode_text.format(format))
+	rtlabel.pop()
 	#rtlabel.push_align(RichTextLabel.ALIGNMENT_CENTER)
 	# warning-ignore:return_value_discarded
-	rtlabel.append_text(text.format(format))
-	rtlabel.append_text("[center]%s[/center]" % [rtlabel])
-	#	print_debug(bbcode_text.format(format))
-	#rtlabel.pop()
+	#rtlabel.append_text(bbcode_text.format(format))
+	#rtlabel.append_text("[/center]")
+	#print_debug(bbcode_text.format(format))
 	if rtlabel == card_labels["Name"]:
 		_pop_title_bbcode(rtlabel)
 

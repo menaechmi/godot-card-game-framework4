@@ -12,8 +12,7 @@ func after_all():
 func before_each():
 	await setup_board()
 	card = cfc.NMAP.deck.get_top_card()
-	
-	
+
 func test_methods():
 	assert_true(card is Card, 'class name returns correct value')
 
@@ -59,41 +58,48 @@ func test_move_to():
 
 func test_init_card_name():
 	# We need a yield to allow the richtextlabel setup complete
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 1)
 	# We know which are the last 3 card types of the test cards
 	var test3 = cfc.NMAP.deck.get_card(15)
 	var test2 = cfc.NMAP.deck.get_card(14)
 	var test1 = cfc.NMAP.deck.get_card(13)
 	assert_eq("Test Card 1",test1.canonical_name,
 			'card_name variable is set correctly')
-	assert_string_contains(test1.name, "Test Card 1")
+	#NOTE: A call to x.name used to return the properties.name, but now it returns the node name
+	#Not sure why, because setting x.name works fine - it's probably a "no longer shadow" thing
+	#str() conversion used because GUT doesn't consider StringName a String
+	assert_string_contains(str(test1.properties.Name), "Test Card 1")
 	assert_eq("Test Card 1",test1.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 	assert_eq("Test Card 2",test2.canonical_name,
 			'card_name variable is set correctly')
-	assert_string_contains(test2.name, "Test Card 2")
+	#str() conversion used because GUT doesn't consider StringName a String
+	assert_string_contains(str(test2.properties.Name), "Test Card 2")
 	assert_eq("Test Card 2",test2.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 	assert_eq("Test Card 3",test3.canonical_name,
 			'card_name variable is set correctly')
-	assert_string_contains(test3.name, "Test Card 3")
+	#str() conversion used because GUT doesn't consider StringName a String
+	assert_string_contains(str(test3.properties.Name), "Test Card 3")
 	assert_eq("Test Card 3",test3.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 
 func test_card_name_setget():
 	await yield_to(get_tree(), "process_frame", 0.1)
-	card.set_name("Testing Name Change 1")
+	card.set_card_name("Testing Name Change 1")
 	# We need a yield to allow the richtextlabel setup complete
 	assert_eq("Testing Name Change 1",card.canonical_name,
 			'card_name variable is set correctly')
-	assert_string_contains(card.name, "Testing Name Change 1")
+	#str() conversion used because GUT doesn't consider StringName a String
+	assert_string_contains(str(card.name), "Testing Name Change 1")
 	assert_eq("Testing Name Change 1",card.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 	card.canonical_name = "Testing Name Change 2"
 	await yield_to(get_tree(), "process_frame", 0.1)
 	assert_eq("Testing Name Change 2",card.canonical_name,
 			'card_name variable is set correctly')
-	assert_string_contains(card.name, "Testing Name Change 2")
+	#str() conversion used because GUT doesn't consider StringName a String
+	assert_string_contains(str(card.name), "Testing Name Change 2")
 	assert_eq("Testing Name Change 2",card.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 
@@ -112,7 +118,7 @@ func test_CardDefinition_properties():
 	board.add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 1)
 	assert_eq(new_card.card_front.card_labels["Tags"].text,"Tag 1 - Tag 2 - GUT Tag",
 			"Array property uses the separator")
 	assert_eq(new_card.card_front.card_labels["Cost"].text, "10",
@@ -194,7 +200,7 @@ func test_refresh_card_front():
 	board.add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.1)
 	new_card.properties = {
 		"Type": "Red",
 		"Tags": ["Tag 3","Tag 4"],
@@ -204,12 +210,12 @@ func test_refresh_card_front():
 		"Power": "+3",
 	}
 	new_card.refresh_card_front()
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.1)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"U",
 			"Number Property refreshed as string")
 	assert_eq(new_card.card_front.card_labels["Power"].text, '3',
 			"String refreshed to int")
 	assert_eq(new_card.card_front.card_labels["Tags"].text, "Tag 3 - Tag 4",
 			"Tags refreshed")
-	assert_eq(new_card.card_front.card_labels["Abilities"].text, "Property Refreshed",
+	assert_eq(new_card.card_front.card_labels["Abilities"].get_parsed_text(), "Property Refreshed",
 			"Abilities refreshed")
