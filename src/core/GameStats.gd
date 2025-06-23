@@ -71,7 +71,7 @@ func call_api(userdata):
 		else:
 			# Synchronous HTTP requests are not supported on the web,
 			# so wait for the next main loop iteration.
-			await Engine.get_main_loop().idle_frame
+			await Engine.get_main_loop().process_frame
 
 	# Could not connect
 	assert(http.get_status() == HTTPClient.STATUS_CONNECTED)
@@ -116,7 +116,7 @@ func call_api(userdata):
 		else:
 			# Synchronous HTTP requests are not supported on the web,
 			# so wait for the next main loop iteration.
-			await Engine.get_main_loop().idle_frame
+			await Engine.get_main_loop().process_frame
 	# Make sure request finished well.
 	assert(http.get_status() == HTTPClient.STATUS_BODY\
 			or http.get_status() == HTTPClient.STATUS_CONNECTED)
@@ -140,7 +140,7 @@ func call_api(userdata):
 					else:
 						# Synchronous HTTP requests are not supported on the web,
 						# so wait for the next main loop iteration.
-						await Engine.get_main_loop().idle_frame
+						await Engine.get_main_loop().process_frame
 				else:
 					# Append to read buffer.
 					rb = rb + chunk

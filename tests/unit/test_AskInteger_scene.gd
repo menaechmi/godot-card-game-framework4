@@ -101,6 +101,5 @@ func test_submit():
 	await yield_for(0.1)
 	#This used to be "popup_hide", but AcceptDialog no longer has that signal
 	#I'm not sure what the test actually wants so it's failing currently
-	assert_signal_emitted(ask_integer,"canceled")
+	assert_signal_emitted(ask_integer,"confirmed")
 	assert_eq(2,ask_integer.number)
-
