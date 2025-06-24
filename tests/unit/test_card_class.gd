@@ -8,6 +8,7 @@ func before_all():
 
 func after_all():
 	cfc.game_settings.fancy_movement = true
+	await teardown_board()
 
 func before_each():
 	await setup_board()

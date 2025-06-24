@@ -5,6 +5,9 @@ var cards := []
 func before_each():
 	await setup_board()
 
+func after_each():
+	await teardown_board()
+
 func test_methods():
 	var container : Pile = cfc.NMAP.deck
 	assert_true(container is CardContainer,
