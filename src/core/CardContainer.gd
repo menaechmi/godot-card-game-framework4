@@ -52,7 +52,7 @@ var accumulated_shift := Vector2(0,0)
 @onready var manipulation_buttons := $Control/ManipulationButtons
 # ManipulationButtons tween
 #@onready var manipulation_buttons_tween: Tween = $Control/ManipulationButtons._tween
-var _tween: Tween
+var _tween := WeakRef.new()
 # Control node
 @onready var control := $Control
 # Shuffle button
@@ -130,8 +130,9 @@ func _on_Control_mouse_entered() -> void:
 # Ensures that buttons are not trying to disappear via previous animation
 func _on_button_mouse_entered() -> void:
 	# We stop ongoing animations to avoid conflicts.
-	if _tween:
-		_tween.kill()
+	var tween = _tween.get_ref()
+	if tween:
+		tween.kill()
 	for button in get_all_manipulation_buttons():
 		button.modulate[3] = 1
 
@@ -159,23 +160,27 @@ func are_cards_still_animating() -> bool:
 # Hides manipulation buttons
 func hide_buttons() -> void:
 	# We stop existing tweens to avoid deadlocks
-	if _tween:
-		_tween.kill()
-	_tween = create_tween()
+	var tween = _tween.get_ref() as Tween
+	if tween:
+		tween.kill()
+	tween = create_tween()
 	for button in get_all_manipulation_buttons():
-		_tween.tween_property(button, 'modulate:a', 0, 0.25)\
+		tween.tween_property(button, 'modulate:a', 0, 0.25)\
 				.from(button.modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	_tween.play()
+	tween.play()
+	_tween = weakref(tween)
 
 # Shows manipulation buttons
 func show_buttons() -> void:
-	if _tween:
-		_tween.kill()
-	_tween = create_tween()
+	var tween = _tween.get_ref() as Tween
+	if tween:
+		tween.kill()
+	tween = create_tween()
 	for button in get_all_manipulation_buttons():
-		_tween.tween_property(button, 'modulate:a', 1, 0.25)\
+		tween.tween_property(button, 'modulate:a', 1, 0.25)\
 				.from(button.modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	_tween.play()
+	tween.play()
+	_tween = weakref(tween)
 
 
 # Getter for all_manipulation_buttons

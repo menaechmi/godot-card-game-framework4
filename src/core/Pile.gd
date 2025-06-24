@@ -36,7 +36,8 @@ var _has_cards := false
 		/PanelContainer/CenterContainer/CardCount
 
 # The popup node
-@onready var _opacity_tween: Tween
+@onready var _opacity_tween := WeakRef.new()
+
 
 var pre_sorted_order: Array
 
@@ -93,22 +94,26 @@ func _on_ViewSorted_Button_pressed() -> void:
 
 # Ensures the popup window interpolates to visibility when opened
 func _on_ViewPopup_about_to_show() -> void:
-	if _tween and _tween.is_running():
-		await _tween.finished
-	_tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	var tween = _tween.get_ref() as Tween
+	if tween and tween.is_running():
+		await tween.finished
+	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	#it refuses to let me set a from .from(Color(1,1,1,0))\
-	_tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,1), 0.5)
-	_tween.play()
+	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,1), 0.5)
+	tween.play()
+	_tween = weakref(tween)
 
 # Puts all [Card] objects to the root node once the popup view window closes
 func _on_ViewPopup_popup_hide() -> void:
-	if _tween and _tween.is_running():
-		await _tween.finished
-	_tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	var tween = _tween.get_ref() as Tween
+	if tween and tween.is_running():
+		await tween.finished
+	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#.from(Color(1,1,1,1))
-	_tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,0), 0.5)
-	_tween.play()
-	await _tween.finished
+	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,0), 0.5)
+	tween.play()
+	_tween = weakref(tween)
+	await tween.finished
 	for card in pre_sorted_order:
 		# For each card we have hosted, we check if it's hosted in the popup.
 		# If it is, we move it to the root.
@@ -190,12 +195,15 @@ func add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 			# If this was the first card which enterred this pile
 			# We hide the pile "floor" by making it transparent
 			if get_card_count() >= 1:
-				#if _opacity_tween:
-					#_opacity_tween.kill()
-				#_opacity_tween = create_tween()
-				#_opacity_tween.tween_property($Control, 'self_modulate:a', 0.4, 0.5)\
-					#.from(Control.self_modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-				#_opacity_tween.play()
+				var opacity_tween = _opacity_tween.get_ref() as Tween
+				if opacity_tween:
+					opacity_tween.kill()
+				opacity_tween = create_tween()
+				opacity_tween.stop()
+				_opacity_tween = weakref(opacity_tween)
+				opacity_tween.tween_property($Control, 'self_modulate:a', 0.4, 0.5)\
+					.from($Control.self_modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+				opacity_tween.play()
 				card_count_label.text = str(get_card_count())
 	elif node as Card: # This triggers if the ViewPopup node is active
 		# When the player adds card while the viewpopup is active
@@ -214,12 +222,15 @@ func remove_child(node, _legible_unique_name=false) -> void:
 	if get_card_count() == 0:
 		_has_cards = false
 		reorganize_stack()
-		if _opacity_tween:
-			await _opacity_tween.finished
-		_opacity_tween = create_tween()
-		_opacity_tween.tween_property($Control,'self_modulate:a',0.4, 0.5)\
+		var opacity_tween = _opacity_tween.get_ref() as Tween
+		if opacity_tween:
+			await opacity_tween.finished
+		opacity_tween = create_tween()
+		opacity_tween.stop()
+		_opacity_tween = weakref(opacity_tween)
+		opacity_tween.tween_property($Control,'self_modulate:a',0.4, 0.5)\
 			.from($Control.self_modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		_opacity_tween.play()
+		opacity_tween.play()
 	else:
 		$Control.self_modulate.a = 0.0
 
@@ -385,13 +396,15 @@ func shuffle_cards(animate = true) -> void:
 		else:
 			style = shuffle_style
 		if style == CFConst.ShuffleStyle.CORGI:
-			if _tween and _tween.is_running():
-				await _tween.finished
-			_tween = create_tween()
-			_tween.stop()
+			var tween = _tween.get_ref() as Tween
+			if tween and tween.is_running():
+				await tween.finished
+			tween = create_tween()
+			tween.stop()
+			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
-			_tween.play()
+			tween.play()
 			# We move the pile to a more central location to see the anim
 			await _tween.finished
 			# The animation speeds have been empirically tested to look good
@@ -414,13 +427,15 @@ func shuffle_cards(animate = true) -> void:
 			# their original position.
 			await get_tree().create_timer(anim_speed * 2.5).timeout
 		elif style == CFConst.ShuffleStyle.SPLASH:
-			if _tween and _tween.is_running():
-				await _tween.finished
-			_tween = create_tween()
-			_tween.stop()
+			var tween = _tween.get_ref() as Tween
+			if tween and tween.is_running():
+				await tween.finished
+			tween = create_tween()
+			tween.stop()
+			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
-			_tween.play()
+			tween.play()
 			await _tween.finished
 			# The animation speeds have been empirically tested to look good
 			anim_speed = 0.6
@@ -435,13 +450,15 @@ func shuffle_cards(animate = true) -> void:
 			# To the starting location, and let reorganize_stack() do its magic
 			await get_tree().create_timer(anim_speed + 0.6).timeout
 		elif style == CFConst.ShuffleStyle.SNAP:
-			if _tween and _tween.is_running():
-				await _tween.finished
-			_tween = create_tween()
-			_tween.stop()
+			var tween = _tween.get_ref() as Tween
+			if tween and tween.is_running():
+				await tween.finished
+			tween = create_tween()
+			tween.stop()
+			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
-			_tween.play()
+			tween.play()
 			await _tween.finished
 			anim_speed = 0.2
 			var card = get_random_card()
@@ -467,13 +484,15 @@ func shuffle_cards(animate = true) -> void:
 				super.shuffle_cards()
 				reorganize_stack()
 		if position != init_position:
-			if _tween and _tween.is_running():
-				await _tween.finished
-			_tween = create_tween()
-			_tween.stop()
+			var tween = _tween.get_ref() as Tween
+			if tween and tween.is_running():
+				await tween.finished
+			tween = create_tween()
+			tween.stop()
+			_tween = weakref(tween)
 			_add_tween_position(position,init_position,0.2)
 			_add_tween_rotation(rotation_degrees,0,0.2)
-			_tween.play()
+			tween.play()
 		z_index = 0
 	else:
 		# if we're already running another animation, just shuffle
@@ -496,7 +515,8 @@ func _add_tween_rotation(
 		runtime := 0.3,
 		trans_type = Tween.TRANS_BACK,
 		ease_type = Tween.EASE_IN_OUT):
-	_tween.tween_property(self,'rotation_degrees', target_rotation, runtime).from(expected_rotation)\
+	var tween = _tween.get_ref() as Tween
+	tween.tween_property(self,'rotation_degrees', target_rotation, runtime).from(expected_rotation)\
 		.set_trans(trans_type).set_ease(ease_type)
 
 
@@ -508,5 +528,6 @@ func _add_tween_position(
 		runtime := 0.3,
 		trans_type = Tween.TRANS_CUBIC,
 		ease_type = Tween.EASE_OUT):
-	_tween.tween_property(self,'position',target_position, runtime).from(expected_position)\
+	var tween = _tween.get_ref() as Tween
+	tween.tween_property(self,'position',target_position, runtime).from(expected_position)\
 		.set_trans(trans_type).set_ease(ease_type)
