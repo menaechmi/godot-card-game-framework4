@@ -1327,8 +1327,8 @@ func move_to(targetHost: Node,
 				# One for the fancy move, and then the move to the final position.
 				# If we don't then the card will appear to teleport
 				# to the pile before starting animation
-				if tween:
-					await tween.finished
+				#if tween:
+					#await tween.finished
 				#if cfc.game_settings.fancy_movement:
 					#await tween.finished
 				targetHost.reorganize_stack()
@@ -1871,7 +1871,7 @@ func animate_shuffle(anim_speed : float, style : int) -> void:
 	if rot_anim:
 		_add_tween_rotation(0,random_rot,rot_speed,rot_anim,Tween.EASE_OUT)
 	tween.play()
-	await tween.finished
+	#await tween.finished
 	tween = create_tween()
 	tween.stop()
 	_tween = weakref(tween)
@@ -2253,7 +2253,6 @@ func _add_tween_scale(
 # Makes sure that when a card is in a specific state while
 # its position, highlights, scaling and so on, stay as expected
 func _process_card_state() -> void:
-	var tween := _tween.get_ref() as Tween
 	match state:
 		CardState.IN_HAND:
 			if state_finalized:
@@ -2269,6 +2268,7 @@ func _process_card_state() -> void:
 			# in the rotation expected of their position
 			if cfc.game_settings.hand_use_oval_shape:
 				_target_rotation  = _recalculate_rotation()
+				var tween := _tween.get_ref() as Tween
 				if not tween \
 						and not CFUtils.compare_floats($Control.rotation, _target_rotation):
 					tween = create_tween()
@@ -2277,6 +2277,7 @@ func _process_card_state() -> void:
 					_add_tween_rotation($Control.rotation,_target_rotation,
 						in_hand_tween_duration)
 					tween.play()
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()):
 				state_finalized = true
 
@@ -2293,6 +2294,7 @@ func _process_card_state() -> void:
 			#is_running()
 			#NOTE: Used to be false, false to prevent tween running
 			set_card_rotation(0,false)
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()) and \
 					not _focus_completed and \
 					cfc.game_settings.focus_style != CFInt.FocusStyle.VIEWPORT:
@@ -2371,6 +2373,7 @@ func _process_card_state() -> void:
 			buttons.set_active(false)
 			# warning-ignore:return_value_discarded
 			# set_card_rotation(0,false,false)
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()): #is_running()
 				var intermediate_position: Vector2
 				tween = create_tween()
@@ -2427,7 +2430,7 @@ func _process_card_state() -> void:
 					_add_tween_global_position(global_position, intermediate_position,
 						to_container_tween_duration)
 					tween.play()
-					await tween.finished
+					#await tween.finished
 					_tween_stuck_time = 0
 					_fancy_move_second_part = true
 				# We need to check again, just in case it's been reorganized instead.
@@ -2437,7 +2440,7 @@ func _process_card_state() -> void:
 					_add_tween_rotation($Control.rotation,_target_rotation,
 						to_container_tween_duration)
 					tween.play()
-					await tween.finished
+					#await tween.finished
 					_determine_idle_state()
 				#Not all codepaths lead to a _tween.play(). Invalidate it if it's not used
 				if tween:
@@ -2453,7 +2456,8 @@ func _process_card_state() -> void:
 			# warning-ignore:return_value_discarded
 			#NOTE: used to be 0, false, false to prevent tween from running
 			set_card_rotation(0,false, false)
-			if not (tween and tween.is_running()): #is_running()
+			var tween := _tween.get_ref() as Tween
+			if not (tween and tween.is_running()):
 				tween = create_tween()
 				tween.stop()
 				_tween = weakref(tween)
@@ -2472,7 +2476,7 @@ func _process_card_state() -> void:
 			set_control_mouse_filters(true)
 			buttons.set_active(false)
 			# warning-ignore:return_value_discarded
-			#is_running
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()) and \
 					not position.is_equal_approx(_target_position):
 				tween = create_tween()
@@ -2494,6 +2498,7 @@ func _process_card_state() -> void:
 			set_focus(true)
 			set_control_mouse_filters(true)
 			buttons.set_active(false)
+			var tween := _tween.get_ref() as Tween
 			if (not (tween and tween.is_running()) and #is_running()
 				not scale.is_equal_approx(CFConst.CARD_SCALE_WHILE_DRAGGING) and
 				get_parent() != cfc.NMAP.board):
@@ -2529,7 +2534,7 @@ func _process_card_state() -> void:
 			set_focus(false)
 			set_control_mouse_filters(true)
 			buttons.set_active(false)
-			#is_running()
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()) and \
 					not scale.is_equal_approx(Vector2(1,1) * play_area_scale):
 				tween = create_tween()
@@ -2539,7 +2544,7 @@ func _process_card_state() -> void:
 					on_board_tween_duration, Tween.TRANS_SINE, Tween.EASE_OUT)
 				tween.play()
 			_organize_attachments()
-			if not (tween and tween.is_running()): #is_running()
+			if not (tween and tween.is_running()):
 				state_finalized = true
 
 		CardState.DROPPING_TO_BOARD:
@@ -2549,7 +2554,8 @@ func _process_card_state() -> void:
 			# Used when dropping the cards to the table
 			# When dragging the card, the card is slightly behind the mouse cursor
 			# so we tween it to the right location
-			if not (tween and tween.is_running()): #is_running()
+			var tween := _tween.get_ref() as Tween
+			if not (tween and tween.is_running()):
 				#$Tween.remove(self,'position') # We make sure to remove other tweens of the same type to avoid a deadlock
 				_target_position = _determine_board_position_from_mouse()
 				# The below ensures the card doesn't leave the viewport dimentions
@@ -2601,6 +2607,7 @@ func _process_card_state() -> void:
 					return
 				set_is_faceup(get_parent().faceup_cards, true)
 				ensure_proper()
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()): #is_running()
 				state_finalized = true
 
@@ -2618,6 +2625,7 @@ func _process_card_state() -> void:
 				scale = Vector2(1,1)
 			if get_parent() in get_tree().get_nodes_in_group("piles"):
 				set_is_faceup(get_parent().faceup_cards, true)
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()): #is_running()
 				state_finalized = true
 
@@ -2638,6 +2646,7 @@ func _process_card_state() -> void:
 				scale = Vector2(0.75,0.75)
 			if position != Vector2(0,0):
 				position = Vector2(0,0)
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running()): #is_running()
 				state_finalized = true
 
@@ -2676,8 +2685,10 @@ func _process_card_state() -> void:
 			if not is_faceup:
 				if is_viewed:
 					_flip_card(_card_back_container,_card_front_container, true)
+			var tween := _tween.get_ref() as Tween
 			if (tween and tween.is_valid()):
 				await tween.finished
+				print_debug("Tween actually finished")
 			state_finalized = true
 
 		CardState.PREVIEW:
@@ -2718,7 +2729,7 @@ func _process_card_state() -> void:
 #				set_card_size(CFConst.CARD_SIZE * thumbnail_scale)
 				resize_recursively(_control, thumbnail_scale * cfc.curr_scale)
 				card_front.scale_to(thumbnail_scale * cfc.curr_scale)
-			await tween.finished
+			#await tween.finished
 			state_finalized = true
 
 		CardState.MOVING_TO_SPAWN_DESTINATION:
@@ -2726,7 +2737,7 @@ func _process_card_state() -> void:
 			set_focus(false)
 			set_control_mouse_filters(false)
 			buttons.set_active(false)
-			#is_running()
+			var tween := _tween.get_ref() as Tween
 			if not (tween and tween.is_running())\
 					and not scale.is_equal_approx(Vector2(1,1)):
 				tween = create_tween()
@@ -2735,7 +2746,8 @@ func _process_card_state() -> void:
 				_add_tween_scale(scale, Vector2(1,1),0.75)
 				_add_tween_global_position(global_position, get_viewport().size/2 - CFConst.CARD_SIZE/2)
 				tween.play()
-				await tween.finished
+				#Tween awaits are ingnored
+				#await tween.finished
 				_tween_stuck_time = 0
 				move_to(spawn_destination)
 				spawn_destination = null
