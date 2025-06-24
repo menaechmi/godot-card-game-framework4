@@ -24,7 +24,7 @@ func _process(_delta: float) -> void:
 		_set_placement()
 
 func _set_placement() -> void:
-	if _tween.is_running():
+	if _tween and _tween.is_running():
 		return
 	_tween = create_tween()
 	var new_position : Vector2 = get_preview_placement()

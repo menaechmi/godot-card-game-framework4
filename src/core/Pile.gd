@@ -37,7 +37,6 @@ var _has_cards := false
 
 # The popup node
 @onready var _opacity_tween: Tween
-#@onready var _tween: Tween
 
 var pre_sorted_order: Array
 
@@ -65,7 +64,7 @@ func _process(_delta) -> void:
 	pass
 	# This performs a bit of garbage collection to make sure no Control temp objects
 	# are leftover empty in the popup
-	for obj in $ViewPopup/CardView.get_children():
+	for obj in _popup_grid.get_children():
 		if not obj.get_child_count():
 			obj.queue_free()
 	# We make sure to adjust our popup if cards were removed from it while it's open
@@ -94,7 +93,7 @@ func _on_ViewSorted_Button_pressed() -> void:
 
 # Ensures the popup window interpolates to visibility when opened
 func _on_ViewPopup_about_to_show() -> void:
-	if _tween:
+	if _tween and _tween.is_running():
 		await _tween.finished
 	_tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	#it refuses to let me set a from .from(Color(1,1,1,0))\
@@ -103,7 +102,7 @@ func _on_ViewPopup_about_to_show() -> void:
 
 # Puts all [Card] objects to the root node once the popup view window closes
 func _on_ViewPopup_popup_hide() -> void:
-	if _tween:
+	if _tween and _tween.is_running():
 		await _tween.finished
 	_tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	#.from(Color(1,1,1,1))
@@ -321,7 +320,7 @@ func _slot_card_into_popup(card: Card) -> void:
 	# We set the control container size to be equal
 	# to the card size to which the card will scale.
 	card_slot.custom_minimum_size = card.get_node("Control").custom_minimum_size * card.scale
-	$ViewPopup/CardView.add_child(card_slot)
+	_popup_grid.add_child(card_slot)
 	# Finally, the card is added to the temporary control node parent.
 	card_slot.add_child(card)
 	# warning-ignore:return_value_discarded
@@ -386,7 +385,7 @@ func shuffle_cards(animate = true) -> void:
 		else:
 			style = shuffle_style
 		if style == CFConst.ShuffleStyle.CORGI:
-			if _tween:
+			if _tween and _tween.is_running():
 				await _tween.finished
 			_tween = create_tween()
 			_tween.stop()
@@ -415,7 +414,7 @@ func shuffle_cards(animate = true) -> void:
 			# their original position.
 			await get_tree().create_timer(anim_speed * 2.5).timeout
 		elif style == CFConst.ShuffleStyle.SPLASH:
-			if _tween:
+			if _tween and _tween.is_running():
 				await _tween.finished
 			_tween = create_tween()
 			_tween.stop()
@@ -436,7 +435,7 @@ func shuffle_cards(animate = true) -> void:
 			# To the starting location, and let reorganize_stack() do its magic
 			await get_tree().create_timer(anim_speed + 0.6).timeout
 		elif style == CFConst.ShuffleStyle.SNAP:
-			if _tween:
+			if _tween and _tween.is_running():
 				await _tween.finished
 			_tween = create_tween()
 			_tween.stop()
@@ -468,7 +467,7 @@ func shuffle_cards(animate = true) -> void:
 				super.shuffle_cards()
 				reorganize_stack()
 		if position != init_position:
-			if _tween:
+			if _tween and _tween.is_running():
 				await _tween.finished
 			_tween = create_tween()
 			_tween.stop()
