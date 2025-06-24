@@ -96,7 +96,8 @@ func _on_ViewSorted_Button_pressed() -> void:
 func _on_ViewPopup_about_to_show() -> void:
 	var tween = _tween.get_ref() as Tween
 	if tween and tween.is_running():
-		await tween.finished
+		tween.custom_step(5)
+		#await tween.finished
 	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	#it refuses to let me set a from .from(Color(1,1,1,0))\
 	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,1), 0.5)
@@ -107,17 +108,20 @@ func _on_ViewPopup_about_to_show() -> void:
 func _on_ViewPopup_popup_hide() -> void:
 	var tween = _tween.get_ref() as Tween
 	if tween and tween.is_running():
-		await tween.finished
-	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	#.from(Color(1,1,1,1))
+		tween.custom_step(5)
+		#await tween.finished
+	tween = create_tween()
+	tween.stop()
+	_tween = weakref(tween)
+	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,0), 0.5)
 	tween.play()
-	_tween = weakref(tween)
-	await tween.finished
+	#Teen awaits never get called
+	#await tween.finished
 	for card in pre_sorted_order:
 		# For each card we have hosted, we check if it's hosted in the popup.
 		# If it is, we move it to the root.
-#		print_debug(card.canonical_name, card.get_parent().name)
+		#print_debug(card.canonical_name, card.get_parent().name)
 		if "CardPopUpSlot" in card.get_parent().name:
 			card.get_parent().remove_child(card)
 			add_child(card)
@@ -327,7 +331,7 @@ func _slot_card_into_popup(card: Card) -> void:
 	# Therefore we instantatiate a new Control container
 	# in which to put the card objects.
 	var card_slot := Control.new()
-	card_slot.set_name("CardPopUpSlot")
+	card_slot.set_name("CardPopUpSlot " + str(card))
 	# We set the control container size to be equal
 	# to the card size to which the card will scale.
 	card_slot.custom_minimum_size = card.get_node("Control").custom_minimum_size * card.scale
@@ -398,7 +402,8 @@ func shuffle_cards(animate = true) -> void:
 		if style == CFConst.ShuffleStyle.CORGI:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				await tween.finished
+				tween.custom_step(5)
+				#await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
@@ -406,7 +411,7 @@ func shuffle_cards(animate = true) -> void:
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
 			tween.play()
 			# We move the pile to a more central location to see the anim
-			await _tween.finished
+			#await _tween.finished
 			# The animation speeds have been empirically tested to look good
 			next_card_speed = 0.05 - 0.002 * card_count
 			if next_card_speed < 0.01:
@@ -429,14 +434,15 @@ func shuffle_cards(animate = true) -> void:
 		elif style == CFConst.ShuffleStyle.SPLASH:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				await tween.finished
+				tween.custom_step(5)
+				#await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
 			tween.play()
-			await _tween.finished
+			#await _tween.finished
 			# The animation speeds have been empirically tested to look good
 			anim_speed = 0.6
 			for card in get_all_cards():
@@ -452,14 +458,15 @@ func shuffle_cards(animate = true) -> void:
 		elif style == CFConst.ShuffleStyle.SNAP:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				await tween.finished
+				tween.custom_step(5)
+				#await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
 			tween.play()
-			await _tween.finished
+			#await _tween.finished
 			anim_speed = 0.2
 			var card = get_random_card()
 			card.animate_shuffle(anim_speed, CFConst.ShuffleStyle.SNAP)
@@ -486,7 +493,8 @@ func shuffle_cards(animate = true) -> void:
 		if position != init_position:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				await tween.finished
+				tween.custom_step(5)
+				#await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
