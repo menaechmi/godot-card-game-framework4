@@ -22,7 +22,7 @@ func _ready() -> void:
 		$SeedLabel.text = "Game Seed is: " + cfc.game_rng_seed
 	if not cfc.are_all_nodes_mapped:
 		await cfc.all_nodes_mapped
-	if not get_tree().get_root().has_node('Gut'):
+	if not get_tree().get_root().has_node('GutRunner'):
 		load_test_cards(false)
 	# warning-ignore:return_value_discarded
 	$DeckBuilderPopup.connect('popup_hide', Callable(self, '_on_DeckBuilder_hide'))
