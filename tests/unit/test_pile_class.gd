@@ -68,9 +68,9 @@ func test_popup_view():
 	print("Cards should be ordered in view popup")
 	assert_eq_deep(popup_card_names, ordered_card_names)
 	pile.pile_popup.hide()
-	await wait_seconds(10)
-	assert_eq_deep(pile.get_all_cards(), card_order)#,\
-			#"Pile order resumed after being viewed ordered")
+	await wait_seconds(1)
+	print("Pile order should be resumed after being viewed order")
+	assert_eq_deep(pile.get_all_cards(), card_order)
 
 func retrieve_popup_order(pile: Pile) -> Array:
 	var popup_cards := []
