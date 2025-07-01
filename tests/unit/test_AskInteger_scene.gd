@@ -3,7 +3,7 @@ extends "res://tests/UTcommon.gd"
 var cards := []
 var card: Card
 var test_script: Dictionary
-var ask_integer: AcceptDialog
+var ask_integer: AskInteger
 var hh: Panel
 var vh: Panel
 var line: LineEdit
@@ -78,28 +78,31 @@ func test_on_LineEdit_text_changed():
 
 func test_submit():
 	watch_signals(ask_integer)
+	watch_signals(line)
 	ask_integer.prep("UT Card",1,5)
 	ask_integer._on_AskInteger_confirmed()
 	await yield_for(0.1)
-	assert_eq(0,ask_integer.number)
+	assert_eq(0,ask_integer.number, "No input handled correctly")
 	assert_signal_not_emitted(ask_integer,"canceled")
 	line.text = "11"
 	line._on_IntegerLineEdit_text_changed("11")
 	ask_integer._on_AskInteger_confirmed()
 	await yield_for(0.1)
 	assert_eq(0,ask_integer.number)
-	assert_signal_not_emitted(ask_integer,"canceled")
+	assert_signal_emitted(line, "int_changed_nok", "Out of bounds number disallowed")
+	assert_signal_not_emitted(ask_integer,"canceled", "Out of bounds cancels AskInt")
 	line.text = "abd"
 	line._on_IntegerLineEdit_text_changed("abd")
 	ask_integer._on_AskInteger_confirmed()
 	await yield_for(0.1)
-	assert_eq(0,ask_integer.number)
-	assert_signal_not_emitted(ask_integer,"canceled")
+	assert_eq(0,ask_integer.number, "Letters not accepted")
+	assert_signal_not_emitted(ask_integer,"canceled", "Letters cancel AskInt")
 	line.text = "2"
 	line._on_IntegerLineEdit_text_changed("2")
 	ask_integer._on_AskInteger_confirmed()
 	await yield_for(0.1)
+	assert_signal_emitted(line, "int_changed_ok", "Valid text handled")
+	assert_eq(2,ask_integer.number, "Valid number applied correctly")
 	#This used to be "popup_hide", but AcceptDialog no longer has that signal
-	#I think it's to confirm the popup is gone, which is no longer an issue
-	#assert_signal_emitted(ask_integer,"confirmed")
-	assert_eq(2,ask_integer.number)
+	#I think it's to confirm the popup is gone, so focus_exited should be fine
+	assert_signal_emitted(ask_integer,"focus_exited", "AskInt exits on submit")

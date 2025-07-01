@@ -19,9 +19,6 @@ func _ready() -> void:
 	# warning-ignore:return_value_discarded
 	connect("text_submitted", Callable(self, "_on_IntegerLineEdit_text_entered"))
 
-func _exit_tree() -> void:
-	disconnect("text_changed", Callable(self,"_on_IntegerLineEdit_text_changed"))
-	disconnect("text_submitted", Callable(self, "_on_IntegerLineEdit_text_entered"))
 
 func _on_IntegerLineEdit_text_entered(new_text: String) -> void:
 	if new_text.is_valid_int() and \
