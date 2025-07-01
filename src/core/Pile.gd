@@ -54,7 +54,8 @@ func _ready():
 	$ViewPopup.connect("about_to_popup", Callable(self, '_on_ViewPopup_about_to_show'))
 	set_pile_name(pile_name)
 	# warning-ignore:return_value_discarded
-	#connect("shuffle_completed", Callable(self, cfc.signal_propagator))
+	#FIXME: This probably didn't work in Godot3, but in Godot4 it makes an error
+	#because CFControl's _on_signal_received expects a Card parameter.
 	connect("shuffle_completed", 
 		Callable(cfc.signal_propagator, 
 			"_on_signal_received")\
