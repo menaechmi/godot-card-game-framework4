@@ -169,7 +169,7 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 						"modifier": _retrieve_temp_modifiers(script, "properties")
 					}
 				var retcode = call(script.script_name, script)
-				retcode = await retcode #.completed
+				#retcode = await retcode #.completed
 				# We set the previous subjects only after the execution, because some tasks
 				# might change the previous subjects for the future tasks
 				if not script.get_property(SP.KEY_PROTECT_PREVIOUS):
@@ -408,7 +408,6 @@ func mod_tokens(script: ScriptTask) -> int:
 	var set_to_mod: bool = script.get_property(SP.KEY_SET_TO_MOD)
 	if not set_to_mod:
 		alteration = await _check_for_alterants(script, modification)
-		#await alteration.completed
 	var token_diff := 0
 	for card in script.subjects:
 		var current_tokens: int
@@ -547,9 +546,8 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 			canonical_name = filtered_cards[0]
 		else:
 			filtered_cards = filtered_cards.slice(0,selection_amount - 1)
-			var select_return = cfc.ov_utils.select_card(
+			var select_return = await cfc.ov_utils.select_card(
 					filtered_cards, 1, 'min', false, cfc.NMAP.board)
-			await select_return.completed
 			if typeof(select_return) == TYPE_ARRAY:
 				canonical_name = select_return[0]
 			else:
@@ -572,7 +570,6 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 	else:
 		count = script.get_property(SP.KEY_OBJECT_COUNT)
 	alteration = await _check_for_alterants(script, count)
-	alteration = await alteration.completed
 	var spawned_cards := []
 	for iter in range(count + alteration):
 		card = cfc.instance_card(canonical_name)
@@ -747,8 +744,9 @@ func ask_integer(script: ScriptTask) -> void:
 	var maximum = script.get_property(SP.KEY_ASK_INTEGER_MAX)
 	integer_dialog.prep(script.owner.canonical_name, minimum, maximum)
 	# We have to wait until the player has finished selecting an option
-	#TODO: AcceptDialog is no longer a popup so popup_hide isn't availailable
-	await integer_dialog.canceled
+	#TODO: AcceptDialog is no longer a popup so popup_hide isn't available
+	#I think close_requested covers accept & not accept, but I'm not 100% sure
+	await integer_dialog.close_requested
 	stored_integer = integer_dialog.number
 	# Garbage cleanup
 	integer_dialog.queue_free()
@@ -861,7 +859,7 @@ func execute_scripts(script: ScriptTask) -> int:
 	var retcode : int = CFConst.ReturnCode.CHANGED
 	# If your subject is "self" make sure you know what you're doing
 	# or you might end up in an inifinite loop
-	for card in script.subjects:
+	for card: Card in script.subjects:
 		var requested_exec_state = script.get_property(SP.KEY_REQUIRE_EXEC_STATE)
 		# If not specific exec_state has been requested
 		# we execute whatever scripts of the state the card is currently in.

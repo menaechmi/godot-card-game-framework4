@@ -80,6 +80,8 @@ func get_property(property: String, default = null):
 func _find_subjects(stored_integer := 0) -> Array:
 	var subjects_array := []
 	# See SP.KEY_SUBJECT doc
+	#HACK: Conditionals make co-routines not work
+	await Engine.get_main_loop().process_frame
 	match get_property(SP.KEY_SUBJECT):
 		# Ever task retrieves the subjects used in the previous task.
 		# if the value "previous" is given to the "subjects" key,

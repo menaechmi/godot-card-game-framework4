@@ -1330,7 +1330,6 @@ func move_to(targetHost: Node,
 				tween = _tween.get_ref() as Tween
 				if tween:
 					tween.custom_step(2)
-					#await tween.finished
 				#if cfc.game_settings.fancy_movement:
 					#await tween.finished
 				targetHost.reorganize_stack()
@@ -1509,7 +1508,8 @@ func execute_scripts(
 	# To avoid unnecessary operations
 	# we evoke the ScriptingEngine only if we have something to execute
 	# We do not statically type it as this causes a circular reference
-	var sceng = null
+	#var sceng = null FIXME: see if this does cause circular reference
+	var sceng: ScriptingEngine
 	if len(state_scripts):
 		is_executing_scripts = true
 		# This evocation of the ScriptingEngine, checks the card for
@@ -2182,7 +2182,7 @@ func _flip_card(to_invisible: Control, to_visible: Control, instant := false) ->
 		_flip_tween.tween_property(highlight,'position', Vector2((highlight.size.x-3)/2,0), 0.4)\
 				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		_flip_tween.play()
-		await _flip_tween.finished
+		#await _flip_tween.finished
 		to_visible.visible = true
 		to_invisible.visible = false
 		_flip_tween = create_tween().set_parallel(true)
@@ -2747,7 +2747,6 @@ func _process_card_state() -> void:
 				_add_tween_scale(scale, Vector2(1,1),0.75)
 				_add_tween_global_position(global_position, get_viewport().size/2 - CFConst.CARD_SIZE/2)
 				tween.play()
-				#Tween awaits are ingnored
 				#await tween.finished
 				_tween_stuck_time = 0
 				move_to(spawn_destination)

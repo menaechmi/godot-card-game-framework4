@@ -9,7 +9,6 @@ var trigger_details : Dictionary
 # Only relevant for optional tasks (see [SP].KEY_IS_OPTIONAL)
 var is_accepted := true
 
-
 # Prepares the script_definition needed by the alteration to function and
 # checks the ongoing task and its owner_card against defined filters.
 #func _init(
@@ -45,15 +44,15 @@ func _init(
 				script_definition,
 				owner.canonical_name,
 				script_name)
-		#await confirm_return.completed
 		is_valid = confirm_return
 	if is_valid:
 		# The alterant might require counting other cards to see if it's valid.
 		# So we just run it through the _find_subjects() to see if it will
 		# set is_valid to false.
 		await _find_subjects(0)
-		#ret = await ret.completed
 	# We emit a signal when done so that our ScriptingEngine
 	# knows we're ready to continue
+	#HACK: Conditionals make co-routines not work
+	await Engine.get_main_loop().process_frame
 	is_primed = true
 	emit_signal("primed")

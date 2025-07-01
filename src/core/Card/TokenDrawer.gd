@@ -80,6 +80,7 @@ func token_drawer(requested_state := true) -> void:
 			# We want to consider the drawer closed
 			# only when the animation finished
 			# Otherwise it might start to open immediately again
+			#TODO: Because the tween has a set amount of time, probably just wait 0.2s
 			#await _tween.finished
 			# When it's closed, we hide token names
 			for token in $Drawer/VBoxContainer.get_children():
@@ -186,10 +187,12 @@ func get_token(token_name: String) -> Token:
 # Else it returns 0
 func get_token_count(token_name: String) -> int:
 	var token: Token = get_token(token_name)
+	#HACK: Ensures this counts as a co-routine
+	await get_tree().process_frame
 	if not token:
 		return(0)
 	else:
-		return(await token.get_count())
+		return(token.count)
 
 
 # Returns true, when the mouse cursor is over the drawer.

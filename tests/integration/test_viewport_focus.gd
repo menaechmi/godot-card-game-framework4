@@ -5,12 +5,15 @@ var cards := []
 func before_each():
 	await setup_main()
 	cards = draw_test_cards(5)
-	await yield_for(0.1)
+	await wait_seconds(1)
 
 func test_single_card_focus():
 	var card : Card = cards[0]
 	await move_mouse(card.global_position)
-	#await yield_to(main.card_focus.get_node('Tween'), "finished", 1)
+	await wait_for_signal(get_tree().process_frame, 1)
+	var tween = main._tween.get_ref() as Tween
+	if tween:
+		await wait_for_signal(tween.finished, 1)
 	var focus_dupe = main._previously_focused_cards[card]
 	assert_eq(main.card_focus.get_node('SubViewport').get_child_count(),2,
 			"Duplicate card has been added for viewport focus")
