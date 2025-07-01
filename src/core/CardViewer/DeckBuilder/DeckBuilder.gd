@@ -59,7 +59,7 @@ var deck_summaries
 func _ready() -> void:
 	super._ready()
 	deck_summaries = deck_summary_scene.instantiate()
-	$VBC/HBC/DeckMC/CurrentDeck/DeckDetails.add_child(deck_summaries)
+	$VBC/HBC/DeckMC/CurrentDeck/DeckDetails._add_child(deck_summaries)
 	deck_summaries.setup()
 	# warning-ignore:return_value_discarded
 	_load_button.connect("deck_loaded", Callable(self, "_on_deck_loaded"))
@@ -113,13 +113,13 @@ func add_new_card(card_name, category, value) -> DBDeckCardObject:
 	if not _deck_cards.has_node(category):
 		category_container = _DECK_CATEGORY_SCENE.instantiate()
 		category_container.name = category
-		_deck_cards.add_child(category_container)
+		_deck_cards._add_child(category_container)
 		category_container.get_node("CategoryLabel").text = category
 	else:
 		category_container = _deck_cards.get_node(category)
 	var category_cards_node = category_container.get_node("CategoryCards")
 	var deck_card_object = deck_card_object_scene.instantiate()
-	category_cards_node.add_child(deck_card_object)
+	category_cards_node._add_child(deck_card_object)
 	deck_card_object.setup(card_name, value)
 	return(deck_card_object)
 

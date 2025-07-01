@@ -331,7 +331,7 @@ var _tween := WeakRef.new()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	targeting_arrow = targeting_arrow_scene.instantiate()
-	add_child(targeting_arrow)
+	_add_child(targeting_arrow)
 	set_card_size(card_size)
 	_init_card_layout()
 	# The below call ensures out canonical_name variable is set.
@@ -1244,13 +1244,13 @@ func move_to(targetHost: Node,
 		elif parent_scale < target_scale:
 			scale *= parent_scale * target_scale
 		# We need to remove the current parent node before adding a different one
-		parentHost.remove_child(self)
-		targetHost.add_child(self)
+		parentHost._remove_child(self)
+		targetHost._add_child(self)
 		# The below is used when a specific card position is requested
 		# It converts the requested card position, to absolute node position
 		# between all nodes
 		if index >= 0:
-			targetHost.move_child(self,
+			targetHost._move_child(self,
 					targetHost.translate_card_index_to_node_index(index))
 		# Ensure card stays where it was before it changed parents
 		global_position = previous_pos
@@ -1327,7 +1327,9 @@ func move_to(targetHost: Node,
 				# One for the fancy move, and then the move to the final position.
 				# If we don't then the card will appear to teleport
 				# to the pile before starting animation
-				#if tween:
+				tween = _tween.get_ref() as Tween
+				if tween:
+					tween.custom_step(2)
 					#await tween.finished
 				#if cfc.game_settings.fancy_movement:
 					#await tween.finished
@@ -1435,7 +1437,7 @@ func move_to(targetHost: Node,
 							_placement_slot = null
 				move_to_front()
 		elif parentHost == targetHost and index != get_my_card_index():
-			parentHost.move_child(self,
+			parentHost._move_child(self,
 					parentHost.translate_card_index_to_node_index(index))
 		elif "CardPopUpSlot" in parentHost.name:
 			set_state(CardState.IN_POPUP)
@@ -1991,10 +1993,10 @@ func _organize_attachments() -> void:
 			# by the attachment offset
 			if (card.attachment_mode == AttachmentMode.ATTACH_BEHIND and
 				card.get_index() > (self.get_index()-attach_index)):
-				get_parent().move_child(card, self.get_index()-attach_index)
+				get_parent()._move_child(card, self.get_index()-attach_index)
 			elif(card.attachment_mode == AttachmentMode.ATTACH_IN_FRONT and
 				card.get_index() < (self.get_index()+attach_index)):
-				get_parent().move_child(card, self.get_index()+attach_index)
+				get_parent()._move_child(card, self.get_index()+attach_index)
 
 			# We don't want to try and move it if it's still tweening.
 			# But if it isn't, we make sure it always follows its parent is_running()
@@ -2925,3 +2927,15 @@ func _on_Back_resized() -> void:
 func _on_tree_exiting():
 	if cfc.NMAP.has("main"):
 		cfc.NMAP.main.unfocus(self)
+
+# These functions replace the calls to _add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

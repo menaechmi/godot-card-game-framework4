@@ -292,7 +292,7 @@ func shuffle_cards() -> void:
 		cardsArray.append(card)
 	CFUtils.shuffle_array(cardsArray)
 	for card in cardsArray:
-		move_child(card, cardsArray.find(card))
+		_move_child(card, cardsArray.find(card))
 
 # Overridable function to allow the container to specify different
 # effects to happen when a card is attempted to be added
@@ -422,3 +422,15 @@ func re_place():
 		# Finally, we move to the right location.
 		position = place
 		call_deferred("_init_control_size")
+
+# These functions replace the calls to _add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

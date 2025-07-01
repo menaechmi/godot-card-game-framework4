@@ -42,7 +42,7 @@ func select_card(
 	var selected_cards
 	# This way we can override the card select scene with a custom one
 	var selection = card_select_scene.instantiate()
-	parent_node.add_child(selection)
+	parent_node._add_child(selection)
 	selection.call_deferred("initiate_selection", card_list,selection_count,selection_type,selection_optional)
 	# We have to wait until the player has finished selecting their cards
 	await selection.confirmed

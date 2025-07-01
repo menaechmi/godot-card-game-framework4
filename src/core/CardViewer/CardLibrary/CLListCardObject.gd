@@ -40,7 +40,7 @@ func setup(_card_name: String) -> void:
 				new_label.text = card_viewer.replacements[property][card_properties[property]]
 			else:
 				new_label.text = str(card_properties[property]).format(format)
-			add_child(new_label)
+			_add_child(new_label)
 
 
 # Fetches the bbcode formating used for this game

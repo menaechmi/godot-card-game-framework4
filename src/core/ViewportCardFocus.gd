@@ -23,7 +23,7 @@ func _ready():
 	world_environemt.environment.glow_enabled = cfc.game_settings.get('glow_enabled', true)
 	# We use the below while to wait until all the nodes we need have been mapped
 	# "hand" should be one of them.
-	$SubViewportContainer/SubViewport.add_child(board_scene.instantiate())
+	$SubViewportContainer/SubViewport._add_child(board_scene.instantiate())
 	if not cfc.are_all_nodes_mapped:
 		await cfc.all_nodes_mapped
 	# warning-ignore:return_value_discarded
@@ -114,7 +114,7 @@ func focus_card(card: Card, show_preview := true) -> void:
 			# We display a "pure" version of the card
 			# This means we hide buttons, tokens etc
 			dupe_focus.state = Card.CardState.VIEWPORT_FOCUS
-			_focus_viewport.add_child(dupe_focus)
+			_focus_viewport._add_child(dupe_focus)
 			_extra_dupe_ready(dupe_focus, card)
 			dupe_focus.is_faceup = card.is_faceup
 			dupe_focus.is_viewed = card.is_viewed

@@ -74,7 +74,7 @@ func add_info(
 				new_info_panel = info_scene.instantiate()
 			else:
 				new_info_panel = info_panel_scene.instantiate()
-			add_child(new_info_panel)
+			_add_child(new_info_panel)
 			existing_details[id] = new_info_panel
 		var label = new_info_panel.get_node("Details")
 		if label as RichTextLabel:
@@ -97,3 +97,15 @@ func get_visible_details() -> int:
 		if node.visible:
 			visible_count += 1
 	return(visible_count)
+
+# These functions replace the calls to add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

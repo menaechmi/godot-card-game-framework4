@@ -106,7 +106,7 @@ func show_preview_card(card) -> void:
 			preview_card = card
 			preview_card.position = Vector2(0,0)
 			preview_card.scale = Vector2(1,1)
-		add_child(preview_card)
+		_add_child(preview_card)
 		# It's necessary we do this here because if we only we it during
 		# the process, the card will appear to teleport
 		if CFConst.VIEWPORT_FOCUS_ZOOM_TYPE == "resize":
@@ -144,3 +144,15 @@ func _on_viewport_resized() -> void:
 # else returns false
 func has_preview_card() -> bool:
 	return(is_instance_valid(preview_card))
+
+# These functions replace the calls to add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

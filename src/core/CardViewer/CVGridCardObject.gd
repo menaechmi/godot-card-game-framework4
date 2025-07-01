@@ -20,7 +20,7 @@ func setup(card) -> Card:
 		display_card = card
 		display_card.position = Vector2(0,0)
 		display_card.scale = Vector2(1,1)
-	add_child(display_card)
+	_add_child(display_card)
 	display_card.set_owner(self)
 	if CFConst.VIEWPORT_FOCUS_ZOOM_TYPE == "scale":
 		display_card.scale = Vector2(1,1) * display_card.thumbnail_scale * cfc.curr_scale
@@ -51,3 +51,15 @@ func get_class() -> String:
 func _on_viewport_resized() -> void:
 	custom_minimum_size = display_card.canonical_size * display_card.thumbnail_scale * cfc.curr_scale
 	size = custom_minimum_size
+
+# These functions replace the calls to add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

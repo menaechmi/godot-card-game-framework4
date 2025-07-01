@@ -116,7 +116,7 @@ func test_CardDefinition_properties():
 		"Power": 0,
 	}
 	var new_card = cfc.instance_card("GUT Card")
-	board.add_child(new_card)
+	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
 	await wait_for_signal(get_tree().process_frame, 1)
@@ -144,7 +144,7 @@ func test_number_properties_with_string_value():
 		"Power": '1',
 	}
 	var new_card = cfc.instance_card("GUT Card")
-	board.add_child(new_card)
+	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
 	await yield_to(get_tree(), "process_frame", 0.1)
@@ -170,7 +170,7 @@ func test_number_properties_adjust():
 		"Power": '5',
 	}
 	var new_card = cfc.instance_card("GUT Card")
-	board.add_child(new_card)
+	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
 	await yield_to(get_tree(), "process_frame", 0.1)
@@ -198,7 +198,7 @@ func test_refresh_card_front():
 		"Power": '5',
 	}
 	var new_card = cfc.instance_card("GUT Card")
-	board.add_child(new_card)
+	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
 	await wait_for_signal(get_tree().process_frame, 0.1)

@@ -17,7 +17,7 @@ func prep(title_reference: String, script_with_choices: Dictionary) -> void:
 		# and the dictionary keys, are the choices in human-readable text.
 		for key in script_with_choices.keys():
 			add_item(key)
-		cfc.NMAP.board.add_child(self)
+		cfc.NMAP.board._add_child(self)
 		popup_centered()
 		# One again we need two different Panels due to 
 		# https://github.com/godotengine/godot/issues/32030

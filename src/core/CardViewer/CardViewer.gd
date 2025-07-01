@@ -103,7 +103,7 @@ func prepate_filter_buttons() -> void:
 				filter_button.setup(button_property, value)
 				filter_button.connect("pressed", Callable(self, "_on_filter_button_pressed"))
 				filter_button.connect("right_pressed", Callable(self, "_on_filter_button_right_pressed").bind(filter_button))
-				_filter_buttons.add_child(filter_button)
+				_filter_buttons._add_child(filter_button)
 		# warning-ignore:return_value_discarded
 		_show_all_button.connect("pressed", Callable(self, "_on_ShowAll_button_pressed"))
 
@@ -126,7 +126,7 @@ func populate_available_cards() -> void:
 			continue
 		var list_card_object = list_card_object_scene.instantiate()
 		list_card_object.card_viewer = self
-		_available_cards.add_child(list_card_object)
+		_available_cards._add_child(list_card_object)
 		list_card_object.setup(card_def)
 		counter += 1
 	_card_count.text = "Total: " + str(counter)

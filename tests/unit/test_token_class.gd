@@ -15,7 +15,7 @@ func before_each():
 	await setup_board()
 	token = token_scene.instantiate()
 	token.setup("tech")
-	board.add_child(token)
+	board._add_child(token)
 
 func test_count_setget():
 	var count_label = token.get_node("CenterContainer/Count")
@@ -67,7 +67,7 @@ func test_buttons():
 func test_get_token_name():
 	var token2 = token_scene.instantiate()
 	token2.setup("tech")
-	board.add_child(token2)
+	board._add_child(token2)
 	assert_eq("tech",token2.get_token_name(),
 			"Returned name should be lowercase")
 	assert_ne("Tech",token2.name,

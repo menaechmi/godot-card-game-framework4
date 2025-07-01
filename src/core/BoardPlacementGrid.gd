@@ -63,7 +63,7 @@ func get_slot(idx: int) -> BoardPlacementSlot:
 # Returns the slot object
 func add_slot() -> BoardPlacementSlot:
 	var new_slot : BoardPlacementSlot = _SLOT_SCENE.instantiate()
-	$GridContainer.add_child(new_slot)
+	$GridContainer._add_child(new_slot)
 	return(new_slot)
 
 

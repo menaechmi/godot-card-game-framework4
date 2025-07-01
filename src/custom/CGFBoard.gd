@@ -127,7 +127,7 @@ func load_test_cards(gut := true) -> void:
 			for card_name in test_cards:
 				test_card_array.append(cfc.instance_card(card_name))
 	for card in test_card_array:
-		cfc.NMAP.deck.add_child(card)
+		cfc.NMAP.deck._add_child(card)
 		#card.set_is_faceup(false,true)
 		card._determine_idle_state()
 

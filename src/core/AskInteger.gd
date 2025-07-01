@@ -24,7 +24,7 @@ func prep(title_reference: String, min_req: int, max_req : int) -> void:
 		$IntegerLineEdit.minimum = min_req
 		$IntegerLineEdit.maximum = max_req
 		#$LineEdit.text = str(minimum)
-		cfc.NMAP.board.add_child(self)
+		cfc.NMAP.board._add_child(self)
 		popup_centered()
 		# One again we need two different Panels due to
 		# https://github.com/godotengine/godot/issues/32030

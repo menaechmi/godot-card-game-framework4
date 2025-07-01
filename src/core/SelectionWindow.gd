@@ -137,7 +137,7 @@ func initiate_selection(
 			dupe_selection.properties = card.properties.duplicate()
 		card_sample = dupe_selection
 		var card_grid_obj = grid_card_object_scene.instantiate()
-		_card_grid.add_child(card_grid_obj)
+		_card_grid._add_child(card_grid_obj)
 		# This is necessary setup for the card grid container
 		card_grid_obj.preview_popup.focus_info.info_panel_scene = info_panel_scene
 		card_grid_obj.preview_popup.focus_info.setup()

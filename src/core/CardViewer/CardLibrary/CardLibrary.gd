@@ -41,4 +41,4 @@ func populate_available_cards() -> void:
 			new_label.scroll_active = false
 			new_label.fit_content_height = false
 			new_label.custom_effects = custom_rich_text_effects
-			_card_headers.add_child(new_label)
+			_card_headers._add_child(new_label)

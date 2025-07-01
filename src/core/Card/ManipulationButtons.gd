@@ -27,7 +27,7 @@ func spawn_manipulation_buttons() -> void:
 		var button = manipulation_button.instantiate()
 		button.name = button_name
 		button.text = needed_buttons[button_name]
-		add_child(button)
+		_add_child(button)
 		# We also connect each button to the ourselves
 		# The method should exist in any script that extends this class
 		button.connect("pressed", Callable(self, "_on_" + button.name + "_pressed"))
@@ -95,3 +95,15 @@ func set_alpha(value := 1) -> void:
 		_tween.tween_property(self,'modulate:a', value, 0.25)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		_tween.play()
+
+# These functions replace the calls to add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

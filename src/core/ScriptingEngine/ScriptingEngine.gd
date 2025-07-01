@@ -479,7 +479,7 @@ func spawn_card(script: ScriptTask) -> void:
 				await script.owner.get_tree().create_timer(0.05).timeout
 				if slot:
 					card = cfc.instance_card(canonical_name)
-					cfc.NMAP.board.add_child(card)
+					cfc.NMAP.board._add_child(card)
 					card.position = slot.global_position
 					card._placement_slot = slot
 					slot.occupying_card = card
@@ -489,7 +489,7 @@ func spawn_card(script: ScriptTask) -> void:
 		for iter in range(count + alteration):
 			card = cfc.instance_card(canonical_name)
 			var board_position: Vector2 = script.get_property(SP.KEY_BOARD_POSITION)
-			cfc.NMAP.board.add_child(card)
+			cfc.NMAP.board._add_child(card)
 			card.position = board_position
 			# If we're spawning more than 1 card, we place the extra ones
 			# +1 card-length to the right each.
@@ -577,7 +577,7 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 	for iter in range(count + alteration):
 		card = cfc.instance_card(canonical_name)
 		if not script.get_property(SP.KEY_IMMEDIATE_PLACEMENT):
-			cfc.NMAP.board.add_child(card)
+			cfc.NMAP.board._add_child(card)
 			card.scale = Vector2(0.1,0.1)
 			if 'global_position' in script.owner:
 				card.global_position = script.owner.global_position
@@ -588,7 +588,7 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 			card.spawn_destination = dest_container
 			card.state = Card.CardState.MOVING_TO_SPAWN_DESTINATION
 		else:
-			dest_container.add_child(card)
+			dest_container._add_child(card)
 			card.set_to_idle()
 		# We set the drawn cards as the subjects, so that they can be
 		# used by other followup scripts
@@ -779,7 +779,7 @@ func add_grid(script: ScriptTask) -> void:
 		var grid: BoardPlacementGrid = load(grid_scene).instantiate()
 		# A small delay to allow the instance to be added
 		await script.owner.get_tree().create_timer(0.05).timeout
-		cfc.NMAP.board.add_child(grid)
+		cfc.NMAP.board._add_child(grid)
 		# If the grid name is empty, we use the predefined names in the scene.
 		if grid_name != "":
 			grid.name = grid_name

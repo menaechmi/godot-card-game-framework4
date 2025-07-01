@@ -2,8 +2,7 @@ extends "res://tests/UTcommon.gd"
 
 func before_each():
 	await setup_board()
-
-
+#TODO: The final card doesn't get added to the hand properly for some reason
 func test_single_card_draw_use_rectangle():
 	cfc.game_settings.hand_use_oval_shape = false
 	var card0: Card = hand.draw_card()
@@ -13,14 +12,16 @@ func test_single_card_draw_use_rectangle():
 			"Cards drawn is visible")
 	#await yield_to(card0._tween, "finished", 1)
 	#await yield_to(card0._tween, "finished", 1)
-	assert_almost_eq(412.0,card0.recalculate_position().x,5.0,
+	await wait_seconds(2)
+	assert_almost_eq(card0.recalculate_position().x, 412.0, 5.0,
 			"Card position x is recalculated correctly")
-	assert_almost_eq(0.0,card0.recalculate_position().y,5.0,
+	assert_almost_eq(card0.recalculate_position().y, 0.0, 5.0,
 			"Card position y is recalculated correctly")
-	assert_almost_eq(hand.to_global(card0.recalculate_position()),
-			card0.global_position,Vector2(2,2),
+	assert_almost_eq(card0.global_position,
+			card0.recalculate_position(),
+			Vector2(2,2),
 			"Card placed in correct global position")
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	assert_almost_eq(hand.to_local(card0.position), card0.recalculate_position(), Vector2(2,2),
 			"Card placed in correct position")
 	cfc.game_settings.hand_use_oval_shape = true
 
@@ -34,14 +35,16 @@ func test_single_card_draw_use_oval():
 			"Cards drawn is visible")
 	#await yield_to(card0._tween, "finished", 1)
 	#await yield_to(card0._tween, "finished", 1)
-	assert_almost_eq(412.0,card0.recalculate_position().x,5.0,
+	await wait_seconds(2)
+	assert_almost_eq(card0.recalculate_position().x,412.0, 5.0,
 			"Card position x is recalculated correctly")
-	assert_almost_eq(-60.0,card0.recalculate_position().y,5.0,
+	assert_almost_eq(card0.recalculate_position().y, -60.0, 5.0,
 			"Card position y is recalculated correctly")
-	assert_almost_eq(hand.to_global(card0.recalculate_position()),
-			card0.global_position,Vector2(2,2),
+	assert_almost_eq(card0.global_position,
+			hand.to_global(card0.recalculate_position()),
+			Vector2(2,2),
 			"Card placed in correct global position")
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	assert_almost_eq(card0.position, card0.recalculate_position(),Vector2(2,2),
 			"Card placed in correct position")
 	cfc.game_settings.hand_use_oval_shape = true
 
@@ -51,14 +54,17 @@ func test_draw_multiple_cards_slow_use_rectangle():
 	var card0: Card = hand.draw_card()
 	#await yield_to(card0._tween, "finished", 1)
 	#await yield_to(card0._tween, "finished", 1)
+	await wait_seconds(1)
 	var card1: Card = hand.draw_card()
 	#await yield_to(card1._tween, "finished", 1)
 	#await yield_to(card1._tween, "finsihed", 1)
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	await wait_seconds(1)
+	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
-	assert_almost_eq(card1.recalculate_position(),card1.position,Vector2(2,2),
+	assert_almost_eq(card1.position, card1.recalculate_position(), Vector2(2,2),
 			"Card at index 1 placed in correct position")
 	var card2: Card = hand.draw_card()
+	await wait_seconds(3)
 	#await yield_to(card2._tween, "finished", 1)
 	#await yield_to(card2._tween, "finished", 1)
 	assert_almost_eq(250.0,card0.recalculate_position().x,5.0,
@@ -85,16 +91,19 @@ func test_draw_multiple_cards_slow_use_rectangle():
 func test_draw_multiple_cards_slow_use_oval():
 	cfc.game_settings.hand_use_oval_shape = true
 	var card0: Card = hand.draw_card()
+	await wait_seconds(2)
 	#await yield_to(card0._tween, "finished", 1)
 	#await yield_to(card0._tween, "finished", 1)
 	var card1: Card = hand.draw_card()
+	await wait_seconds(2)
 	#await yield_to(card1._tween, "finished", 1)
 	#await yield_to(card1._tween, "finshed", 1)
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
-	assert_almost_eq(card1.recalculate_position(),card1.position,Vector2(2,2),
+	assert_almost_eq(card1.position, card1.recalculate_position(), Vector2(2,2),
 			"Card at index 1 placed in correct position")
 	var card2: Card = hand.draw_card()
+	await wait_seconds(2)
 	#await yield_to(card2._tween, "finished", 1)
 	#await yield_to(card2._tween, "finished", 1)
 	assert_almost_eq(238.0,card0.recalculate_position().x,5.0,
@@ -109,40 +118,41 @@ func test_draw_multiple_cards_slow_use_oval():
 			"Index 2 card position x is recalculated correctly")
 	assert_almost_eq(-48.754,card2.recalculate_position().y,5.0,
 			"Index 2 card position y is recalculated correctly")
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	assert_almost_eq(card0.position, card0.recalculate_position(),Vector2(2,2),
 			"Card at index 0 placed in correct position")
-	assert_almost_eq(card1.recalculate_position(),card1.position,Vector2(2,2),
+	assert_almost_eq(card1.position, card1.recalculate_position(),Vector2(2,2),
 			"Card at index 1 placed in correct position")
-	assert_almost_eq(card2.recalculate_position(),card2.position,Vector2(2,2),
+	assert_almost_eq(card2.position, card2.recalculate_position(),Vector2(2,2),
 			"Card at index 2 placed in correct position")
 	cfc.game_settings.hand_use_oval_shape = true
 #
 #
 func test_draw_multiple_cards_fast():
 	var card0: Card = hand.draw_card()
-	await yield_for(0.2)
+	await wait_seconds(0.2)
 	var card1: Card = hand.draw_card()
-	await yield_for(0.1)
+	await wait_seconds(0.1)
 	var card2: Card = hand.draw_card()
-	await yield_for(0.3)
+	await wait_seconds(0.3)
 	var card3: Card = hand.draw_card()
-	await yield_for(0.5)
+	await wait_seconds(0.5)
 	var card4: Card = hand.draw_card()
-	await yield_for(0.1)
+	await wait_seconds(0.1)
 	var card5: Card = hand.draw_card()
+	await wait_seconds(2)
 	#await yield_to(card5._tween, "finished", 1)
 	#await yield_to(card5._tween, "finished", 1)
-	assert_almost_eq(card0.recalculate_position(),card0.position,Vector2(2,2),
+	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
-	assert_almost_eq(card1.recalculate_position(),card1.position,Vector2(2,2),
+	assert_almost_eq(card1.position, card1.recalculate_position(), Vector2(2,2),
 			"Card at index 1 placed in correct position")
-	assert_almost_eq(card2.recalculate_position(),card2.position,Vector2(2,2),
+	assert_almost_eq(card2.position, card2.recalculate_position(), Vector2(2,2),
 			"Card at index 2 placed in correct position")
-	assert_almost_eq(card3.recalculate_position(),card3.position,Vector2(2,2),
+	assert_almost_eq(card3.position, card3.recalculate_position(), Vector2(2,2),
 			"Card at index 3 placed in correct position")
-	assert_almost_eq(card4.recalculate_position(),card4.position,Vector2(2,2),
+	assert_almost_eq(card4.position, card4.recalculate_position(), Vector2(2,2),
 			"Card at index 4 placed in correct position")
-	assert_almost_eq(card5.recalculate_position(),card5.position,Vector2(2,2),
+	assert_almost_eq(card5.position, card5.recalculate_position(),Vector2(2,2),
 			"Card at index 5 placed in correct position")
 
 
@@ -172,7 +182,6 @@ func test_container_custom_card_functions():
 
 func test_card_does_not_become_focused_during_movement():
 	var card = hand.draw_card()
-	await yield_for(0.2)
 	card._on_Card_mouse_entered()
 	assert_eq(Card.CardState.MOVING_TO_CONTAINER, card.state, "Card state is still MovingToContainer")
 

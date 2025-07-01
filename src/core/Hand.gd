@@ -86,7 +86,7 @@ func shuffle_cards() -> void:
 	for card in get_all_cards():
 		card.interruptTweening()
 		card.reorganize_self()
-	move_child($Control,0)
+	_move_child($Control,0)
 	emit_signal("shuffle_completed", self)
 
 # Takes the top card from the specified [CardContainer]
@@ -226,3 +226,15 @@ func _adjust_collision_area() -> void:
 # Overridable function for counting cards
 func _get_modified_card_count() -> int:
 	return(get_card_count())
+
+# These functions replace the calls to _add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

@@ -31,7 +31,7 @@ func setup_main() -> void:
 	cfc.is_testing = true
 	cfc._setup()
 	main = autoqfree(MAIN_SCENE.instantiate())
-	get_tree().get_root().add_child(main)
+	get_tree().get_root()._add_child(main)
 	if not cfc.are_all_nodes_mapped:
 		await cfc.all_nodes_mapped
 	board = cfc.NMAP.board
@@ -66,7 +66,7 @@ func draw_test_cards(count: int, fast := true) -> Array:
 		if fast:
 			var card = deck.get_top_card()
 			deck.remove_child(card)
-			hand.add_child(card)
+			hand._add_child(card)
 			card.state = Card.CardState.IN_HAND
 			cards.append(card)
 		else:

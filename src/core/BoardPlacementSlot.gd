@@ -37,3 +37,15 @@ func set_highlight(requested: bool,
 # This is typically used with CFConst.BoardDropPlacement.SPECIFIC_GRID
 func get_grid_name() -> String:
 	return(owner_grid.name_label.text)
+
+# These functions replace the calls to _add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

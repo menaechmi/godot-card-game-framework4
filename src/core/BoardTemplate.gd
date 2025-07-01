@@ -31,7 +31,7 @@ func _ready() -> void:
 	if not cfc.are_all_nodes_mapped:
 		await cfc.all_nodes_mapped
 	mouse_pointer = load(CFConst.PATH_MOUSE_POINTER).instantiate()
-	add_child(mouse_pointer)
+	_add_child(mouse_pointer)
 	for container in get_tree().get_nodes_in_group("piles"):
 		container.re_place()
 	for container in get_tree().get_nodes_in_group("hands"):
@@ -106,3 +106,15 @@ func get_grid(grid_name: String) -> BoardPlacementGrid:
 # warning-ignore:unused_argument
 func get_final_placement_node(card: Card) -> Node:
 	return(self)
+
+# These functions replace the calls to add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

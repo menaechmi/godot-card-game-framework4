@@ -208,3 +208,15 @@ func _on_single_task_completed(script_task) -> void:
 func _set_counter(counter_name: String, value) -> void:
 	counters[counter_name] = value
 	_labels[counter_name].text = str(counters[counter_name])
+
+# These functions replace the calls to _add_child, remove_child, and move_child.
+# Because Godot doesn't override built_ins, this lets us call these on all nodes
+# So the ones it matters for can have special functions.
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+	super.add_child(node)
+
+func _remove_child(node, _legible_unique_name=false) -> void:
+	super.remove_child(node)
+
+func _move_child(child_node, to_position) -> void:
+	super.move_child(child_node, to_position)

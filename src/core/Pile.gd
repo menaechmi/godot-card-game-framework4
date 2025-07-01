@@ -123,8 +123,8 @@ func _on_ViewPopup_popup_hide() -> void:
 		# If it is, we move it to the root.
 		#print_debug(card.canonical_name, card.get_parent().name)
 		if "CardPopUpSlot" in card.get_parent().name:
-			card.get_parent().remove_child(card)
-			add_child(card)
+			card.get_parent()._remove_child(card)
+			_add_child(card)
 			# We need to remember that cards in piles should be left invisible
 			# and at default scale
 			card.scale = Vector2(1,1)
@@ -155,7 +155,7 @@ func populate_popup(sorted:= sorted_popup) -> void:
 		card_array.sort_custom(Callable(CFUtils, "sort_scriptables_by_name"))
 	for card in card_array:
 		# We remove the card to rehost it in the popup grid container
-		remove_child(card)
+		_remove_child(card)
 		_slot_card_into_popup(card)
 	# Finally we Pop the Up :)
 	$ViewPopup.popup_centered()
@@ -179,16 +179,16 @@ func set_pile_name(value: String) -> void:
 		pile_name_label.text = value
 
 
-# Overrides the built-in add_child() method,
+# Overrides the built-in _add_child() method,
 # To make sure the control node is set to be the last one among siblings.
 # This way the control node intercepts any inputs.
 #
 # Also checks if the popup window is currently open, and puts the card
 # directly there in that case.
 #TODO: I haven't touched this, because it's unclear exactly which calls to
-# add_child are supposed to use this and which are supposed to use built-in
+# _add_child are supposed to use this and which are supposed to use built-in
 # Theoretically, GODOT should have never been calling this, but now it definitely won't
-func add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
+func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	if not $ViewPopup.visible:
 		super.add_child(node)
 		if node as Card:
@@ -218,7 +218,7 @@ func add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 # Overrides the function which removed chilren nodes so that it detects
 # when a Card class is removed. In that case it also shows
 # this container's "floor" if it was the last card in the pile.
-func remove_child(node, _legible_unique_name=false) -> void:
+func _remove_child(node, _legible_unique_name=false) -> void:
 	super.remove_child(node)
 	card_count_label.text = str(get_card_count())
 	# When we put the first card in the pile, we make sure the
@@ -275,14 +275,14 @@ func reorganize_stack() -> void:
 
 # Override the godot builtin move_child() method,
 # to make sure the $Control node is always drawn on top of Card nodes
-func move_child(child_node, to_position) -> void:
+func _move_child(child_node, to_position) -> void:
 	super.move_child(child_node, to_position)
 	$Control.move_to_front()
 
 # The top position of a pile, is always the lowest
 func move_card_to_top(card: Card) -> void:
 	var lowest_index = get_children().size() - 1
-	move_child(card, lowest_index)
+	_move_child(card, lowest_index)
 	reorganize_stack()
 
 # Overrides [CardContainer] function to include cards in the popup window
@@ -335,9 +335,9 @@ func _slot_card_into_popup(card: Card) -> void:
 	# We set the control container size to be equal
 	# to the card size to which the card will scale.
 	card_slot.custom_minimum_size = card.get_node("Control").custom_minimum_size * card.scale
-	_popup_grid.add_child(card_slot)
+	_popup_grid._add_child(card_slot)
 	# Finally, the card is added to the temporary control node parent.
-	card_slot.add_child(card)
+	card_slot._add_child(card)
 	# warning-ignore:return_value_discarded
 	card.set_is_faceup(true,true)
 	card.position = Vector2(0,0)

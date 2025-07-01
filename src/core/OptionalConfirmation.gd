@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func prep(card_name: String, task_name: String) -> void:
 		dialog_text =  card_name + ": Do you want to activate " + task_name + "?"
-		cfc.NMAP.board.add_child(self)
+		cfc.NMAP.board._add_child(self)
 		# We spawn the dialogue at the middle of the screen.
 		popup_centered()
 		# One again we need two different Panels due to 

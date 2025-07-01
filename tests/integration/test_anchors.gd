@@ -33,7 +33,7 @@ func test_anchor_positioning_and_groups():
 			Vector2(483.25,120), Vector2(5,5),
 			"Hand collision shape correct position to not overlap with piles")
 	assert_true("bottom" in hand.get_groups(), "bottom Position group assigned")
-	board.add_child(deck2)
+	board._add_child(deck2)
 	deck2.placement = CardContainer.Anchors.TOP_LEFT
 	deck2.re_place()
 	assert_almost_eq(deck2.position, Vector2(0,0), Vector2(5,5),
@@ -63,7 +63,7 @@ func test_anchor_positioning_and_groups():
 	assert_true("left" in deck2.get_groups(), "left Position group assigned")
 
 func test_overlap_shift_up():
-	board.add_child(deck2)
+	board._add_child(deck2)
 	deck2.placement = CardContainer.Anchors.BOTTOM_LEFT
 	deck2.overlap_shift_direction = CFInt.OverlapShiftDirection.UP
 	for container in get_tree().get_nodes_in_group("card_containers"):
@@ -85,7 +85,7 @@ func test_overlap_shift_up():
 			"Hand collision position not shrunk when overlap was displaced upwards")
 
 func test_overlap_shift_left():
-	board.add_child(deck2)
+	board._add_child(deck2)
 	deck2.placement = CardContainer.Anchors.BOTTOM_RIGHT
 	deck2.overlap_shift_direction = CFInt.OverlapShiftDirection.LEFT
 	deck2.re_place()
@@ -108,7 +108,7 @@ func test_overlap_shift_left():
 			"Hand collision position shrunk when overlap was displaced left")
 
 func test_overlap_shift_right():
-	board.add_child(deck2)
+	board._add_child(deck2)
 	deck2.placement = CardContainer.Anchors.BOTTOM_LEFT
 	deck2.overlap_shift_direction = CFInt.OverlapShiftDirection.RIGHT
 	deck2.re_place()
