@@ -40,12 +40,14 @@ func test_manipulation_buttons():
 		assert_eq(0.0,button.modulate.a,
 				"Buttons should start invisible")
 	deck.show_buttons()
-	await yield_to(deck._tween, "finished", 1)
+	var tween = deck._tween.get_ref() as Tween
+	await wait_for_signal(tween.finished, 1)
 	for button in deck.get_all_manipulation_buttons():
 		assert_eq(1.0,button.modulate.a,
 				"Buttons are visible after shown")
 	deck.hide_buttons()
-	await yield_to(deck._tween, "finished", 1)
+	tween = deck._tween.get_ref() as Tween
+	await wait_for_signal(tween.finished, 1)
 	for button in deck.get_all_manipulation_buttons():
 		assert_eq(0.0,button.modulate.a,
 				"Buttons are invisible after hide")
