@@ -2688,9 +2688,8 @@ func _process_card_state() -> void:
 				if is_viewed:
 					_flip_card(_card_back_container,_card_front_container, true)
 			var tween := _tween.get_ref() as Tween
-			if (tween and tween.is_valid()):
-				await tween.finished
-				print_debug("Tween actually finished")
+			if tween:
+				tween.custom_step(5)
 			state_finalized = true
 
 		CardState.PREVIEW:
