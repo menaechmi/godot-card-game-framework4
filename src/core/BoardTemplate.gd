@@ -103,13 +103,14 @@ func get_grid(grid_name: String) -> BoardPlacementGrid:
 			found_grid = grid
 	return(found_grid)
 
-# warning-ignore:unused_argument
+@warning_ignore("unused_parameter")
 func get_final_placement_node(card: Card) -> Node:
 	return(self)
 
 # These functions replace the calls to add_child, remove_child, and move_child.
 # Because Godot doesn't override built_ins, this lets us call these on all nodes
 # So the ones it matters for can have special functions.
+@warning_ignore("unused_parameter", "shadowed_variable_base_class")
 func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	super.add_child(node)
 

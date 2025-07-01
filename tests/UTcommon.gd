@@ -12,7 +12,7 @@ const MOUSE_SPEED := {
 }
 
 
-var main
+var main : ViewportCardFocus
 var board: Board
 var hand: Hand
 var deck: Pile
@@ -40,7 +40,6 @@ func setup_main() -> void:
 	hand = cfc.NMAP.hand
 	deck = cfc.NMAP.deck
 	discard = cfc.NMAP.discard
-
 
 func setup_board() -> void:
 	cfc.is_testing = true
@@ -161,7 +160,7 @@ func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void
 	var mouse_speed = MOUSE_SPEED[interpolation_speed][0]
 	var mouse_yield_wait = MOUSE_SPEED[interpolation_speed][1]
 	board._UT_interpolate_mouse_move(target_position,board._UT_mouse_position,mouse_speed)
-	await yield_for(mouse_yield_wait)
+	await wait_seconds(mouse_yield_wait)
 
 func execute_with_yield(card: Card) -> void:
 	await card.execute_scripts()

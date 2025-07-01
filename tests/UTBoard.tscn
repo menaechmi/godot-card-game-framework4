@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/custom/CGFDeck.gd" id="4"]
 [ext_resource type="Script" path="res://src/custom/CGFBoard.gd" id="5"]
 [ext_resource type="PackedScene" uid="uid://bhgbbxs86qxph" path="res://src/custom/CGFCounters.tscn" id="6"]
-[ext_resource type="FontFile" uid="uid://cosmhtqyogr6w" path="res://fonts/Xolonium-Regular.ttf" id="7"]
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="7"]
 [ext_resource type="PackedScene" uid="uid://dx8s5ofo0alvt" path="res://src/core/BoardPlacementSlot.tscn" id="8"]
 [ext_resource type="Script" path="res://src/core/BoardPlacementGrid.gd" id="9"]
 
@@ -43,6 +43,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5")
 

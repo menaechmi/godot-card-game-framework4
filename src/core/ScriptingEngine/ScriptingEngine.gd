@@ -182,7 +182,7 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 						# only after checking that they are feasible
 						# because there's no point in asking the player
 						# about a task they cannot perform anyway.
-						var confirm_return = await script.check_confirm()
+						await script.check_confirm()
 						if not script.is_accepted:
 							can_all_costs_be_paid = false
 			# If a cost script is not valid

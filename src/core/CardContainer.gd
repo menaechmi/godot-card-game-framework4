@@ -197,6 +197,7 @@ func get_all_manipulation_buttons() -> Array:
 
 
 ## Overrides the built-in get_class to return "CardContainer" instead of "Area2D"
+@warning_ignore("native_method_override")
 func get_class():
 	return "CardContainer"
 
@@ -426,6 +427,7 @@ func re_place():
 # These functions replace the calls to _add_child, remove_child, and move_child.
 # Because Godot doesn't override built_ins, this lets us call these on all nodes
 # So the ones it matters for can have special functions.
+@warning_ignore("shadowed_variable_base_class", "unused_parameter")
 func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	super.add_child(node)
 

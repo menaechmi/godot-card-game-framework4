@@ -514,6 +514,7 @@ func shuffle_cards(animate = true) -> void:
 		# if we're already running another animation, just shuffle
 		super.shuffle_cards()
 	reorganize_stack()
+	#TODO: Error calling from signal 'shuffle_completed' to callable: 'RefCounted::_on_signal_received': Method expected 3 arguments, but called with 2.
 	emit_signal("shuffle_completed", self)
 
 

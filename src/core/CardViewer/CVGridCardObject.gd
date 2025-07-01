@@ -41,6 +41,7 @@ func _on_GridCardObject_mouse_exited() -> void:
 	preview_popup.hide_preview_card()
 
 
+@warning_ignore("native_method_override")
 func get_class() -> String:
 	# As far as I can tell this is never used, but it wouldn't work as expected
 	# Godot will not override the built-in get_class() and that won't show class_name
@@ -55,6 +56,7 @@ func _on_viewport_resized() -> void:
 # These functions replace the calls to add_child, remove_child, and move_child.
 # Because Godot doesn't override built_ins, this lets us call these on all nodes
 # So the ones it matters for can have special functions.
+@warning_ignore("shadowed_variable_base_class", "unused_parameter")
 func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	super.add_child(node)
 

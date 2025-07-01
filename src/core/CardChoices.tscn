@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bey0lyqflhe81"]
 
 [ext_resource type="Script" path="res://src/core/CardChoices.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://cosmhtqyogr6w" path="res://fonts/Xolonium-Regular.ttf" id="2"]
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="2"]
 
 [sub_resource type="FontFile" id="1"]
 fallbacks = Array[Font]([ExtResource("2")])

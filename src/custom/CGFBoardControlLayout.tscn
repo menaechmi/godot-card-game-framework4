@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bhgbbxs86qxph" path="res://src/custom/CGFCounters.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://didret4x8ebw3" path="res://src/custom/CGFPlacementGridDemo.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://cmk1xpwlevglm" path="res://src/custom/CGFModifiedLabelGrid.tscn" id="8"]
-[ext_resource type="FontFile" uid="uid://cs8oiklalqlc7" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="9"]
+[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="9"]
 [ext_resource type="PackedScene" uid="uid://b11xuhluxj23k" path="res://src/custom/CGFDeckbuilder/CGFDeckBuilder.tscn" id="10"]
 [ext_resource type="Theme" uid="uid://b50sjum3qm447" path="res://themes/darktheme/darktheme.theme" id="12"]
 

@@ -48,6 +48,7 @@ var font_thread: Thread
 
 # Set a label node's text.
 # As the string becomes longer, the font size becomes smaller
+@warning_ignore("shadowed_variable_base_class")
 func set_label_text(node: Label, value, scale: float = 1):
 	while font_thread and font_thread.is_alive():
 		await get_tree().process_frame
@@ -102,6 +103,7 @@ func set_label_text(node: Label, value, scale: float = 1):
 # by classes extending this, to allow them to use their own methods
 # (e.g. based on themes)
 func get_card_label_font(label: Label) -> Font:
+	@warning_ignore("shadowed_variable_base_class")
 	var theme : Theme = self.theme
 	var label_font : Font
 	if theme:
@@ -146,6 +148,7 @@ func scale_to(scale_multiplier: float) -> void:
 
 # Set a label node's bbcode text.
 # As the string becomes longer, the font size becomes smaller
+@warning_ignore("shadowed_variable_base_class")
 func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false, scale : float = 1):
 	# We need to avoid other functions to trying to resize this label
 	# while it's already resizing, as due to all the yields
@@ -260,6 +263,7 @@ func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false,
 	resizing_labels.erase(node)
 
 
+@warning_ignore("shadowed_variable_base_class")
 func _cache_font_size(label: Control, text: String, font_size: int, scale : float) -> void:
 	var text_md5 =  text.md5_text()
 	# We will store each label's font size in a key based on the card scale
@@ -275,6 +279,7 @@ func _cache_font_size(label: Control, text: String, font_size: int, scale : floa
 	cfc.set_font_cache()
 
 
+@warning_ignore("shadowed_variable_base_class")
 func get_cached_font_size(label: Control, text: String, scale : float):
 	var text_md5 =  text.md5_text()
 	var card_size = str(scale)
@@ -331,6 +336,7 @@ func _get_bbcode_format() -> Dictionary:
 
 # Goes through a rich text label, and retrieves all fonts used to define it.
 func _get_card_rtl_fonts(label: RichTextLabel) -> Dictionary:
+	@warning_ignore("shadowed_variable_base_class")
 	var theme : Theme = self.theme
 	var all_rt_fonts:= {}
 	var label_font : Font
@@ -357,6 +363,7 @@ func _get_card_rtl_fonts(label: RichTextLabel) -> Dictionary:
 # if we resize normal font to 10. Italic should be resized to 9
 #NOTE: I'm not sure this is needed or possible anymore. 4.0 uses theme overrides
 #"theme_override_font_sizes/normal_font_size" and has_font_size_override
+@warning_ignore("unused_parameter")
 func _capture_rt_font_size_variations(label: RichTextLabel) -> void:
 	#if rich_text_font_size_variations.has(label):
 		#return
@@ -377,6 +384,7 @@ func _capture_rt_font_size_variations(label: RichTextLabel) -> void:
 # Sets all fonts by the current rich text label
 # adjusted in relation to the normal font.
 #NOTE: Not sure what the best way for this is now using 4.0 overrides
+@warning_ignore("unused_parameter")
 func _set_card_rtl_fonts(label: RichTextLabel, fonts_dict: Dictionary, new_size: int) -> void:
 	#for font_type in fonts_dict:
 		#fonts_dict[font_type].size = new_size + rich_text_font_size_variations[label][font_type]
@@ -399,7 +407,7 @@ func _adjust_font_size(
 	# line_spacing should be calculated into rect_size
 	# This calculates the amount of vertical pixels the text would take
 	# once it was word-wrapped.
-	var label_rect_y = font.get_multiline_string_size(text, 1, label_size.x, \
+	var label_rect_y = font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, label_size.x, \
 		current_size + adjustment).y \
 		/ line_height * (line_height + line_spacing) - line_spacing
 	# If the y-size of the wordwrapped text would be bigger than the current
@@ -407,7 +415,7 @@ func _adjust_font_size(
 	# it's small enough to stay within the boundaries
 	while label_rect_y > label_size.y:
 		adjustment -= 1
-		label_rect_y = font.get_multiline_string_size(text, 1, label_size.x, \
+		label_rect_y = font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, label_size.x, \
 		current_size + adjustment).y \
 		/ line_height * (line_height + line_spacing) - line_spacing
 		if (current_size + adjustment) < 5:
