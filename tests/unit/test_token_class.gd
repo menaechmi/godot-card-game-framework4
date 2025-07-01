@@ -16,25 +16,26 @@ func before_each():
 	token = token_scene.instantiate()
 	token.setup("tech")
 	board._add_child(token)
+	await wait_for_signal(get_tree().process_frame, 1)
 
 func test_count_setget():
 	var count_label = token.get_node("CenterContainer/Count")
-	assert_eq(0,token.count,"Initial count should be 0")
-	assert_eq("0",count_label.text,"Label should be '0'")
+	assert_eq(token.count, 0, "Initial count should be 0")
+	assert_eq(count_label.text, "0", "Label should be '0'")
 	token.count += 2
-	assert_eq(2,token.count,"Count should be 2")
+	assert_eq(token.count, 2, "Count should be 2")
 	assert_eq("2",count_label.text,"Label should be '2'")
 	token.count += 5
-	assert_eq(7,token.count,"Count should be 7")
+	assert_eq(token.count, 7, "Count should be 7")
 	assert_eq("7",count_label.text,"Label should be '7'")
 	token.count -= 3
-	assert_eq(4,token.count,"Count should be 4")
+	assert_eq(token.count, 4, "Count should be 4")
 	assert_eq("4",count_label.text,"Label should be '4'")
 	token.count = 10
-	assert_eq(10,token.count,"Count should be 10")
+	assert_eq(token.count, 10, "Count should be 10")
 	assert_eq("10",count_label.text,"Label should be '10'")
 	token.count = -100
-	assert_eq(0,token.count,"Count should be 0")
+	assert_eq(token.count, 0, "Count should be 0")
 	assert_eq("0",count_label.text,"Label should be '0'")
 
 func test_expand_retract():

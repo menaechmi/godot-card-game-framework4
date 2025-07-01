@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dxw6mnmy020so"]
 
-[ext_resource type="FontFile" uid="uid://cosmhtqyogr6w" path="res://fonts/Xolonium-Regular.ttf" id="1"]
-[ext_resource type="Texture2D" uid="uid://c2jwsrdadx14h" path="res://assets/tokens/blue.svg" id="2"]
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="1"]
+[ext_resource type="Texture2D" uid="uid://cx7txxb1e25jl" path="res://assets/tokens/blue.svg" id="2"]
 [ext_resource type="Script" path="res://src/core/Token.gd" id="3"]
 
 [sub_resource type="FontFile" id="1"]

@@ -5,19 +5,20 @@ extends HBoxContainer
 
 
 @export var count := 0: 
-	get: 	
-		var _ret = await get_count_and_alterants()
-		return _ret.count
+	get: return get_count()
 	set(value): set_count(value)
+#Private _count avoids a cyclical set->get problem
 var _count := 0
+var _count_and_alterant: Dictionary
 var token_drawer
 
 @onready var count_label = $CenterContainer/Count
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	set_count(count) # Replace with function body.
-
+	await get_count_and_alterants()
+	count_label.text = str(count)
+	set_count(count)
 
 # Button to increment token counter by 1
 func _on_Add_pressed() -> void:
@@ -54,12 +55,18 @@ func set_count(value := 1) -> void:
 	# https://github.com/godotengine/godot/issues/30460#issuecomment-509697259
 	if is_inside_tree():
 		count_label.text = str(count)
+	get_count_and_alterants()
 
 
 # Returns the amount of tokens of this type
 func get_count() -> int:
-	var _ret = await get_count_and_alterants()
-	return _ret.count
+	var _ret
+	if token_drawer:
+		_ret = _count_and_alterant.count
+	else:
+		_ret = _count
+	get_count_and_alterants()
+	return _ret
 
 
 # Discovers the modified value of this token
@@ -82,10 +89,13 @@ func get_count_and_alterants() -> Dictionary:
 			"get_token",
 			{SP.KEY_TOKEN_NAME: name,},
 			_count)
+	#This ensures get_counts... is a co-routine, without it control doesn't return to the caller
+	await get_tree().process_frame
 	var return_dict := {
 		"count": _count + alteration.value_alteration,
 		"alteration": alteration
 	}
+	_count_and_alterant = return_dict
 	return(return_dict)
 
 
@@ -114,6 +124,7 @@ func get_token_name() -> String:
 # These functions replace the calls to _add_child, remove_child, and move_child.
 # Because Godot doesn't override built_ins, this lets us call these on all nodes
 # So the ones it matters for can have special functions.
+@warning_ignore("unused_parameter", "shadowed_variable_base_class")
 func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	super.add_child(node)
 
