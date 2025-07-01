@@ -31,7 +31,7 @@ func setup_main() -> void:
 	cfc.is_testing = true
 	cfc._setup()
 	main = autoqfree(MAIN_SCENE.instantiate())
-	get_tree().get_root()._add_child(main)
+	get_tree().get_root().add_child(main)
 	if not cfc.are_all_nodes_mapped:
 		await cfc.all_nodes_mapped
 	board = cfc.NMAP.board
@@ -111,7 +111,9 @@ func drag_card(card: Card, target_position: Vector2, interpolation_speed := "fas
 func drop_card(card: Card, drop_location: Vector2) -> void:
 	var fc:= fake_click(false, drop_location)
 	card._on_Card_gui_input(fc)
-	await yield_to(card._tween, "finished", 1)
+	var tween = card._tween.get_ref() as Tween
+	if tween and tween.is_running():
+		tween.custom_step(1)
 
 
 # Takes care of simple drag&drop requests
@@ -149,10 +151,11 @@ func target_card(source: Card,
 
 func table_move(card: Card, pos: Vector2) -> void:
 	card.move_to(board, -1, pos)
-	if card._tween:
-		await yield_to(card._tween, "finished", 0.5)
-	if cfc.game_settings.fancy_movement and card._tween:
-		await yield_to(card._tween, "finished", 0.5)
+	var tween = card._tween.get_ref() as Tween
+	if tween and tween.is_running():
+		tween.custom_step(0.5)
+	if cfc.game_settings.fancy_movement and tween:
+		tween.custom_step(0.5)
 
 func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void:
 	var mouse_speed = MOUSE_SPEED[interpolation_speed][0]

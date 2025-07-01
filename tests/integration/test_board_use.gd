@@ -2,7 +2,7 @@ extends "res://tests/UTcommon.gd"
 
 class TestCardBoardDrop:
 	extends "res://tests/Basic_common.gd"
-
+	#TODO: I think the problems in this one are related to the drag_card and move_mouse functions
 	func test_card_table_drop_location_and_rotation_use_rectangle():
 		cfc.game_settings.hand_use_oval_shape = false
 		for c in cfc.NMAP.hand.get_all_cards():

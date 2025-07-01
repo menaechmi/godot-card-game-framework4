@@ -86,7 +86,7 @@ func test_init_card_name():
 			'Name Label text is set correctly')
 
 func test_card_name_setget():
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 5)
 	card.set_card_name("Testing Name Change 1")
 	# We need a yield to allow the richtextlabel setup complete
 	assert_eq("Testing Name Change 1",card.canonical_name,
@@ -96,7 +96,7 @@ func test_card_name_setget():
 	assert_eq("Testing Name Change 1",card.card_front.card_labels["Name"].text,
 			'Name Label text is set correctly')
 	card.canonical_name = "Testing Name Change 2"
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.1)
 	assert_eq("Testing Name Change 2",card.canonical_name,
 			'card_name variable is set correctly')
 	#str() conversion used because GUT doesn't consider StringName a String
@@ -147,7 +147,7 @@ func test_number_properties_with_string_value():
 	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 1)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"X",
 			"Numerical array allowed string value")
 	assert_eq(new_card.card_front.card_labels["Power"].text, '1',
@@ -155,7 +155,7 @@ func test_number_properties_with_string_value():
 	assert_eq(new_card.properties.Power, 1,
 			"Number property changed to integer")
 	new_card.modify_property('Power', 'U')
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 1)
 	assert_eq(new_card.card_front.card_labels["Power"].text,"U",
 			"Numerical array allowed string value")
 
