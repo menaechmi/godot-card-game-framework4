@@ -123,7 +123,7 @@ func _on_ViewPopup_popup_hide() -> void:
 		# If it is, we move it to the root.
 		#print_debug(card.canonical_name, card.get_parent().name)
 		if "CardPopUpSlot" in card.get_parent().name:
-			card.get_parent()._remove_child(card)
+			card.get_parent().remove_child(card)
 			_add_child(card)
 			# We need to remember that cards in piles should be left invisible
 			# and at default scale
@@ -335,9 +335,9 @@ func _slot_card_into_popup(card: Card) -> void:
 	# We set the control container size to be equal
 	# to the card size to which the card will scale.
 	card_slot.custom_minimum_size = card.get_node("Control").custom_minimum_size * card.scale
-	_popup_grid._add_child(card_slot)
+	_popup_grid.add_child(card_slot)
 	# Finally, the card is added to the temporary control node parent.
-	card_slot._add_child(card)
+	card_slot.add_child(card)
 	# warning-ignore:return_value_discarded
 	card.set_is_faceup(true,true)
 	card.position = Vector2(0,0)
