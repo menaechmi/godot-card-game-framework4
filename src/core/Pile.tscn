@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cm3g4vp4jtd2q"]
+[gd_scene load_steps=9 format=3 uid="uid://cm3g4vp4jtd2q"]
 
 [ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="1"]
 [ext_resource type="Script" path="res://src/core/Pile.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://d1rsjrmjo6acw" path="res://src/core/Highlight.tscn" id="3"]
+[ext_resource type="StyleBox" uid="uid://dauwgsoy0ksr8" path="res://themes/darktheme/StyleBox/Normal.tres" id="4_mvrta"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(1, 1, 1, 1)
@@ -108,12 +109,13 @@ position = Vector2(78, 123)
 shape = SubResource("4")
 
 [node name="ViewPopup" type="PopupPanel" parent="."]
+theme_override_styles/panel = ExtResource("4_mvrta")
 
 [node name="CardView" type="GridContainer" parent="ViewPopup"]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 96.0
-offset_bottom = 96.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 98.0
+offset_bottom = 98.0
 columns = 7
 
 [node name="Debug" type="VBoxContainer" parent="."]

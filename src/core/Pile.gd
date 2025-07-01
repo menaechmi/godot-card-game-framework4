@@ -99,8 +99,7 @@ func _on_ViewPopup_about_to_show() -> void:
 		tween.custom_step(5)
 		#await tween.finished
 	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	#it refuses to let me set a from .from(Color(1,1,1,0))\
-	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,1), 0.5)
+	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,1), 0.5)
 	tween.play()
 	_tween = weakref(tween)
 
@@ -114,16 +113,24 @@ func _on_ViewPopup_popup_hide() -> void:
 	tween.stop()
 	_tween = weakref(tween)
 	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.tween_property($ViewPopup,'modulate:a', Color(1,1,1,0), 0.5)
+	#bg_color
+	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,0), 0.5)
 	tween.play()
-	#Teen awaits never get called
 	#await tween.finished
 	for card in pre_sorted_order:
 		# For each card we have hosted, we check if it's hosted in the popup.
 		# If it is, we move it to the root.
 		#print_debug(card.canonical_name, card.get_parent().name)
-		if "CardPopUpSlot" in card.get_parent().name:
-			card.get_parent().remove_child(card)
+		var parent = card.get_parent()
+		if "CardPopUpSlot" in parent.name:
+			# Condition "p_elem->_root != this" https://github.com/godotengine/godot/issues/80073
+			# Deferred calls may help, but you can't defer both remove and add without awaiting
+			# and that would turn this into a co-routine
+			if parent is Pile:
+				#This ensures Pile -> Pile works correctly, because I can't add _remove_child to Control
+				parent._remove_child(card)
+			else:
+				parent.remove_child(card)
 			_add_child(card)
 			# We need to remember that cards in piles should be left invisible
 			# and at default scale
@@ -228,7 +235,8 @@ func _remove_child(node, _legible_unique_name=false) -> void:
 		reorganize_stack()
 		var opacity_tween = _opacity_tween.get_ref() as Tween
 		if opacity_tween:
-			await opacity_tween.finished
+			#await opacity_tween.finished
+			opacity_tween.custom_step(2)
 		opacity_tween = create_tween()
 		opacity_tween.stop()
 		_opacity_tween = weakref(opacity_tween)
