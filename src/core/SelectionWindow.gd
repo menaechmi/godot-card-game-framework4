@@ -171,7 +171,7 @@ func initiate_selection(
 	# We do a nice alpha-modulate tween
 	_tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	_tween.start()
+	_tween.play()
 	emit_signal(
 			"selection_window_opened",
 			self,

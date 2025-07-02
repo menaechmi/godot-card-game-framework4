@@ -166,7 +166,7 @@ func focus_card(card: Card, show_preview := true) -> void:
 		else:
 			tween.tween_property(focus_info,'modulate', Color(1,1,1,0), 0.25).from(focus_info.modulate)\
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.start()
+		tween.play()
 		card_focus.visible = show_preview
 		# Now that the display panels can expand horizontally
 		# we need to set their parent container size to 0 here
@@ -194,7 +194,7 @@ func unfocus(card: Card) -> void:
 		if focus_info.modulate != Color(1,1,1,0):
 			tween.tween_property(focus_info,'modulate',Color(1,1,1,0), 0.25).from(focus_info.module)\
 				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.start()
+		tween.play()
 
 
 # Tells the currently focused card to stop focusing.
