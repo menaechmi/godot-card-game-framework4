@@ -43,9 +43,12 @@ func select_card(
 	# This way we can override the card select scene with a custom one
 	var selection = card_select_scene.instantiate()
 	parent_node._add_child(selection)
-	selection.call_deferred("initiate_selection", card_list,selection_count,selection_type,selection_optional)
+	#HACK: Awaiting here turns the whole Alterant Engine into a co-routine
+	# Instead, we follow it with this thread to ensure a selection is made or the game waits
+	selection.initiate_selection(card_list,selection_count,selection_type,selection_optional)
+	#selection.call_deferred("initiate_selection", card_list,selection_count,selection_type,selection_optional)
 	# We have to wait until the player has finished selecting their cards
-	await selection.confirmed
+	#await selection.confirmed
 	if selection.is_cancelled:
 		selected_cards = false
 	else:

@@ -9,7 +9,7 @@ extends HBoxContainer
 	set(value): set_count(value)
 #Private _count avoids a cyclical set->get problem
 var _count := 0
-var _count_and_alterant: Dictionary
+var _count_and_alterant := { "count": 0, "alteration": {}}
 var token_drawer
 
 @onready var count_label = $CenterContainer/Count
@@ -35,6 +35,7 @@ func _on_Remove_pressed() -> void:
 # Initializes the token with the right texture and name 
 # based on the values in the configuration
 func setup(token_name: String, _token_drawer = null) -> void:
+	get_count_and_alterants()
 	name = token_name
 	token_drawer = _token_drawer
 	var textrect : TextureRect = $CenterContainer/TokenIcon
@@ -60,12 +61,12 @@ func set_count(value := 1) -> void:
 
 # Returns the amount of tokens of this type
 func get_count() -> int:
+	get_count_and_alterants()
 	var _ret
 	if token_drawer:
 		_ret = _count_and_alterant.count
 	else:
 		_ret = _count
-	get_count_and_alterants()
 	return _ret
 
 
@@ -84,13 +85,14 @@ func get_count_and_alterants() -> Dictionary:
 	# We do this check because in UT the token might not be
 	# assigned to a token_drawer
 	if token_drawer:
-		alteration = await CFScriptUtils.get_altered_value(
+		# Used to be an await
+		alteration = CFScriptUtils.get_altered_value(
 			token_drawer.owner_card,
 			"get_token",
 			{SP.KEY_TOKEN_NAME: name,},
 			_count)
 	#This ensures get_counts... is a co-routine, without it control doesn't return to the caller
-	await get_tree().process_frame
+	#await Engine.get_main_loop().create_timer(0.001).timeout
 	var return_dict := {
 		"count": _count + alteration.value_alteration,
 		"alteration": alteration

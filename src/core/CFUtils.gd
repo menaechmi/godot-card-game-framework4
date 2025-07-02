@@ -121,6 +121,7 @@ static func list_imported_in_directory(path: String, full_path := false) -> Arra
 
 # Creates a ConfirmationDialog for the player to approve the
 # Use of an optional script or task.
+# Caller is used to set a callback for async confirmation
 static func confirm(
 		script: Dictionary,
 		card_name: String,
@@ -133,6 +134,9 @@ static func confirm(
 		var confirm = _OPTIONAL_CONFIRM_SCENE.instantiate()
 		confirm.prep(card_name,task_name)
 		# We have to wait until the player has finished selecting an option
+		#TODO: Refactor this better so that TokenDrawer->Token->get_count_and_alterants
+		#->CFScriptUtils.get_altered_value->cfc.alterant_engine.new->scriptAlter.new()->this
+		#isn't a likely path to happen.
 		await confirm.selected
 		# If the player selected "No", we don't execute anything
 		if not confirm.is_accepted:

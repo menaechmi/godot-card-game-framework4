@@ -165,7 +165,7 @@ func initiate_selection(
 	popup_centered_clamped()
 	# Spawning all the duplicates is a bit heavy
 	# So we delay showing the tween to avoid having it look choppy
-	await get_tree().create_timer(0.2).timeout
+	#await get_tree().create_timer(0.2).timeout
 	if _tween:
 		_tween.kill()
 	# We do a nice alpha-modulate tween

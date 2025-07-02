@@ -934,7 +934,8 @@ func null_script(script: ScriptTask) -> int:
 # Initiates a seek through the table to see if there's any cards
 # which have scripts which modify the intensity of the current task.
 func _check_for_alterants(script: ScriptTask, value: int, subject = null) -> int:
-	var alteration = await CFScriptUtils.get_altered_value(
+	# Used to be an await
+	var alteration = CFScriptUtils.get_altered_value(
 		script.owner,
 		script.script_name,
 		script.script_definition,
@@ -961,7 +962,8 @@ func _check_for_property_alterants(
 			script_def[SP.KEY_MODIFY_PROPERTIES][property]
 	script_def[SP.TRIGGER_PREV_COUNT] = old_value
 	script_def[SP.TRIGGER_NEW_COUNT] = new_value
-	var alteration = await CFScriptUtils.get_altered_value(
+	#Used to be an await
+	var alteration = CFScriptUtils.get_altered_value(
 		script.owner,
 		script.script_name,
 		script_def,

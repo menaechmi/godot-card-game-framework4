@@ -68,7 +68,8 @@ func prime(_prev_subjects: Array, run_type: int, sceng_stored_int: int) -> void:
 			or (run_type == CFInt.RunType.COST_CHECK
 			and (is_cost or needs_subject))):
 		# We discover which other card this task will affect, if any
-		await _find_subjects(sceng_stored_int)
+		# Used to be an await
+		_find_subjects(sceng_stored_int)
 	#print_debug(str(subjects), str(cost_dry_run))
 	# We emit a signal when done so that our ScriptingEngine
 	# knows we're ready to continue

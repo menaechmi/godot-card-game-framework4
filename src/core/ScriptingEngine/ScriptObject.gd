@@ -80,8 +80,8 @@ func get_property(property: String, default = null):
 func _find_subjects(stored_integer := 0) -> Array:
 	var subjects_array := []
 	# See SP.KEY_SUBJECT doc
-	#HACK: Conditionals make co-routines not work
-	await Engine.get_main_loop().process_frame
+	#HACK: Conditionals make co-routines not work - but we also want this not to be a coroutine
+	#await Engine.get_main_loop().process_frame
 	match get_property(SP.KEY_SUBJECT):
 		# Ever task retrieves the subjects used in the previous task.
 		# if the value "previous" is given to the "subjects" key,
@@ -104,28 +104,31 @@ func _find_subjects(stored_integer := 0) -> Array:
 					if not SP.check_validity(c, script_definition, "subject"):
 						is_valid = false
 		SP.KEY_SUBJECT_V_TARGET:
-			var c = await _initiate_card_targeting()
+			#HACK: We prevent _find_subjects from needing to be awaited by
+			#moving this to another call stack & waiting for a signal
+			# it means in the case of a KEY_SUBJECT_V_TARGET, we can't know the validity until later
+			_initiate_card_targeting()
 			# If the target is null, it means the player pointed at nothing
-			if c:
-				is_valid = SP.check_validity(c, script_definition, "subject")
-				subjects_array.append(c)
-			else:
-				# If the script required a target and it didn't find any
-				# we consider it invalid
-				is_valid = false
+			#if c.return:
+				#is_valid = SP.check_validity(c.return, script_definition, "subject")
+				#subjects_array.append(c.return)
+			#else:
+				## If the script required a target and it didn't find any
+				## we consider it invalid
+				#is_valid = false
 		SP.KEY_SUBJECT_V_BOARDSEEK:
 			subjects_array = _boardseek_subjects(stored_integer)
 		SP.KEY_SUBJECT_V_TUTOR:
 			subjects_array = _tutor_subjects(stored_integer)
 		SP.KEY_SUBJECT_V_INDEX:
 			subjects_array = _index_seek_subjects(stored_integer)
-		SP.KEY_SUBJECT_V_TRIGGER:
-			# We check, just to make sure we didn't mess up
-			if trigger_object:
-				is_valid = SP.check_validity(trigger_object, script_definition, "subject")
-				subjects_array.append(trigger_object)
-			else:
-				print_debug("WARNING: Subject: trigger requested, but no trigger card passed")
+		#SP.KEY_SUBJECT_V_TRIGGER:
+			## We check, just to make sure we didn't mess up
+			#if trigger_object:
+				#is_valid = SP.check_validity(trigger_object, script_definition, "subject")
+				#subjects_array.append(trigger_object)
+			#else:
+				#print_debug("WARNING: Subject: trigger requested, but no trigger card passed")
 		SP.KEY_SUBJECT_V_SELF:
 			is_valid = SP.check_validity(owner, script_definition, "subject")
 			subjects_array.append(owner)
@@ -141,7 +144,8 @@ func _find_subjects(stored_integer := 0) -> Array:
 		var selection_optional = get_property(SP.KEY_SELECTION_OPTIONAL)
 		if get_property(SP.KEY_SELECTION_IGNORE_SELF):
 			subjects_array.erase(owner)
-		var select_return = await cfc.ov_utils.select_card(
+		#This used to require an await
+		var select_return = cfc.ov_utils.select_card(
 				subjects_array, selection_count, selection_type, selection_optional, cfc.NMAP.board)
 		# In case the owner card is still focused (say because script was triggered
 		# on double-click and card was not moved
@@ -314,19 +318,33 @@ func _index_seek_subjects(stored_integer: int) -> Array:
 # and yields until it's found.
 #
 # Returns a Card object.
-func _initiate_card_targeting() -> Card:
+func _initiate_card_targeting() -> void: #used to return Card
 	# We wait a centisecond, to prevent the card's _input function from seeing
 	# The double-click which started the script and immediately triggerring
 	# the target completion
-	await owner.get_tree().create_timer(0.1).timeout
+	# If we keep this await, everything touched by ScriptObjects needs to be awaited.
+	#await owner.get_tree().create_timer(0.1).timeout
 	owner.targeting_arrow.initiate_targeting()
 	# We wait until the targetting has been completed to continue
-	await owner.targeting_arrow.target_selected
+	owner.targeting_arrow.target_selected.connect(_on_target_selected)
+	#await owner.targeting_arrow.target_selected
+	#var target = owner.targeting_arrow.target_object
+	#owner.targeting_arrow.target_object = null
+	##owner_card.target_object = null
+	#return(target)
+
+func _on_target_selected():
+	var subjects_array := []
 	var target = owner.targeting_arrow.target_object
 	owner.targeting_arrow.target_object = null
-	#owner_card.target_object = null
-	return(target)
-
+	# If the target is null, it means the player pointed at nothing
+	if target.return:
+		is_valid = SP.check_validity(target.return, script_definition, "subject")
+		subjects_array.append(target.return)
+	else:
+		# If the script required a target and it didn't find any
+		# we consider it invalid
+		is_valid = false
 
 # Handles looking for intensifiers of a current effect via the board state
 #

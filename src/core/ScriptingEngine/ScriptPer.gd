@@ -17,7 +17,8 @@ func _init(per_msg: perMessage) -> void:
 		prev_subjects = per_msg.prev_subjects
 	else:
 		prev_subjects = per_msg.subjects
-	await _find_subjects()
+	#await _find_subjects()
+	_find_subjects()
 	# We emit a signal when done so that our ScriptingEngine
 	# knows we're ready to continue
 	emit_signal("primed")

@@ -38,7 +38,7 @@ func _init(
 		_subject) -> void:
 	subject = _subject
 	for alter_task_def in scripts_queue.duplicate(true):
-		var alter_task := await ScriptAlter.new(
+		var alter_task := ScriptAlter.new(
 				alter_task_def,
 				trigger_object,
 				alterant_object,
@@ -54,11 +54,18 @@ func _init(
 # then turns each array element into a [ScriptAlter] object which check
 # against the relevant filters and per_ requests.
 func execute() -> void:
+	var skipped_tasks: Array
 	for alter_task in alterants_queue:
+		#This means alter_tasks aren't promised to be in any specific order anymore
 		if not alter_task.is_primed:
-			await alter_task.primed
+			skipped_tasks.append(alter_task)
+			continue
 		if alter_task.is_valid:
 			calculate_alteration(alter_task)
+	#If tasks have been skipped, we loop until no tasks are skipped.
+	if len(skipped_tasks):
+		alterants_queue = skipped_tasks
+		call_deferred("execute")
 	all_alterations_completed = true
 	emit_signal("alterations_completed")
 

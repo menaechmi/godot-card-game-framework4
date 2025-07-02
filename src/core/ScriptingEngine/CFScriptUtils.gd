@@ -55,8 +55,8 @@ static func get_altered_value(
 						state_scripts,
 						task_details,
 						subject)
-				if not alteng.all_alterations_completed:
-					await alteng.alterations_completed
+				#if not alteng.all_alterations_completed:
+					#await alteng.alterations_completed
 				value_alteration += alteng.alteration
 				# We don't want to register alterants which didn't modify the number.
 				if alteng.alteration != 0:
