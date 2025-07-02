@@ -664,7 +664,7 @@ func modify_property(
 				properties[property] = value
 			#FIXME: sometimes items without card_front get stuck here
 			# because dupes don't get card_front or card_back
-			if not card_front.card_labels.has(property):
+			if card_front and not card_front.card_labels.has(property):
 				if not property.begins_with("_"):
 					print_debug("Warning: ", property,
 							" does not have a matching label!")
@@ -763,7 +763,7 @@ func refresh_card_front() -> void:
 # properties.get() as it takes into account the temp_properties_modifiers var
 # and also checks for alterant scripts
 func get_property(property: String):
-	var _ret = await get_property_and_alterants(property)
+	var _ret = get_property_and_alterants(property)
 	return _ret.value
 
 
@@ -812,7 +812,7 @@ func get_property_and_alterants(property: String,
 		# by filtering the card's properties, causing an infinite loop.
 		if not _is_property_being_altered:
 			_is_property_being_altered = true
-			alteration = await CFScriptUtils.get_altered_value(
+			alteration = CFScriptUtils.get_altered_value(
 				self,
 				"get_property",
 				{SP.KEY_PROPERTY_NAME: property,},
