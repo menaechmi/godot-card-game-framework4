@@ -17,6 +17,9 @@ func after_all():
 func before_each():
 	await setup_board()
 	cards = draw_test_cards(initial_card_count)
-	await yield_for(initial_wait)
+	await wait_seconds(initial_wait)
 	card = cards[card_index]
 	target = cards[target_index]
+
+#func after_each():
+	#await teardown_board()

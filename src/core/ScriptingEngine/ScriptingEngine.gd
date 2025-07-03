@@ -134,14 +134,14 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 			# This is useful for example, when the targeting task would move
 			# The subject to another pile but we want to check (#SUBJECT_PARENT)
 			# against the parent it had before it was moved.
-			# FIXME: We get hung up here because prev_subjects isn't assigned sometimes
-			# priming scripts seems to not happen correctly - script isn't marked as valid
 			if script.get_property(SP.KEY_SUBJECT) == SP.KEY_SUBJECT_V_PREVIOUS\
 					and prev_subjects.size() == 0:
-				var current_index := scripts_queue.find(task)
-				var next_task: ScriptTask =  scripts_queue[current_index + 1]
-				if next_task.subjects.size() > 0:
-					prev_subjects = next_task.subjects
+				var next_index := (scripts_queue.find(task)) + 1
+				# Prevents out of bounds index
+				if (next_index) < scripts_queue.size():
+					var next_task: ScriptTask =  scripts_queue[next_index]
+					if next_task.subjects.size() > 0:
+						prev_subjects = next_task.subjects
 			script.prime(prev_subjects,run_type,stored_integer)
 			# In case the task involves targetting, we need to wait on further
 			# execution until targetting has completed

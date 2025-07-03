@@ -1,18 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7ol2l4250d3b"]
+[gd_scene load_steps=3 format=3 uid="uid://b7x6er87bnf5e"]
 
-[ext_resource type="PackedScene" uid="uid://buxphht5k7omf" path="res://src/core/CardViewer/CardLabel.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bfseefufrlgxf" path="res://src/core/CardViewer/CardLabel.tscn" id="2"]
 [ext_resource type="Script" path="res://src/core/CardViewer/CVListCardObject.gd" id="3"]
 
 [node name="ListCardObject" type="HBoxContainer"]
-offset_right = 628.0
-offset_bottom = 20.0
 script = ExtResource("3")
 
 [node name="CardLabel" parent="." instance=ExtResource("2")]
 layout_mode = 2
 
 [node name="Type" type="RichTextLabel" parent="."]
-custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 bbcode_enabled = true
 scroll_active = false

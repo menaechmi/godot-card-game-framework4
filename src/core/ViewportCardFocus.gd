@@ -109,13 +109,17 @@ func focus_card(card: Card, show_preview := true) -> void:
 			dupe_focus.set_is_faceup(card.is_faceup, true)
 			dupe_focus.is_viewed = card.is_viewed
 		else:
+			#FIXME the cards are duplicated here, but are missing some things
+			#Most importantly, card_front and card_back
+			#DUPLICATE_USE_INSTANTIATION seems to be the default now
 			dupe_focus = card.duplicate(DUPLICATE_USE_INSTANTIATION)
 			dupe_focus.remove_from_group("cards")
+			# add_child removes the card_front and card_back properties, so it happens first
+			_focus_viewport.add_child(dupe_focus)
 			_extra_dupe_preparation(dupe_focus, card)
 			# We display a "pure" version of the card
 			# This means we hide buttons, tokens etc
 			dupe_focus.state = Card.CardState.VIEWPORT_FOCUS
-			_focus_viewport.add_child(dupe_focus)
 			_extra_dupe_ready(dupe_focus, card)
 			dupe_focus.is_faceup = card.is_faceup
 			dupe_focus.is_viewed = card.is_viewed
@@ -151,7 +155,7 @@ func focus_card(card: Card, show_preview := true) -> void:
 		# We always make sure to clean tweening conflicts
 		var tween = _tween.get_ref() as Tween
 		if tween:
-			tween.kill()
+			tween.custom_step(5)
 		tween = create_tween().set_parallel(true)
 		tween.stop()
 		_tween = weakref(tween)
@@ -185,15 +189,13 @@ func unfocus(card: Card) -> void:
 		#but a window and does not have the modulate property
 		var tween = _tween.get_ref() as Tween
 		if tween:
-			tween.kill()
-		tween = create_tween().set_parallel(true)
+			tween.custom_step(5)
+		tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tween.stop()
 		_tween = weakref(tween)
-		tween.tween_property($VBC/Focus,'modulate', Color(1,1,1,0), 0.25).from($VBC/Focus.modulate)\
-				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_property($VBC/Focus,"modulate", Color(1,1,1,0), 0.25).from_current()
 		if focus_info.modulate != Color(1,1,1,0):
-			tween.tween_property(focus_info,'modulate',Color(1,1,1,0), 0.25).from(focus_info.module)\
-				.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+			tween.tween_property(focus_info,"modulate",Color(1,1,1,0), 0.25).from_current()
 		tween.play()
 
 
@@ -208,6 +210,8 @@ func unfocus_all() -> void:
 func _extra_dupe_preparation(dupe_focus: Card, card: Card) -> void:
 	dupe_focus.canonical_name = card.canonical_name
 	dupe_focus.properties = card.properties.duplicate()
+	dupe_focus.card_front = card.card_front.duplicate()
+	dupe_focus.card_back = card.card_back.duplicate()
 	focus_info.hide_all_info()
 
 

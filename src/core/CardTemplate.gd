@@ -398,7 +398,7 @@ func _process(delta) -> void:
 		_tween_stuck_time += delta
 		if _tween_stuck_time > 5 and int(fmod(_tween_stuck_time,3)) == 2 :
 			print_debug("Tween Stuck for ",_tween_stuck_time, " seconds.")
-			tween.kill()
+			tween.custom_step(5)
 			_tween_stuck_time = 0
 	else:
 		_tween_stuck_time = 0
@@ -1085,7 +1085,7 @@ func set_card_rotation(
 				and $Control.rotation != 0.0 \
 				and not tween.is_valid:
 			if tween:
-				tween.kill()
+				tween.custom_step(5)
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
@@ -1244,7 +1244,11 @@ func move_to(targetHost: Node,
 		elif parent_scale < target_scale:
 			scale *= parent_scale * target_scale
 		# We need to remove the current parent node before adding a different one
-		parentHost._remove_child(self)
+		# Because we can't override remove_child(), we check for it first
+		if parentHost.has_method("_remove_child"):
+			parentHost._remove_child(self)
+		else:
+			parentHost.remove_child(self)
 		targetHost._add_child(self)
 		# The below is used when a specific card position is requested
 		# It converts the requested card position, to absolute node position
@@ -1297,7 +1301,7 @@ func move_to(targetHost: Node,
 				# visible on top of deck
 				var tween := _tween.get_ref() as Tween
 				if tween:
-					tween.kill()
+					tween.custom_step(2)
 				# We need to adjust the end position based on the local rect inside
 				# the container control node
 				# So we transform global coordinates to container rect coordinates.
@@ -1708,9 +1712,9 @@ func interruptTweening() ->void:
 	if not cfc.game_settings.fancy_movement or (cfc.game_settings.fancy_movement
 			and (_fancy_move_second_part
 			or state != CardState.MOVING_TO_CONTAINER)):
-		var tween = _tween.get_ref()
+		var tween = _tween.get_ref() as Tween
 		if tween:
-			tween.kill()
+			tween.custom_step(5)
 		set_state(CardState.IN_HAND)
 
 

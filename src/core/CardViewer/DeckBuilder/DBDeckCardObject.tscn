@@ -1,49 +1,22 @@
-[gd_scene load_steps=7 format=3 uid="uid://btii472avyov8"]
+[gd_scene load_steps=3 format=3 uid="uid://dx0bwlwrfurdq"]
 
-[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="1"]
-[ext_resource type="PackedScene" uid="uid://buxphht5k7omf" path="res://src/core/CardViewer/CardLabel.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://src/core/CardViewer/CardLabel.tscn" id="2"]
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/DBDeckCardObject.gd" id="4"]
-[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="5"]
-
-[sub_resource type="FontFile" id="2"]
-fallbacks = Array[Font]([ExtResource("1")])
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
-
-[sub_resource type="FontFile" id="3"]
-fallbacks = Array[Font]([ExtResource("5")])
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="DBDeckCardObject" type="HBoxContainer"]
-offset_right = 623.0
-offset_bottom = 18.0
 size_flags_horizontal = 3
 script = ExtResource("4")
 
 [node name="Plus" type="Button" parent="."]
-custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
-theme_override_fonts/font = SubResource("2")
 text = "+"
 
 [node name="Minus" type="Button" parent="."]
-custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
-theme_override_fonts/font = SubResource("2")
 text = "-"
 
 [node name="CardCount" type="Label" parent="."]
 layout_mode = 2
-theme_override_fonts/font = SubResource("3")
 text = "1x"
 
 [node name="CardLabel" parent="." instance=ExtResource("2")]

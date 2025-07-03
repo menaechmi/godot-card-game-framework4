@@ -1,34 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://cdkmxw5o8cgrj"]
+[gd_scene load_steps=5 format=3 uid="uid://clh235220p7mg"]
 
-[ext_resource type="PackedScene" uid="uid://buxphht5k7omf" path="res://src/core/CardViewer/CardLabel.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://src/core/CardViewer/CardLabel.tscn" id="1"]
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/QuantityNumberButton.gd" id="2"]
 [ext_resource type="Script" path="res://src/core/IntegerLineEdit.gd" id="3"]
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/DBListCardObject.gd" id="4"]
-[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="5"]
-[ext_resource type="FontFile" path="res://src/core/CardViewer/CVCardObjectFont.tres" id="6"]
-
-[sub_resource type="FontFile" id="1"]
-fallbacks = Array[Font]([ExtResource("5")])
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="DBListCardObject" type="HBoxContainer"]
-offset_right = 628.0
-offset_bottom = 20.0
 script = ExtResource("4")
 
 [node name="Quantity" type="HBoxContainer" parent="."]
-custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_constants/separation = 0
 
 [node name="0" type="Button" parent="Quantity"]
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "0"
 script = ExtResource("2")
@@ -36,7 +20,6 @@ script = ExtResource("2")
 [node name="1" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "1"
 script = ExtResource("2")
@@ -44,7 +27,6 @@ script = ExtResource("2")
 [node name="2" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "2"
 script = ExtResource("2")
@@ -52,7 +34,6 @@ script = ExtResource("2")
 [node name="3" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "3"
 script = ExtResource("2")
@@ -60,7 +41,6 @@ script = ExtResource("2")
 [node name="4" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "4"
 script = ExtResource("2")
@@ -68,7 +48,6 @@ script = ExtResource("2")
 [node name="5" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 toggle_mode = true
 text = "5"
 script = ExtResource("2")
@@ -82,22 +61,18 @@ script = ExtResource("3")
 [node name="Plus" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 text = "+"
 
 [node name="Minus" type="Button" parent="Quantity"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = SubResource("1")
 text = "-"
 
 [node name="CardLabel" parent="." instance=ExtResource("1")]
 layout_mode = 2
 
 [node name="Type" type="Label" parent="."]
-custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("6")
 text = "Blue"
 
 [connection signal="pressed" from="Quantity/Plus" to="." method="_on_Plus_pressed"]

@@ -7,8 +7,9 @@ class TestMoveToContainer:
 		var card: Card
 		card = cards[2]
 		await drag_drop(card, cfc.NMAP.discard.position)
-		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(card.global_position,cfc.NMAP.discard.position,Vector2(2,2),
 				"Card's final position matches pile's position")
 		assert_eq(1,cfc.NMAP.discard.get_card_count(),
@@ -22,9 +23,9 @@ class TestMoveToContainer:
 		await drag_drop(cards[1], cfc.NMAP.discard.position + Vector2(10,10))
 		await move_mouse(Vector2(500,300))
 		await drag_drop(cards[0], cfc.NMAP.deck.position + Vector2(10,10))
-		if cards[0]._tween:
-			await yield_to(cards[0]._tween, "finished", 0.5) 
-		#await yield_to(cards[0]._tween, "finished", 0.5) 
+		var tween = cards[0]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(cards[2].global_position,
 				cfc.NMAP.discard.global_position,Vector2(2,2),
 				"Card 2 final position matches pile's position")
@@ -50,12 +51,14 @@ class TestMoveToContainer:
 		card = cards[2]
 		await drag_drop(card, Vector2(1000,100))
 		await drag_drop(card, cfc.NMAP.deck.position)
-		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 	# warning-ignore:return_value_discarded
 		hand.draw_card()
-		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(hand.to_global(card.recalculate_position()),
 				card.global_position,Vector2(2,2),
 				"Card finished move to hand from deck from board")
@@ -66,13 +69,15 @@ class TestPileFacing:
 	func test_pile_facing():
 		var card: Card = cfc.NMAP.deck.get_top_card()
 		card.move_to(cfc.NMAP.discard)
-		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_true(card.is_faceup, "Card should be faceup in discard")
 		card = cards[0]
 		card.move_to(cfc.NMAP.deck)
-		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_false(card.is_faceup,"Card should be facedown in deck")
 
 class TestPopupView:
@@ -82,9 +87,9 @@ class TestPopupView:
 		var discard = cfc.NMAP.discard
 		for card in cfc.NMAP.deck.get_all_cards():
 			card.move_to(discard)
-		await yield_for(1) 
+		await wait_seconds(1) 
 		discard._on_View_Button_pressed()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		assert_eq(6,len(discard.get_children()),
 				"No cards should appear in the pile root after popup")
 		assert_eq(12,discard.get_card_count(),
@@ -95,7 +100,7 @@ class TestPopupView:
 		#assert_eq(1.0,discard.get_node("ViewPopup").modulate[3],
 				#"ViewPopup should be visible")
 		cards[1].move_to(discard)
-		await yield_for(1) 
+		await wait_seconds(1) 
 		assert_eq(13,discard.get_node("ViewPopup/CardView").get_child_count(),
 				"Hosting a card in the pile, while popup is open, puts it in the popup")
 		assert_eq(Vector2(0.75,0.75),cards[1].scale,
@@ -104,7 +109,7 @@ class TestPopupView:
 		assert_false(discard.get_node("Control/ManipulationButtons").visible,
 				"Manipulation Buttons should be hidden while popup is active")
 		discard.get_node("ViewPopup").hide()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		assert_true(cards[1].is_faceup,
 				"Cards returning from popup should respect piles card facing")
 
@@ -114,7 +119,7 @@ class TestPopupView:
 		deck._on_View_Button_pressed()
 		#await yield_to(deck.get_node('ViewPopup/Tween'), "finished", 0.5) 
 		card.move_to(deck)
-		await yield_for(0.3) 
+		await wait_seconds(0.3)
 		assert_eq(Vector2(0,0),card.position,
 				"Moving card from popup back to the same pile, should do nothing")
 		assert_eq(Vector2(0.75,0.75),card.scale,
@@ -122,7 +127,7 @@ class TestPopupView:
 		assert_true(card.is_faceup,
 				"Moving card from popup back to the same pile, should do nothing")
 		deck.get_node("ViewPopup").hide()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		assert_false(card.is_faceup,
 				"Cards returning from popup should respect piles card facing")
 
@@ -133,14 +138,16 @@ class TestStacking:
 		var deck : Pile = cfc.NMAP.deck
 		var card: Card = cards[4]
 		card.move_to(deck)
+		var tween = card._tween.get_ref() as Tween
 		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(deck.get_stack_position(card),card.position,
 				"Card moved in, placed in stack position")
 		card = cards[2]
 		card.move_to(deck)
+		tween = card._tween.get_ref() as Tween
 		if card._tween:
-			await yield_to(card._tween, "finished", 0.5) 
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(deck.get_stack_position(card),card.position,
 				"Card moved in, placed in stack position")
 		deck.shuffle_cards(false)
@@ -155,17 +162,17 @@ class TestShuffleRng:
 		var card = deck.get_bottom_card()
 		var prev_index = card.get_my_card_index()
 		deck.shuffle_cards()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		if prev_index == card.get_my_card_index():
 			rng_threshold += 1
 		prev_index = card.get_my_card_index()
 		deck.shuffle_cards()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		if prev_index == card.get_my_card_index():
 			rng_threshold += 1
 		prev_index = card.get_my_card_index()
 		deck.shuffle_cards()
-		await yield_for(1) 
+		await wait_seconds(1) 
 		if prev_index == card.get_my_card_index():
 			rng_threshold += 1
 		prev_index = card.get_my_card_index()

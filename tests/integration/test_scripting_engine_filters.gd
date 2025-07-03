@@ -22,7 +22,9 @@ class TestFilterGtGeLtLe:
 				}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await yield_to(cards[3]._tween, "finished", 0.2)
+		var tween = cards[3]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card not matching comparison not rotated")
 		assert_eq(cards[2].card_rotation, 0,
@@ -38,7 +40,9 @@ class TestFilterGtGeLtLe:
 				}],
 				"degrees": 180}]}}
 		card.execute_scripts()
-		await yield_to(cards[3]._tween, "finished", 0.2)
+		tween = cards[3]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card not matching comparison not rotated")
 		assert_eq(cards[2].card_rotation, 180,
@@ -54,7 +58,9 @@ class TestFilterGtGeLtLe:
 				}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 270,
 				"Card matching comparison rotated")
 		assert_eq(cards[2].card_rotation, 180,
@@ -70,7 +76,9 @@ class TestFilterGtGeLtLe:
 				}],
 				"degrees": 0}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card matching comparison rotated")
 		assert_eq(cards[2].card_rotation, 0,
@@ -102,7 +110,9 @@ class TestTokensFilterGtGeLtLe:
 				}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await yield_to(cards[3]._tween, "finished", 0.2)
+		var tween = cards[3]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card not matching comparison not rotated")
 		assert_eq(cards[2].card_rotation, 0,
@@ -124,7 +134,9 @@ class TestTokensFilterGtGeLtLe:
 				}],
 				"degrees": 180}]}}
 		card.execute_scripts()
-		await yield_to(cards[3]._tween, "finished", 0.2)
+		tween = cards[3]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card not matching comparison not rotated")
 		assert_eq(cards[2].card_rotation, 0,
@@ -146,7 +158,9 @@ class TestTokensFilterGtGeLtLe:
 				}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 270,
 				"Card matching comparison rotated")
 		assert_eq(cards[2].card_rotation, 270,
@@ -168,7 +182,9 @@ class TestTokensFilterGtGeLtLe:
 				}],
 				"degrees": 0}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 0,
 				"Card matching comparison rotated")
 		assert_eq(cards[2].card_rotation, 0,
@@ -196,7 +212,9 @@ class TestAnd:
 				}],
 				"degrees": 180}]}}
 		cards[1].execute_scripts()
-		await yield_to(target._tween, "finished", 0.2)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[0].card_rotation, 180,
 				"Matching both properties will be rotated")
 		assert_eq(cards[4].card_rotation, 0,
@@ -219,8 +237,8 @@ class TestAnd:
 				}],
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
+		if target._flip_tween:
+			await wait_for_signal(target._flip_tween.finished, 0.4)
 		assert_false(target.is_faceup,
 				"Card turned face-down after matching or property")
 		assert_false(cards[4].is_faceup,
@@ -239,7 +257,7 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_degrees": 0}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await yield_for(0.2)
+		await wait_seconds(0.2)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -247,7 +265,9 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_degrees": 0}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(target._tween, "finished", 0.2)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board matching rotation state should be rotated 90 degrees")
 		assert_eq(cards[2].card_rotation, 90,
@@ -263,10 +283,10 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_faceup": true}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await yield_for(0.2)
+		await wait_seconds(0.2)
 		cards[1].is_faceup = false
 		cards[2].is_faceup = false
-		await yield_for(0.4)
+		await wait_seconds(0.4)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -274,7 +294,9 @@ class TestStateFilterRotation:
 				"filter_state_seek":[ {"filter_faceup": true}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(target._tween, "finished", 0.2)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board matching flip state should be rotated 90 degrees")
 		assert_eq(cards[2].card_rotation, 90,
@@ -297,7 +319,9 @@ class TestFilterTokens:
 						{"filter_token_name": "void"}]}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		var tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -307,7 +331,9 @@ class TestFilterTokens:
 						{"filter_token_name": "industry"}]}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board matching token name rotated 90 degrees")
 		assert_eq(cards[2].card_rotation, 90,
@@ -325,7 +351,9 @@ class TestFilterTokens:
 				}],
 				"degrees": 0}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board not matching token count stays 90 degrees")
 		assert_eq(cards[2].card_rotation, 0,
@@ -344,7 +372,9 @@ class TestFilterTokens:
 				}],
 				"degrees": 270}]}}
 		card.execute_scripts()
-		await yield_to(cards[1]._tween, "finished", 0.2)
+		tween = cards[1]._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board not matching tokens stays 90 degrees")
 		assert_eq(cards[2].card_rotation, 270,
@@ -369,7 +399,9 @@ class TestFilterParent:
 				}],
 				"degrees": 180}]}}
 		cards[1].execute_scripts()
-		await yield_to(target._tween, "finished", 0.2)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[0].card_rotation, 180,
 				"Matching counter comparison rotated")
 		assert_eq(cards[4].card_rotation, 0,
@@ -383,7 +415,9 @@ class TestFilterParent:
 				}],
 				"degrees": 90}]}}
 		cards[1].execute_scripts()
-		await yield_to(target._tween, "finished", 0.2)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.2)
 		assert_eq(cards[0].card_rotation, 180,
 				"Failing comparison not rotated ")
 		assert_eq(cards[4].card_rotation, 90,
@@ -430,7 +464,9 @@ class TestPerCounter:
 				"set_faceup": false}]}}
 		card.execute_scripts()
 		cards[1].execute_scripts()
-		await yield_to(card._flip_tween, "finished", 0.4)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_false(card.is_faceup,
 				"Card is facedown because counter comparison succeeded")
 		assert_true(cards[1].is_faceup,

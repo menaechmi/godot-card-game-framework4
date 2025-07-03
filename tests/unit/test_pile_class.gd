@@ -30,14 +30,14 @@ func test_facedown_cards():
 	var pile : Pile = cfc.NMAP.deck
 	# We need a longer yield because we're also waiting for the richtextlabels
 	# To populate, during which time, cards are left face-up
-	await yield_for(0.3)
+	await wait_seconds(0.3)
 	assert_eq(pile.get_top_card().is_faceup, pile.faceup_cards,\
 			"Card has to be facedown when moved into pile")
 
 func test_faceup_cards():
 	var pile : Pile = cfc.NMAP.deck
 	pile.faceup_cards = true
-	await yield_for(0.1)
+	await wait_seconds(0.1)
 	assert_eq(pile.get_top_card().is_faceup, pile.faceup_cards,\
 			"Card has to be faceup when moved into pile")
 

@@ -12,6 +12,7 @@ var card_properties: Dictionary
 var card_name: String
 
 @onready var _card_label:= $CardLabel
+@warning_ignore("unused_private_class_variable")
 @onready var _card_type:= $Type
 
 func _ready() -> void:

@@ -2,7 +2,7 @@
 # Which confirms with the player to execute a card script.
 extends ConfirmationDialog
 
-signal selected
+signal selected(is_accepted: bool)
 
 var is_accepted := false
 
@@ -28,10 +28,9 @@ func prep(card_name: String, task_name: String) -> void:
 
 func _on_OptionalConfirmation_confirmed() -> void:
 	is_accepted = true
-	emit_signal("selected")
+	emit_signal("selected", true)
 
 
 func _on_OptionalConfirmation_cancelled() -> void:
 	is_accepted = false
-	emit_signal("selected")
-
+	emit_signal("selected", false)

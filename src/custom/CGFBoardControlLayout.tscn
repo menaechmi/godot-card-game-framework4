@@ -1,135 +1,68 @@
-[gd_scene load_steps=15 format=3 uid="uid://dficgqm7kvea1"]
+[gd_scene load_steps=11 format=3 uid="uid://drnji21fij5hk"]
 
 [ext_resource type="Script" path="res://src/custom/CGFDiscard.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://cm3g4vp4jtd2q" path="res://src/core/Pile.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://ns61wd4x7pmt" path="res://src/custom/CGFHand.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://coxgwqpthig74" path="res://src/core/Pile.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dpu4f25w7oimd" path="res://src/custom/CGFHand.tscn" id="3"]
 [ext_resource type="Script" path="res://src/custom/CGFDeck.gd" id="4"]
 [ext_resource type="Script" path="res://src/custom/CGFBoard.gd" id="5"]
-[ext_resource type="PackedScene" uid="uid://bhgbbxs86qxph" path="res://src/custom/CGFCounters.tscn" id="6"]
-[ext_resource type="PackedScene" uid="uid://didret4x8ebw3" path="res://src/custom/CGFPlacementGridDemo.tscn" id="7"]
-[ext_resource type="PackedScene" uid="uid://cmk1xpwlevglm" path="res://src/custom/CGFModifiedLabelGrid.tscn" id="8"]
-[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="9"]
-[ext_resource type="PackedScene" uid="uid://b11xuhluxj23k" path="res://src/custom/CGFDeckbuilder/CGFDeckBuilder.tscn" id="10"]
+[ext_resource type="PackedScene" uid="uid://bysjuhmetv26u" path="res://src/custom/CGFCounters.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://bdm1yxgn2dtre" path="res://src/custom/CGFPlacementGridDemo.tscn" id="7"]
+[ext_resource type="PackedScene" uid="uid://bflx44g2mwr0p" path="res://src/custom/CGFModifiedLabelGrid.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://82uxevaxocl7" path="res://src/custom/CGFDeckbuilder/CGFDeckBuilder.tscn" id="10"]
 [ext_resource type="Theme" uid="uid://b50sjum3qm447" path="res://themes/darktheme/darktheme.theme" id="12"]
-
-[sub_resource type="FontFile" id="1"]
-fallbacks = Array[Font]([ExtResource("9")])
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
-
-[sub_resource type="StyleBoxFlat" id="3"]
-bg_color = Color(0.145098, 0.145098, 0.145098, 1)
-
-[sub_resource type="StyleBoxFlat" id="2"]
-bg_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
 
 [node name="Board" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("12")
 script = ExtResource("5")
 
 [node name="Counters" parent="." instance=ExtResource("6")]
 layout_mode = 0
-offset_top = 205.0
-offset_bottom = 219.0
 
 [node name="FancyMovementToggle" type="CheckButton" parent="."]
 layout_mode = 0
-offset_right = 12.0
-offset_bottom = 20.0
 text = "Fancy Movement"
 
 [node name="EnableAttach" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 194.978
-offset_top = 1.33486
-offset_right = 395.978
-offset_bottom = 41.3349
 text = "Enable Attachment"
 
 [node name="ScalingFocusOptions" type="OptionButton" parent="."]
 layout_mode = 0
-offset_left = -1.33484
-offset_top = 44.0497
-offset_right = 187.665
-offset_bottom = 84.0497
 
 [node name="ReshuffleAllDeck" type="Button" parent="."]
 layout_mode = 0
-offset_left = 9.89948
-offset_top = 116.762
-offset_right = 200.899
-offset_bottom = 136.762
 text = "Reshuffle all cards into deck"
 
 [node name="ReshuffleAllDiscard" type="Button" parent="."]
 layout_mode = 0
-offset_left = 9.89948
-offset_top = 140.334
-offset_right = 200.899
-offset_bottom = 160.334
 text = "Reshuffle all cards into discard"
 
 [node name="OvalHandToggle" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 405.31
-offset_top = 1.12245
-offset_right = 594.31
-offset_bottom = 41.1225
-text = "Oval Hand Shape3D"
+text = "Oval Hand Shape"
 
 [node name="DeckBuilder" type="Button" parent="."]
 layout_mode = 0
-offset_left = 205.0
-offset_top = 45.0
-offset_right = 345.0
-offset_bottom = 85.0
 text = "DeckBuilder"
 
 [node name="Debug" type="CheckButton" parent="."]
 layout_mode = 0
-offset_left = 789.192
-offset_top = 3.36737
-offset_right = 978.192
-offset_bottom = 43.3674
 text = "Debug"
 
 [node name="PlacementGridDemo" parent="." instance=ExtResource("7")]
 layout_mode = 0
-offset_left = 775.0
-offset_top = 240.0
-offset_right = 1274.0
-offset_bottom = 436.0
 highlight = Color(0.985156, 0, 1.3, 1.3)
 
 [node name="ModifiedLabelGrid" parent="." instance=ExtResource("8")]
 layout_mode = 0
-offset_left = 1015.0
-offset_top = 30.0
-offset_right = 1264.0
-offset_bottom = 226.0
 
 [node name="SeedLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 10.0
-offset_top = 175.0
-offset_right = 265.0
-offset_bottom = 200.0
-theme_override_fonts/font = SubResource("1")
 text = "Game Seed is: "
 
 [node name="DeckBuilderPopup" type="PopupPanel" parent="."]
@@ -137,28 +70,21 @@ text = "Game Seed is: "
 [node name="DeckBuilder" parent="DeckBuilderPopup" instance=ExtResource("10")]
 offset_left = 2.0
 offset_top = 2.0
-offset_right = 622.0
-offset_bottom = 148.0
-theme_override_styles/panel = SubResource("3")
+offset_right = 22.0
+offset_bottom = -384.0
 
 [node name="HandArea" type="MarginContainer" parent="."]
-custom_minimum_size = Vector2(0, 120)
 layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -241.124
-offset_bottom = -1.12354
 size_flags_horizontal = 3
 
 [node name="HBC" type="HBoxContainer" parent="HandArea"]
 layout_mode = 2
 
 [node name="DeckControl" type="MarginContainer" parent="HandArea/HBC"]
-custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HandArea/HBC/DeckControl"]
 layout_mode = 2
@@ -176,6 +102,11 @@ script = ExtResource("4")
 pile_name = "Deck"
 placement = 9
 
+[node name="Highlight" parent="HandArea/HBC/DeckControl/VBoxContainer/Control/Deck/Control" index="0"]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+
 [node name="HandControl" type="Control" parent="HandArea/HBC"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -185,10 +116,7 @@ excess_cards = 0
 placement = 9
 
 [node name="DiscardControl" type="MarginContainer" parent="HandArea/HBC"]
-custom_minimum_size = Vector2(75, 0)
 layout_mode = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_right = 15
 
 [node name="VBC" type="VBoxContainer" parent="HandArea/HBC/DiscardControl"]
 layout_mode = 2
@@ -207,8 +135,10 @@ pile_name = "Discard"
 faceup_cards = true
 placement = 9
 
-[node name="Control" parent="HandArea/HBC/DiscardControl/VBC/Control/Discard" index="0"]
-theme_override_styles/panel = SubResource("2")
+[node name="Highlight" parent="HandArea/HBC/DiscardControl/VBC/Control/Discard/Control" index="0"]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
 
 [connection signal="toggled" from="FancyMovementToggle" to="." method="_on_FancyMovementToggle_toggled"]
 [connection signal="toggled" from="EnableAttach" to="." method="_on_EnableAttach_toggled"]

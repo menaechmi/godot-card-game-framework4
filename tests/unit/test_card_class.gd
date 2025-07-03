@@ -173,10 +173,10 @@ func test_number_properties_adjust():
 	board._add_child(new_card)
 	new_card._determine_idle_state()
 	# We need a yield to allow the richtextlabel setup complete
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.1)
 	new_card.modify_property("Cost", "+3")
 	new_card.modify_property("Power", "-3")
-	await yield_to(get_tree(), "process_frame", 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.1)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"4",
 			"Number property label adjusted upwards")
 	assert_eq(new_card.properties.Cost, 4,

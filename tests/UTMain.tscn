@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c13ydwjxdyaui"]
 
-[ext_resource type="PackedScene" uid="uid://dm4pry2qodp81" path="res://src/core/Main.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://qrs8awgju2j3" path="res://src/core/Main.tscn" id="1"]
 [ext_resource type="PackedScene" uid="uid://d07cwd715li36" path="res://tests/UTBoard.tscn" id="2_hokps"]
-[ext_resource type="PackedScene" uid="uid://tsh5bu1buul3" path="res://src/custom/CGFInfoPanel.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://cytkrhfqtwuqp" path="res://src/custom/CGFInfoPanel.tscn" id="3"]
 
 [node name="Main" instance=ExtResource("1")]
 board_scene = ExtResource("2_hokps")

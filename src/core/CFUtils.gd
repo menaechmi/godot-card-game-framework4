@@ -131,18 +131,18 @@ static func confirm(
 	# We do not use SP.KEY_IS_OPTIONAL here to avoid causing cyclical
 	# references when calling CFUtils from SP
 	if script.get("is_optional_" + type):
-		var confirm = _OPTIONAL_CONFIRM_SCENE.instantiate()
-		confirm.prep(card_name,task_name)
+		var confirmation = _OPTIONAL_CONFIRM_SCENE.instantiate()
+		confirmation.prep(card_name,task_name)
 		# We have to wait until the player has finished selecting an option
 		#TODO: Refactor this better so that TokenDrawer->Token->get_count_and_alterants
 		#->CFScriptUtils.get_altered_value->cfc.alterant_engine.new->scriptAlter.new()->this
 		#isn't a likely path to happen.
-		await confirm.selected
+		await confirmation.selected
 		# If the player selected "No", we don't execute anything
-		if not confirm.is_accepted:
+		if not confirmation.is_accepted:
 			is_accepted = false
 		# Garbage cleanup
-		confirm.queue_free()
+		confirmation.queue_free()
 	return(is_accepted)
 
 

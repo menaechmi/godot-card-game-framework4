@@ -16,7 +16,7 @@ var token_drawer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	await get_count_and_alterants()
+	get_count_and_alterants()
 	count_label.text = str(count)
 	set_count(count)
 

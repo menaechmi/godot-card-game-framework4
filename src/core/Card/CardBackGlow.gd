@@ -33,9 +33,13 @@ func _on_Pulse_completed() -> void:
 # Initiates the looping card back pulse
 # The pulse increases and decreases the brightness of the glow
 func start_card_back_animation():
-	_tween = create_tween().set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
-	_tween.tween_property(self,'modulate', _pulse_values[1], 2).from(_pulse_values[0])
-	_tween.play()
+	# Dupe cards aren't always inside the scene tree
+	if self.is_inside_tree():
+		_tween = get_tree().create_tween()
+		_tween.stop()
+		_tween.set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+		_tween.tween_property(self,'modulate', _pulse_values[1], 2).from(_pulse_values[0])
+		_tween.play()
 
 
 # Disables the looping card back pulse

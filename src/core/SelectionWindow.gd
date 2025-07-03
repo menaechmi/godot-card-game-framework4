@@ -110,13 +110,13 @@ func initiate_selection(
 		return
 	match selection_type:
 		"min":
-			self.window_title = "Select at least " + str(selection_count) + " cards."
+			self.title = "Select at least " + str(selection_count) + " cards."
 		"max":
-			self.window_title = "Select at most " + str(selection_count) + " cards."
+			self.title = "Select at most " + str(selection_count) + " cards."
 		"equal":
-			self.window_title = "Select exactly " + str(selection_count) + " cards."
+			self.title = "Select exactly " + str(selection_count) + " cards."
 		"display":
-			self.window_title = "Press OK to continue"
+			self.title = "Press OK to continue"
 	for c in _card_grid.get_children():
 		c.queue_free()
 	# We use this to quickly store a copy of a card object to use to get
@@ -167,8 +167,10 @@ func initiate_selection(
 	# So we delay showing the tween to avoid having it look choppy
 	#await get_tree().create_timer(0.2).timeout
 	if _tween:
-		_tween.kill()
+		_tween.custom_step(5)
 	# We do a nice alpha-modulate tween
+	_tween.create_tween()
+	_tween.stop()
 	_tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	_tween.play()

@@ -1,15 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://irp5hud4poju"]
+[gd_scene load_steps=9 format=3 uid="uid://damg1ar2cjaox"]
 
-[ext_resource type="PackedScene" uid="uid://8qrwugb6apcx" path="res://src/core/CardViewer/CardViewer.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://ccqepx5u7j5eu" path="res://src/core/CardViewer/DeckBuilder/DBDeckScene.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://src/core/CardViewer/CardViewer.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://s2is7t8jvfjt" path="res://src/core/CardViewer/DeckBuilder/DBDeckScene.tscn" id="2"]
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/DeckBuilder.gd" id="3"]
-[ext_resource type="PackedScene" uid="uid://b2wln5olcatyd" path="res://src/core/CardViewer/DeckBuilder/DBGridCardObject.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://btii472avyov8" path="res://src/core/CardViewer/DeckBuilder/DBDeckCardObject.tscn" id="4_c36hx"]
-[ext_resource type="PackedScene" uid="uid://cdkmxw5o8cgrj" path="res://src/core/CardViewer/DeckBuilder/DBListCardObject.tscn" id="5"]
-[ext_resource type="PackedScene" uid="uid://dfm4rponrut82" path="res://src/core/CardViewer/DeckBuilder/DBDeckSummaries.tscn" id="5_fx32b"]
+[ext_resource type="PackedScene" uid="uid://bhs346an4n4fr" path="res://src/core/CardViewer/DeckBuilder/DBGridCardObject.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://dx0bwlwrfurdq" path="res://src/core/CardViewer/DeckBuilder/DBDeckCardObject.tscn" id="4_1f7kf"]
+[ext_resource type="PackedScene" uid="uid://clh235220p7mg" path="res://src/core/CardViewer/DeckBuilder/DBListCardObject.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://di0yw5xdijx33" path="res://src/core/CardViewer/DeckBuilder/DBDeckSummaries.tscn" id="5_uba37"]
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/DeckNameRandomizer.gd" id="6"]
 
 [node name="DeckBuilder" instance=ExtResource("1")]
+anchors_preset = 15
 script = ExtResource("3")
 deck_name_randomizer = ExtResource("6")
 random_adverb_miss = 10
@@ -19,13 +20,83 @@ second_noun_miss = 3
 max_quantity = 3
 deck_minimum = 52
 deck_maximum = 60
-deck_card_object_scene = ExtResource("4_c36hx")
-deck_summary_scene = ExtResource("5_fx32b")
+deck_card_object_scene = ExtResource("4_1f7kf")
+deck_summary_scene = ExtResource("5_uba37")
 list_card_object_scene = ExtResource("5")
 grid_card_object_scene = ExtResource("4")
 
+[node name="VBC" parent="." index="0"]
+layout_mode = 2
+
 [node name="Title" parent="VBC" index="0"]
+layout_mode = 2
 text = "Deck Builder"
 
+[node name="HBC" parent="VBC" index="1"]
+layout_mode = 2
+
 [node name="DeckMC" parent="VBC/HBC" index="0" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="MC" parent="VBC/HBC" index="1"]
+layout_mode = 2
+
+[node name="AvailableCards" parent="VBC/HBC/MC" index="0"]
+layout_mode = 2
+
+[node name="HBC" parent="VBC/HBC/MC/AvailableCards" index="0"]
+layout_mode = 2
+
+[node name="ClearFilters" parent="VBC/HBC/MC/AvailableCards/HBC" index="0"]
+layout_mode = 2
+
+[node name="FilterLine" parent="VBC/HBC/MC/AvailableCards/HBC" index="1"]
+layout_mode = 2
+
+[node name="Label" parent="VBC/HBC/MC/AvailableCards/HBC/FilterLine/Syntax" index="1"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
+
+[node name="CardCount" parent="VBC/HBC/MC/AvailableCards/HBC" index="2"]
+layout_mode = 2
+
+[node name="CC" parent="VBC/HBC/MC/AvailableCards" index="1"]
+layout_mode = 2
+
+[node name="ButtonFilters" parent="VBC/HBC/MC/AvailableCards/CC" index="0"]
+layout_mode = 2
+
+[node name="ShowAll" parent="VBC/HBC/MC/AvailableCards/CC/ButtonFilters" index="0"]
+layout_mode = 2
+
+[node name="CardListHeaders" parent="VBC/HBC/MC/AvailableCards" index="2"]
+layout_mode = 2
+
+[node name="Name" parent="VBC/HBC/MC/AvailableCards/CardListHeaders" index="0"]
+layout_mode = 2
+
+[node name="Type" parent="VBC/HBC/MC/AvailableCards/CardListHeaders" index="1"]
+layout_mode = 2
+
+[node name="LineSeparator" parent="VBC/HBC/MC/AvailableCards" index="3"]
+layout_mode = 2
+
+[node name="ScrollContainer" parent="VBC/HBC/MC/AvailableCards" index="4"]
+layout_mode = 2
+
+[node name="CardList" parent="VBC/HBC/MC/AvailableCards/ScrollContainer" index="0"]
+layout_mode = 2
+
+[node name="CardGrid" parent="VBC/HBC/MC/AvailableCards/ScrollContainer" index="1"]
+layout_mode = 2
+
+[node name="Settings" parent="VBC/HBC/MC/AvailableCards" index="5"]
+layout_mode = 2
+
+[node name="Control" parent="VBC/HBC/MC/AvailableCards/Settings" index="0"]
+layout_mode = 2
+
+[node name="GridViewStyle" parent="VBC/HBC/MC/AvailableCards/Settings" index="1"]
 layout_mode = 2

@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=3 uid="uid://d07cwd715li36"]
 
 [ext_resource type="Script" path="res://src/custom/CGFDiscard.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://cm3g4vp4jtd2q" path="res://src/core/Pile.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://ns61wd4x7pmt" path="res://src/custom/CGFHand.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://coxgwqpthig74" path="res://src/core/Pile.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dpu4f25w7oimd" path="res://src/custom/CGFHand.tscn" id="3"]
 [ext_resource type="Script" path="res://src/custom/CGFDeck.gd" id="4"]
 [ext_resource type="Script" path="res://src/custom/CGFBoard.gd" id="5"]
-[ext_resource type="PackedScene" uid="uid://bhgbbxs86qxph" path="res://src/custom/CGFCounters.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://bysjuhmetv26u" path="res://src/custom/CGFCounters.tscn" id="6"]
 [ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="7"]
-[ext_resource type="PackedScene" uid="uid://dx8s5ofo0alvt" path="res://src/core/BoardPlacementSlot.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://dlepcydspsgr" path="res://src/core/BoardPlacementSlot.tscn" id="8"]
 [ext_resource type="Script" path="res://src/core/BoardPlacementGrid.gd" id="9"]
 
 [sub_resource type="StyleBoxFlat" id="1"]

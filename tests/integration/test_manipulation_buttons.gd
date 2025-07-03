@@ -8,10 +8,10 @@ class TestManipulationButtons:
 		var card = cards[0]
 		await move_mouse(card.global_position)
 		await move_mouse(card.global_position - Vector2(0,100))
-		await yield_for(0.2)
+		await wait_seconds(0.2)
 		await move_mouse(card.global_position)
 		await move_mouse(card.global_position - Vector2(0,100))
-		await yield_for(0.2)
+		await wait_seconds(0.2)
 		await move_mouse(card.global_position)
 		assert_almost_eq(cards[0].position, Vector2(103, -240.5), Vector2(2,2),
 				"Card focused and in correct global position")

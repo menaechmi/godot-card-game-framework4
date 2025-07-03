@@ -21,7 +21,7 @@ func _ready() -> void:
 
 # Populates the list of available cards, with all defined cards in the game
 func populate_available_cards() -> void:
-	$DeckBuilder.populate_available_cards()
+	super.populate_available_cards()
 	var card_props :Dictionary = _available_cards.get_child(0).card_properties
 	for p in card_props:
 		var property: String = p
@@ -39,6 +39,6 @@ func populate_available_cards() -> void:
 			new_label.text = property
 			new_label.bbcode_enabled = true
 			new_label.scroll_active = false
-			new_label.fit_content_height = false
+			new_label.fit_content = false
 			new_label.custom_effects = custom_rich_text_effects
-			_card_headers._add_child(new_label)
+			_card_headers.add_child(new_label)

@@ -62,7 +62,7 @@ func test_buttons():
 	token._on_Remove_pressed()
 	assert_eq(1,token.count,"count should be 1")
 	token._on_Remove_pressed()
-	await yield_for(0.01) # Wait for queue free
+	await wait_seconds(0.01) # Wait for queue free
 	assert_freed(token, "Token")
 
 func test_get_token_name():

@@ -1,11 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ch8qt87b5m8ga"]
+[gd_scene load_steps=2 format=3 uid="uid://dj0wcf6fw2t7g"]
 
 [ext_resource type="Script" path="res://src/core/CardViewer/CVFilterButton.gd" id="1"]
 
 [node name="CVFilterButton" type="Button"]
-offset_left = 308.0
-offset_right = 320.0
-offset_bottom = 20.0
 toggle_mode = true
 shortcut_in_tooltip = false
 text = "Filter"

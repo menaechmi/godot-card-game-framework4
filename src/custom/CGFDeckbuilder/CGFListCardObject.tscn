@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://iuhkagqb6smh"]
+[gd_scene load_steps=3 format=3 uid="uid://1t8wrdgk4bje"]
 
-[ext_resource type="PackedScene" uid="uid://6ugtnrkwf53h" path="res://src/core/CardViewer/CardLibrary/CLListCardObject.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://bdidc5rj12f8n" path="res://src/core/CardViewer/CardLibrary/CLListCardObject.tscn" id="1"]
 [ext_resource type="Script" path="res://src/custom/CGFDeckbuilder/CGFListCardObject.gd" id="2"]
 
 [node name="ListCardObject" instance=ExtResource("1")]

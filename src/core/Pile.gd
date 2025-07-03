@@ -59,7 +59,7 @@ func _ready():
 	connect("shuffle_completed", 
 		Callable(cfc.signal_propagator, 
 			"_on_signal_received")\
-			.bind(["shuffle_completed",{"source": name}])
+			.bind([null, "shuffle_completed",{"source": name}])
 			)
 
 func _process(_delta) -> void:
@@ -117,22 +117,15 @@ func _on_ViewPopup_popup_hide() -> void:
 	#bg_color
 	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,0), 0.5)
 	tween.play()
-	#await tween.finished
+	await tween.finished
 	for card in pre_sorted_order:
 		# For each card we have hosted, we check if it's hosted in the popup.
 		# If it is, we move it to the root.
 		#print_debug(card.canonical_name, card.get_parent().name)
-		var parent = card.get_parent()
-		if "CardPopUpSlot" in parent.name:
-			# Condition "p_elem->_root != this" https://github.com/godotengine/godot/issues/80073
-			# Deferred calls may help, but you can't defer both remove and add without awaiting
-			# and that would turn this into a co-routine
-			if parent is Pile:
-				#This ensures Pile -> Pile works correctly, because I can't add _remove_child to Control
-				parent._remove_child(card)
-			else:
-				parent.remove_child(card)
+		if "CardPopUpSlot" in card.get_parent().name:
+			card.get_parent().remove_child(card)
 			_add_child(card)
+			_after_child_add(card)
 			# We need to remember that cards in piles should be left invisible
 			# and at default scale
 			card.scale = Vector2(1,1)
@@ -193,34 +186,35 @@ func set_pile_name(value: String) -> void:
 #
 # Also checks if the popup window is currently open, and puts the card
 # directly there in that case.
-#TODO: I haven't touched this, because it's unclear exactly which calls to
-# _add_child are supposed to use this and which are supposed to use built-in
-# Theoretically, GODOT should have never been calling this, but now it definitely won't
-func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
-	if not $ViewPopup.visible:
-		super.add_child(node)
-		if node as Card:
-			_has_cards = true
-			# By raising the $Control every time a card is added
-			# we ensure it's always drawn on top of the card objects
-			$Control.move_to_front()
-			# If this was the first card which enterred this pile
-			# We hide the pile "floor" by making it transparent
-			if get_card_count() >= 1:
-				var opacity_tween = _opacity_tween.get_ref() as Tween
-				if opacity_tween:
-					opacity_tween.kill()
-				opacity_tween = create_tween()
-				opacity_tween.stop()
-				_opacity_tween = weakref(opacity_tween)
-				opacity_tween.tween_property($Control, 'self_modulate:a', 0.4, 0.5)\
-					.from($Control.self_modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-				opacity_tween.play()
-				card_count_label.text = str(get_card_count())
-	elif node as Card: # This triggers if the ViewPopup node is active
+@warning_ignore("shadowed_variable_base_class", "unused_parameter")
+func _add_child(node: Node, _legible_unique_name=false, InternalMode=0) -> void:
+	if $ViewPopup.visible:# This triggers if the ViewPopup node is active
 		# When the player adds card while the viewpopup is active
 		# we move them automatically to the viewpopup grid.
 		_slot_card_into_popup(node)
+	else:
+		super.add_child(node)
+		_after_child_add(node)
+
+func _after_child_add(node: Node):
+	if node as Card:
+		_has_cards = true
+		# By raising the $Control every time a card is added
+		# we ensure it's always drawn on top of the card objects
+		$Control.move_to_front()
+		# If this was the first card which enterred this pile
+		# We hide the pile "floor" by making it transparent
+		if get_card_count() >= 1:
+			var opacity_tween = _opacity_tween.get_ref() as Tween
+			if opacity_tween:
+				opacity_tween.custom_step(5)
+			opacity_tween = create_tween()
+			opacity_tween.stop()
+			_opacity_tween = weakref(opacity_tween)
+			opacity_tween.tween_property($Control, 'self_modulate:a', 0.4, 0.5)\
+				.from($Control.self_modulate.a).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+			opacity_tween.play()
+			card_count_label.text = str(get_card_count())
 
 
 # Overrides the function which removed chilren nodes so that it detects
@@ -515,8 +509,9 @@ func shuffle_cards(animate = true) -> void:
 		# if we're already running another animation, just shuffle
 		super.shuffle_cards()
 	reorganize_stack()
-	#TODO: Error calling from signal 'shuffle_completed' to callable: 'RefCounted::_on_signal_received': Method expected 3 arguments, but called with 2.
-	emit_signal("shuffle_completed", self)
+	#TODO Error calling from signal 'shuffle_completed' to callable: 'RefCounted::_on_signal_received': Cannot convert argument 1 from Object to Object.
+	#emit_signal("shuffle_completed", self)
+	shuffle_completed.emit()
 
 
 # Overrides the re_place() function of [Pile] in order

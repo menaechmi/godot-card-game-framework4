@@ -5,15 +5,16 @@ class TestBoardseekWithSubjectCount:
 
 	func test_boardseek_with_subject_count():
 		for iter in range(5):
-			await table_move(deck.get_top_card(), Vector2(150*iter,200))
+			table_move(deck.get_top_card(), Vector2(150*iter,200))
 		target = board.get_card(0)
 		card.scripts = {"manual": {"hand": [
 				{"name": "move_card_to_container",
 				"subject": "boardseek",
 				"dest_container": "discard"}]}}
 		card.execute_scripts()
-		await yield_to(target._tween, "finished", 0.5)
-		await yield_to(target._tween, "finished", 0.5)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(1,discard.get_card_count(),
 				"boarseek defaults to subject_count 1")
 		target = board.get_card(0)
@@ -23,8 +24,9 @@ class TestBoardseekWithSubjectCount:
 				"subject_count": 2,
 				"dest_container": "discard"}]}}
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(3,discard.get_card_count(),
 				"2 cards in table should have been discarded")
 		target = board.get_card(0)
@@ -34,8 +36,9 @@ class TestBoardseekWithSubjectCount:
 				"subject_count": "all",
 				"dest_container": "discard"}]}}
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(5,discard.get_card_count(),
 				"Rest cards in table should have been discarded")
 
@@ -50,7 +53,7 @@ class TestTutorWithSubjectCount:
 				"dest_container": "discard",
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
 		card.execute_scripts()
-		await yield_for(0.5)
+		await wait_seconds(0.5)
 		assert_eq(1,discard.get_card_count(),
 				"tutor defaults to subject_count 1")
 		for c in discard.get_all_cards():
@@ -64,7 +67,7 @@ class TestTutorWithSubjectCount:
 				"subject_count": 2,
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
 		card.execute_scripts()
-		await yield_for(0.5)
+		await wait_seconds(0.5)
 		assert_eq(3,discard.get_card_count(),
 				"2 cards in should have been tutored")
 		for c in discard.get_all_cards():
@@ -78,7 +81,7 @@ class TestTutorWithSubjectCount:
 				"subject_count": "all",
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
 		card.execute_scripts()
-		await yield_for(0.5)
+		await wait_seconds(0.5)
 		for c in deck.get_all_cards():
 			assert_ne("Blue", c.properties.Type,
 				"Tutor correctly discarded all Blue cards")
@@ -96,8 +99,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(1,discard.get_card_count(),
 				"index defaults to subject_count 1")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
@@ -111,8 +115,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(6,discard.get_card_count(),
 				"5 cards in should have been index sought")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
@@ -126,8 +131,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(0,deck.get_card_count(),
 				"all cards should be discarded")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
@@ -145,8 +151,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_bottom_card()
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(5,discard.get_card_count(),
 				"5 cards in should have been index sought")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
@@ -159,8 +166,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_bottom_card()
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(0,deck.get_card_count(),
 				"all cards should be discarded")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
@@ -175,8 +183,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_card(5)
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		var tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(discard,target.get_parent(), "target card should be in discard")
 		card.scripts = {"manual": {"hand": [
 				{"name": "move_card_to_container",
@@ -187,8 +196,9 @@ class TestIndexWithSubjectCount:
 				"dest_container": "discard"}]}}
 		target = deck.get_card(5)
 		card.execute_scripts()
-		if target._tween.get_ref():
-			await yield_to(target._tween, "finished", 0.5)
+		tween = target._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_eq(5,deck.get_card_count(),
 				"5 cards in should have been left in deck")
 

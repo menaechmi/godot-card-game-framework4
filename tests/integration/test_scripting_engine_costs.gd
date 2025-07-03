@@ -22,16 +22,16 @@ class TestSelfandRotate:
 				"set_faceup": false}]}}
 		await table_move(card, Vector2(100,200))
 		card.execute_scripts()
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.5)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
 				"card turn face-down because "
 				+ "rotation cost could be paid")
 		await table_move(cards[1], Vector2(500,200))
 		cards[1].card_rotation = 90
 		cards[1].execute_scripts()
-		if (cards[1]._flip_tween and cards[1]._flip_tween.is_running):
-			await yield_to(cards[1]._flip_tween, "finished", 0.4)
+		if cards[1]._flip_tween:
+			await wait_for_signal(cards[1]._flip_tween.finished, 0.4)
 		assert_true(cards[1].is_faceup,
 				"card should stay face-up because "
 				+ "rotation cost could not be paid")
@@ -59,15 +59,15 @@ class TestTargetCosts:
 		await table_move(target, Vector2(100,200))
 		card.execute_scripts()
 		await target_card(card,target)
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.5)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
 				"card should turn face-down because "
 				+ "target rotation cost could be paid")
 		cards[1].execute_scripts()
 		await target_card(cards[1],target)
-		if (cards[1]._flip_tween and cards[1]._flip_tween.is_running()):
-			await yield_to(cards[1]._flip_tween, "finished", 0.5)
+		if cards[1]._flip_tween:
+			await wait_for_signal(cards[1]._flip_tween.finished, 0.5)
 		assert_true(cards[1].is_faceup,
 				"Target should stay face-up because "
 				+ "target rotation cost could not be paid")
@@ -91,12 +91,12 @@ class TestMultipleCosts:
 				"set_faceup": false}]}}
 		await table_move(target, Vector2(100,200))
 		target.is_faceup = false
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.5)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.5)
 		card.execute_scripts()
 		await target_card(card,target)
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.5)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_true(card.is_faceup,
 				"card should stay face-up because "
 				+ "some costs could not be paid")
@@ -118,9 +118,9 @@ class TestFlipCost:
 		await table_move(card, Vector2(100,200))
 		card.is_faceup = false
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(0,target.card_rotation,
 				"Card not rotated because flip cost could be paid")
 
@@ -139,9 +139,9 @@ class TestTokenCost:
 				"degrees": 90}]}}
 		await table_move(card, Vector2(1000,200))
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(90,card.card_rotation,
 				"Card rotated because positive token cost can always be paid")
 		card.scripts = {"manual": {"board": [
@@ -154,9 +154,9 @@ class TestTokenCost:
 				"subject": "self",
 				"degrees": 180}]}}
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(180,card.card_rotation,
 				"Card rotated because negative token cost could be be paid")
 		card.scripts = {"manual": {"board": [
@@ -169,9 +169,9 @@ class TestTokenCost:
 				"subject": "self",
 				"degrees": 0}]}}
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(180,card.card_rotation,
 				"Card not rotated because negative token cost could not  be be paid")
 		assert_eq(1,card.tokens.get_token("bio").count,
@@ -190,9 +190,9 @@ class TestModifyProperties:
 				"subject": "self",
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_true(card.is_faceup,
 				"card should stay face-up because "
 				+ "property change cost could not be paid")
@@ -205,8 +205,8 @@ class TestModifyProperties:
 				"subject": "self",
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
 				"card should turn face-down because "
 				+ "property change cost could be paid")
@@ -219,8 +219,8 @@ class TestModifyProperties:
 				"subject": "self",
 				"set_faceup": false}]}}
 		target.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
+		if target._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
 				"card stayed face-up because "
 				+ "property reduction could not be paid")
@@ -241,9 +241,8 @@ class TestMoveCardContToCont:
 				"subject": "self",
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.4)
-			#await yield_to(card._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
 				"card should turn face-down because "
 				+ "property change cost could be paid")
@@ -259,9 +258,8 @@ class TestMoveCardContToCont:
 				"subject": "self",
 				"set_faceup": false}]}}
 		target.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
-		#await yield_to(target._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
 				"card should stay face-up because "
 				+ "property change cost could not be paid")
@@ -282,9 +280,8 @@ class TestMoveCardContToBoard:
 				"subject": "self",
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.4)
-		#await yield_to(card._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
 				"card should turn face-down because "
 				+ "enough cards could be moved from the deck")
@@ -300,9 +297,8 @@ class TestMoveCardContToBoard:
 				"subject": "self",
 				"set_faceup": false}]}}
 		target.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
-		#await yield_to(target._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
 				"card should stay face-up because "
 				+ "not enough cards could be found in the deck")
@@ -323,9 +319,8 @@ class TestMoveCardToGrid:
 				"subject": "self",
 				"set_faceup": false}]}}
 		card.execute_scripts()
-		if (card._flip_tween and card._flip_tween.is_running()):
-			await yield_to(card._flip_tween, "finished", 0.4)
-		#await yield_to(card._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
 				"card should turn face-down because "
 				+ "grid had enough slots for all cards")
@@ -342,18 +337,16 @@ class TestMoveCardToGrid:
 				"subject": "self",
 				"set_faceup": false}]}}
 		target.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
-		#await yield_to(target._flip_tween, "finished", 0.4)
+		if card._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
 				"card should stay face-up because "
 				+ "grid did not have enough slots for all cards")
 		var grid = board.get_grid("BoardPlacementGrid")
 		grid.auto_extend = true
 		target.execute_scripts()
-		if (target._flip_tween and target._flip_tween.is_running()):
-			await yield_to(target._flip_tween, "finished", 0.4)
-		#await yield_to(target._flip_tween, "finished", 0.4)
+		if target._flip_tween:
+			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(target.is_faceup,
 				"card should turn face-down because "
 				+ "grid auto-extended to host all cards")
@@ -372,9 +365,9 @@ class TestCountersCost:
 				"degrees": 90}]}}
 		await table_move(card, Vector2(200,200))
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(90,card.card_rotation,
 				"Card rotated because positive counter cost can always be paid")
 		card.scripts = {"manual": {"board": [
@@ -386,9 +379,9 @@ class TestCountersCost:
 				"subject": "self",
 				"degrees": 180}]}}
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(180,card.card_rotation,
 				"Card rotated because negative counter cost could be be paid")
 		card.scripts = {"manual": {"board": [
@@ -400,9 +393,9 @@ class TestCountersCost:
 				"subject": "self",
 				"degrees": 0}]}}
 		card.execute_scripts()
-		if card._tween.get_ref():
-			var _tween = card._tween.get_ref()
-			await yield_to(_tween, "finished", 0.5)
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(180,card.card_rotation,
 				"Card not rotated because negative counter cost could not be be paid")
 		assert_eq(1, await board.counters.get_counter("research"),

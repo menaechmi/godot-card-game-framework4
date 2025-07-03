@@ -5,7 +5,7 @@ class TestModifyProperties:
 
 	func before_each():
 		super.before_each()
-		await yield_for(0.12)
+		await wait_seconds(0.12)
 		card.modify_property("Cost", 5)
 		card.modify_property("Power", 2)
 
@@ -43,7 +43,7 @@ class TestModifyProperties:
 		card.execute_scripts()
 		await wait_for_signal(get_tree().process_frame, 0.1)
 		card.execute_scripts()
-		await yield_for(0.5)
+		await wait_seconds(0.5)
 		assert_eq(await card.get_property("Cost"),2,
 				"Card cost decreased")
 		assert_eq(card.card_front.card_labels["Cost"].text,"2",
@@ -60,7 +60,7 @@ class TestModifyPropertiesPerProperty:
 
 	func before_each():
 		super.before_each()
-		await yield_for(0.12)
+		await wait_seconds(0.12)
 		card.modify_property("Cost", 5)
 		card.modify_property("Power", 2)
 
@@ -108,7 +108,7 @@ class TestModifyTagProperty:
 
 	func before_each():
 		super.before_each()
-		await yield_for(0.12)
+		await wait_seconds(0.12)
 		card.modify_property("Cost", 5)
 		card.modify_property("Power", 2)
 
@@ -129,7 +129,7 @@ class TestModifyStringNumberProperty:
 
 	func before_each():
 		super.before_each()
-		await yield_for(0.12)
+		await wait_seconds(0.12)
 		card.modify_property("Cost", 5)
 		card.modify_property("Power", 2)
 

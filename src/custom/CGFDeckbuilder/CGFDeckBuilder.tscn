@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b11xuhluxj23k"]
+[gd_scene load_steps=4 format=3 uid="uid://82uxevaxocl7"]
 
-[ext_resource type="PackedScene" uid="uid://irp5hud4poju" path="res://src/core/CardViewer/DeckBuilder/DeckBuilder.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://tsh5bu1buul3" path="res://src/custom/CGFInfoPanel.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://damg1ar2cjaox" path="res://src/core/CardViewer/DeckBuilder/DeckBuilder.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://src/custom/CGFInfoPanel.tscn" id="2"]
 [ext_resource type="Script" path="res://src/custom/CGFDeckbuilder/CGFDeckBuilder.gd" id="4"]
 
 [node name="DeckBuilder" instance=ExtResource("1")]

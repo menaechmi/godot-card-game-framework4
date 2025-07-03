@@ -97,14 +97,14 @@ func drag_card(card: Card, target_position: Vector2, interpolation_speed := "fas
 		extra_offset = Vector2(10,60)
 	board._UT_interpolate_mouse_move(card.global_position + extra_offset,
 			board._UT_mouse_position,mouse_speed)
-	await yield_for(mouse_yield_wait)
+	await wait_seconds(mouse_yield_wait)
 	click_card(card)
 	if interpolation_speed == "debug":
-		await yield_for(4) # Allow for review
+		await wait_seconds(4) # Allow for review
 	else:
-		await yield_for(0.3) # Wait to allow dragging to start
+		await wait_seconds(0.3) # Wait to allow dragging to start
 	board._UT_interpolate_mouse_move(target_position,board._UT_mouse_position,mouse_speed)
-	await yield_for(mouse_yield_wait)
+	await wait_seconds(mouse_yield_wait)
 
 
 func drop_card(card: Card, drop_location: Vector2) -> void:
@@ -118,8 +118,8 @@ func drop_card(card: Card, drop_location: Vector2) -> void:
 # Takes care of simple drag&drop requests
 func drag_drop(card: Card, target_position: Vector2, interpolation_speed := "fast") -> void:
 	await drag_card(card,target_position,interpolation_speed)
-	await drop_card(card,board._UT_mouse_position)
-	await yield_for(0.1) # Wait to allow dragging to start
+	drop_card(card,board._UT_mouse_position)
+	await wait_seconds(0.1) # Wait to allow dragging to start
 	card._on_Card_mouse_exited()
 
 # Interpolates the virtual mouse so that it correctly targets a card
@@ -130,7 +130,7 @@ func target_card(source: Card,
 	if source == target:
 		# If the target is the same as the source, we need to wait a bit
 		# because otherwise the _is_targeted might not be set yet.
-		await yield_for(0.6)
+		await wait_seconds(0.6)
 	# We need to offset a bit towards the card rect, to ensure the arrow
 	# Area2D collides
 	var extra_offset = Vector2(10,10)
@@ -138,12 +138,12 @@ func target_card(source: Card,
 		extra_offset = Vector2(10,100)
 	board._UT_interpolate_mouse_move(target.global_position + extra_offset,
 			source.global_position,mouse_speed)
-	await yield_for(mouse_yield_wait)
+	await wait_seconds(mouse_yield_wait)
 	var repeat := 0
 	while not target.highlight.visible and repeat <= 3:
 		board._UT_interpolate_mouse_move(target.global_position + extra_offset,
 				board._UT_mouse_position,mouse_speed)
-		await yield_for(mouse_yield_wait)
+		await wait_seconds(mouse_yield_wait)
 		repeat += 1
 	unclick_card_anywhere(source)
 
@@ -161,9 +161,6 @@ func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void
 	var mouse_yield_wait = MOUSE_SPEED[interpolation_speed][1]
 	board._UT_interpolate_mouse_move(target_position,board._UT_mouse_position,mouse_speed)
 	await wait_seconds(mouse_yield_wait)
-
-func execute_with_yield(card: Card) -> void:
-	await card.execute_scripts()
 
 
 func execute_with_target(card: Card, target: Card) -> void:

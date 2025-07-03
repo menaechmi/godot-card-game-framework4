@@ -60,8 +60,11 @@ const _SHOW_ALL_ICON = preload(_SHOW_ALL_ICON_FILE)
 @onready var _filter_line := $VBC/HBC/MC/AvailableCards/HBC/FilterLine
 @onready var _filter_buttons := $VBC/HBC/MC/AvailableCards/CC/ButtonFilters
 @onready var _card_count := $VBC/HBC/MC/AvailableCards/HBC/CardCount
+@warning_ignore("unused_private_class_variable")
 @onready var _card_headers := $VBC/HBC/MC/AvailableCards/CardListHeaders
+@warning_ignore("unused_private_class_variable")
 @onready var _card_name_header := $VBC/HBC/MC/AvailableCards/CardListHeaders/Name
+@warning_ignore("unused_private_class_variable")
 @onready var _card_type_header := $VBC/HBC/MC/AvailableCards/CardListHeaders/Type
 @onready var _show_all_button := $VBC/HBC/MC/AvailableCards/CC/ButtonFilters/ShowAll
 

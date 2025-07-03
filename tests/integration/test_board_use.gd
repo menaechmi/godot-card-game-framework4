@@ -7,7 +7,7 @@ class TestCardBoardDrop:
 		cfc.game_settings.hand_use_oval_shape = false
 		for c in cfc.NMAP.hand.get_all_cards():
 			c.reorganize_self()
-		await yield_for(0.5) # Wait to allow dragging to start
+		await wait_seconds(0.5) # Wait to allow dragging to start
 		# Reminder that card should not have trigger script definitions, to avoid
 		# messing with the tests
 		var card = cards[1]
@@ -65,8 +65,9 @@ class TestCardBoardDrop:
 		await table_move(card, Vector2(100,200))
 		card.card_rotation = 180
 		await drag_drop(card, Vector2(400,600))
-		await yield_to(card._tween, "finished", 0.5)
-		await yield_to(card._tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(12.461,card.get_node("Control").rotation,2.0,
 				"Rotation reset to a hand angle when card moved back to hand")
 		cfc.game_settings.hand_use_oval_shape = true
@@ -88,8 +89,9 @@ class TestDropRecovery:
 		await drag_card(card, Vector2(100,100))
 		await move_mouse(Vector2(200,620))
 		drop_card(card,board._UT_mouse_position)
-		await yield_to(card._tween, "finished", 0.5)
-		await yield_to(card._tween, "finished", 0.5)
+		var tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(hand.get_card_count(),5,
 				"Card dragged back in hand remains in hand")
 

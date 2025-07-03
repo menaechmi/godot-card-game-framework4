@@ -1,27 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ccqepx5u7j5eu"]
+[gd_scene load_steps=2 format=3 uid="uid://s2is7t8jvfjt"]
 
 [ext_resource type="Script" path="res://src/core/CardViewer/DeckBuilder/DeckLoader.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="2"]
-
-[sub_resource type="StyleBoxLine" id="1"]
-color = Color(1, 0.4, 0, 1)
-thickness = 2
-
-[sub_resource type="FontFile" id="2"]
-fallbacks = Array[Font]([ExtResource("2")])
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="DeckMC" type="MarginContainer"]
-offset_right = 638.0
-offset_bottom = 702.0
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_bottom = 5
 
 [node name="CurrentDeck" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -32,7 +14,6 @@ layout_mode = 2
 
 [node name="LineSeparator2" type="Panel" parent="CurrentDeck"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("1")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CurrentDeck"]
 layout_mode = 2
@@ -57,8 +38,6 @@ text = "R"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.992157, 0, 1)
-theme_override_fonts/font = SubResource("2")
 text = "Deck deleted but current list not cleared"
 
 [node name="DeckNameEdit" type="LineEdit" parent="CurrentDeck"]

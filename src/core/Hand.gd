@@ -230,6 +230,7 @@ func _get_modified_card_count() -> int:
 # These functions replace the calls to _add_child, remove_child, and move_child.
 # Because Godot doesn't override built_ins, this lets us call these on all nodes
 # So the ones it matters for can have special functions.
+@warning_ignore("unused_parameter", "shadowed_variable_base_class")
 func _add_child(node, _legible_unique_name=false, InternalMode=0) -> void:
 	super.add_child(node)
 

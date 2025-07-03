@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bweqvdfktdvmd"]
+[gd_scene load_steps=3 format=3 uid="uid://btj75ohp5sogi"]
 
 [ext_resource type="Script" path="res://src/core/Card/TargetingArrow.gd" id="1"]
 

@@ -1,21 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://8qrwugb6apcx"]
+[gd_scene load_steps=4 format=3 uid="uid://dschc2tr6bi06"]
 
 [ext_resource type="Script" path="res://src/core/CardViewer/CVFilterLine.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://pk32pg4xmi8a" path="res://src/core/CardViewer/open-book.png" id="2"]
 [ext_resource type="Script" path="res://src/core/CardViewer/CardViewer.gd" id="3"]
 
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0.145098, 0.145098, 0.145098, 1)
-
-[sub_resource type="StyleBoxLine" id="2"]
-color = Color(1, 0.4, 0, 1)
-thickness = 2
-
 [node name="CardViewer" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_styles/panel = SubResource("1")
 script = ExtResource("3")
 
 [node name="VBC" type="VBoxContainer" parent="."]
@@ -32,8 +24,6 @@ size_flags_vertical = 3
 [node name="MC" type="MarginContainer" parent="VBC/HBC"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
 
 [node name="AvailableCards" type="VBoxContainer" parent="VBC/HBC/MC"]
 layout_mode = 2
@@ -62,7 +52,6 @@ offset_bottom = 96.0
 text = "Syntax"
 
 [node name="CardCount" type="Label" parent="VBC/HBC/MC/AvailableCards/HBC"]
-custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Total:"
 
@@ -74,7 +63,6 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="ShowAll" type="Button" parent="VBC/HBC/MC/AvailableCards/CC/ButtonFilters"]
-custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 shortcut_in_tooltip = false
 icon = ExtResource("2")
@@ -84,21 +72,18 @@ expand_icon = true
 layout_mode = 2
 
 [node name="Name" type="RichTextLabel" parent="VBC/HBC/MC/AvailableCards/CardListHeaders"]
-custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
 scroll_active = false
 
 [node name="Type" type="RichTextLabel" parent="VBC/HBC/MC/AvailableCards/CardListHeaders"]
-custom_minimum_size = Vector2(100, 20)
 layout_mode = 2
 text = "Type"
 scroll_active = false
 
 [node name="LineSeparator" type="Panel" parent="VBC/HBC/MC/AvailableCards"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("2")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBC/HBC/MC/AvailableCards"]
 layout_mode = 2

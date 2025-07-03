@@ -20,6 +20,7 @@ var is_accepted := true
 			#alterant_object,
 			#alteration_script,
 			#trigger_object) -> void:
+@warning_ignore("shadowed_variable")
 func _init(
 		alteration_script: Dictionary,
 		trigger_object: Card,
@@ -60,6 +61,7 @@ func _init(
 	#is_primed = false
 	#emit_signal("primed")
 
+@warning_ignore("unused_parameter", "shadowed_variable")
 func _async_confirm(script_definintion, canonical_name, script_name):
 	var c = await CFUtils.confirm(
 			script_definition,

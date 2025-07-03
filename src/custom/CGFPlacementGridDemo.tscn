@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://didret4x8ebw3"]
+[gd_scene load_steps=3 format=3 uid="uid://bdm1yxgn2dtre"]
 
-[ext_resource type="PackedScene" uid="uid://dx8s5ofo0alvt" path="res://src/core/BoardPlacementSlot.tscn" id="1"]
-[ext_resource type="PackedScene" uid="uid://b5r7f4pxugaix" path="res://src/core/BoardPlacementGrid.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://dlepcydspsgr" path="res://src/core/BoardPlacementSlot.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://dgpdk6ggcadjl" path="res://src/core/BoardPlacementGrid.tscn" id="2"]
 
 [node name="PlacementGridDemo" instance=ExtResource("2")]
 
@@ -16,9 +16,3 @@ layout_mode = 2
 
 [node name="BoardPlacementSlot4" parent="GridContainer" index="3" instance=ExtResource("1")]
 layout_mode = 2
-
-[node name="Label" parent="Control" index="0"]
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 495.0
-offset_bottom = 23.0

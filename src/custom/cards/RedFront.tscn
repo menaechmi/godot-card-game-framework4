@@ -1,13 +1,47 @@
-[gd_scene load_steps=3 format=3 uid="uid://ba2f2nhghl8oi"]
+[gd_scene load_steps=2 format=3 uid="uid://jrhdg10fm5qr"]
 
-[ext_resource type="PackedScene" uid="uid://dhe8l7gromjia" path="res://src/custom/CGFCardFront.tscn" id="1"]
-
-[sub_resource type="StyleBoxFlat" id="1"]
-bg_color = Color(0.329412, 0, 0, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[ext_resource type="PackedScene" path="res://src/custom/CGFCardFront.tscn" id="1"]
 
 [node name="Front" instance=ExtResource("1")]
-theme_override_styles/panel = SubResource("1")
+anchors_preset = 15
+
+[node name="Margin" parent="." index="0"]
+layout_mode = 0
+
+[node name="CardText" parent="Margin" index="0"]
+layout_mode = 2
+
+[node name="Name" parent="Margin/CardText" index="0"]
+layout_mode = 2
+
+[node name="Type" parent="Margin/CardText" index="1"]
+layout_mode = 2
+
+[node name="Tags" parent="Margin/CardText" index="2"]
+layout_mode = 2
+
+[node name="Requirements" parent="Margin/CardText" index="3"]
+layout_mode = 2
+
+[node name="Abilities" parent="Margin/CardText" index="4"]
+layout_mode = 2
+
+[node name="HB" parent="Margin/CardText" index="5"]
+layout_mode = 2
+
+[node name="CostIcon" parent="Margin/CardText/HB" index="0"]
+layout_mode = 2
+expand_mode = 1
+
+[node name="Cost" parent="Margin/CardText/HB" index="1"]
+layout_mode = 2
+
+[node name="Push" parent="Margin/CardText/HB" index="2"]
+layout_mode = 2
+
+[node name="PowerIcon" parent="Margin/CardText/HB" index="3"]
+layout_mode = 2
+expand_mode = 1
+
+[node name="Power" parent="Margin/CardText/HB" index="4"]
+layout_mode = 2

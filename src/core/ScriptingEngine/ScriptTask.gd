@@ -17,8 +17,7 @@ var is_else := false
 var needs_subject := false
 
 # prepares the script_definition needed by the task to function.
-#TODO: did this break anything? .(owner, script, _trigger_object) This used to shadow script to
-#local script, which filled in the script_definition. 
+@warning_ignore("shadowed_variable")
 func _init(owner,
 		script: Dictionary,
 		_trigger_object,

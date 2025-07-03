@@ -54,7 +54,7 @@ func _init(
 # then turns each array element into a [ScriptAlter] object which check
 # against the relevant filters and per_ requests.
 func execute() -> void:
-	var skipped_tasks: Array
+	var skipped_tasks: Array = []
 	for alter_task in alterants_queue:
 		#This means alter_tasks aren't promised to be in any specific order anymore
 		if not alter_task.is_primed:

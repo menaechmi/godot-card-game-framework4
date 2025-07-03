@@ -1,12 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://buxphht5k7omf"]
+[gd_scene load_steps=3 format=3 uid="uid://bfseefufrlgxf"]
 
-[ext_resource type="PackedScene" uid="uid://dwr0fc7df6o4b" path="res://src/core/CardViewer/CVPreviewPopup.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://src/core/CardViewer/CVPreviewPopup.tscn" id="1"]
 [ext_resource type="Script" path="res://src/core/CardViewer/CardLabel.gd" id="2"]
 
 [node name="CardLabel" type="RichTextLabel"]
-offset_left = 18.0
-offset_right = 105.0
-offset_bottom = 18.0
 size_flags_horizontal = 3
 mouse_filter = 1
 bbcode_enabled = true

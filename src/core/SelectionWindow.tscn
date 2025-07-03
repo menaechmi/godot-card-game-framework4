@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://dogw3g4p70p1n"]
+[gd_scene load_steps=2 format=3 uid="uid://dt1y60qlefg7l"]
 
 [ext_resource type="Script" path="res://src/core/SelectionWindow.gd" id="1"]
 
@@ -9,10 +9,4 @@ script = ExtResource("1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -36.0
-theme_override_constants/h_separation = 5
-theme_override_constants/v_separation = 5
 columns = 8

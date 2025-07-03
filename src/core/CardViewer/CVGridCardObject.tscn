@@ -1,12 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://q7t83hc6iuav"]
+[gd_scene load_steps=3 format=3 uid="uid://bbdbbjilaw5vo"]
 
 [ext_resource type="Script" path="res://src/core/CardViewer/CVGridCardObject.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://dwr0fc7df6o4b" path="res://src/core/CardViewer/CVPreviewPopup.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://src/core/CardViewer/CVPreviewPopup.tscn" id="2"]
 
 [node name="GridCardObject" type="CenterContainer"]
-custom_minimum_size = Vector2(150, 240)
-offset_right = 150.0
-offset_bottom = 240.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")

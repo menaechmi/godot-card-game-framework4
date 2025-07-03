@@ -7,7 +7,7 @@ func before_each():
 	await setup_board()
 	board.get_node("BoardPlacementGrid").visible = true
 	cards = draw_test_cards(5)
-	await yield_for(0.1)
+	await wait_seconds(0.1)
 	grid = board.get_node("BoardPlacementGrid")
 	grid.position = Vector2(500,450)
 	board.get_node("BoardPlacementGrid").visible = true

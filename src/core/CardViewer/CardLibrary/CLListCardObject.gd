@@ -24,8 +24,8 @@ func setup(_card_name: String) -> void:
 				new_label.custom_minimum_size.x = card_viewer.default_property_width
 			new_label.bbcode_enabled = true
 			new_label.scroll_active = false
-			new_label.fit_content_height = true
-			new_label.fit_content_height = true
+			new_label.fit_content = true
+			new_label.fit_content = true
 			new_label.custom_effects = card_viewer.custom_rich_text_effects
 #			new_label.autowrap = true
 			var format = _get_bbcode_format()
