@@ -23,7 +23,7 @@ jobs:
       id: cache
       with:
         path: /usr/local/bin/godot
-        key: ${{ runner.os }}-${{ hashFiles('/usr/local/bin/godot') }}
+        key: ${{ runner.os }}-${{ G_VERSION }}
     - name: Download Godot
       if: ${{ steps.cache.outputs.cache-hit != 'true' }}
       run: |
@@ -44,6 +44,7 @@ jobs:
       with:
         report_paths: output.xml
     - uses: actions/upload-artifact@v4
+      if: '!cancelled()'
       with:
         name: GUT-output
         path: output.xml
