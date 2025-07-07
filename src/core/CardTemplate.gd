@@ -1245,7 +1245,7 @@ func move_to(targetHost: Node,
 			scale *= parent_scale * target_scale
 		# We need to remove the current parent node before adding a different one
 		# Because we can't override remove_child(), we check for it first
-		if parentHost.has_method("_remove_child"):
+		if parentHost is Pile:
 			parentHost._remove_child(self)
 		else:
 			parentHost.remove_child(self)
