@@ -23,7 +23,7 @@ jobs:
       id: cache
       with:
         path: /usr/local/bin/godot
-        key: ${{ runner.os }}-${{ G_VERSION }}
+        key: ${{ runner.os }}-${{ env.G_VERSION }}
     - name: Download Godot
       if: ${{ steps.cache.outputs.cache-hit != 'true' }}
       run: |
