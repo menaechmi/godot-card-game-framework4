@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://src/core/CardViewer/CVListCardObject.gd" id="3"]
 
 [node name="ListCardObject" type="HBoxContainer"]
+offset_right = 628.0
+offset_bottom = 20.0
 script = ExtResource("3")
 
 [node name="CardLabel" parent="." instance=ExtResource("2")]

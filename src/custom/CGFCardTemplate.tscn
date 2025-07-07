@@ -10,8 +10,9 @@ script = ExtResource("2")
 
 [node name="Highlight" parent="Control" index="0"]
 anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+
+[node name="Front" parent="Control" index="2"]
+custom_minimum_size = Vector2(150, 240)
 
 [node name="ManipulationButtons" parent="Control" index="4"]
 script = ExtResource("4")

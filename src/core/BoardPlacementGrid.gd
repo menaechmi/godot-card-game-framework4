@@ -9,7 +9,7 @@
 # The BoardPlacementSlots will adjust to card_size on runtime, but
 # If you want to visually see on the editor your result
 class_name BoardPlacementGrid
-extends Control
+extends PanelContainer
 
 # Used to add new BoardPlacementSlot instances to grids. We have to add the consts
 # together before passing to the preload, or the parser complains

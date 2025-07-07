@@ -59,7 +59,11 @@ func _ready():
 	connect("shuffle_completed", 
 		Callable(cfc.signal_propagator, 
 			"_on_signal_received")\
-			.bind([null, "shuffle_completed",{"source": name}])
+			.bind(
+				null,
+				"shuffle_completed",
+				{"source": name}
+				)
 			)
 
 func _process(_delta) -> void:
@@ -99,6 +103,9 @@ func _on_ViewPopup_about_to_show() -> void:
 	if tween and tween.is_running():
 		tween.custom_step(5)
 		#await tween.finished
+	#We have to add an override here to change the theme
+	var styleBox: StyleBoxFlat = $ViewPopup.get_theme_stylebox("panel").duplicate()
+	$ViewPopup.add_theme_stylebox_override("panel", styleBox)
 	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,1), 0.5)
 	tween.play()
@@ -114,10 +121,11 @@ func _on_ViewPopup_popup_hide() -> void:
 	tween.stop()
 	_tween = weakref(tween)
 	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	#bg_color
 	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,0), 0.5)
 	tween.play()
 	await tween.finished
+	#We removed the theme override here, so we don't try and override it again
+	$ViewPopup.remove_theme_stylebox_override("panel")
 	for card in pre_sorted_order:
 		# For each card we have hosted, we check if it's hosted in the popup.
 		# If it is, we move it to the root.
@@ -509,8 +517,6 @@ func shuffle_cards(animate = true) -> void:
 		# if we're already running another animation, just shuffle
 		super.shuffle_cards()
 	reorganize_stack()
-	#TODO Error calling from signal 'shuffle_completed' to callable: 'RefCounted::_on_signal_received': Cannot convert argument 1 from Object to Object.
-	#emit_signal("shuffle_completed", self)
 	shuffle_completed.emit()
 
 

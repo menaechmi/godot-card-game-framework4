@@ -1,7 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpu4f25w7oimd"]
+[gd_scene load_steps=5 format=3 uid="uid://dpu4f25w7oimd"]
 
 [ext_resource type="PackedScene" uid="uid://dw0j8c4eeyhbn" path="res://src/core/Hand.tscn" id="1"]
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="2"]
 [ext_resource type="Script" path="res://src/custom/CGFHand.gd" id="3"]
+
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("2")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="Hand" instance=ExtResource("1")]
 script = ExtResource("3")
@@ -10,11 +20,13 @@ excess_cards = 2
 placement = 7
 
 [node name="Highlight" parent="Control" index="0"]
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 
-[node name="DiscardRandom" type="Button" parent="Control/ManipulationButtons" index="2" groups=["manipulation_button"]]
+[node name="DiscardRandom" type="Button" parent="Control/ManipulationButtons" index="1" groups=["manipulation_button"]]
 layout_mode = 2
 mouse_filter = 1
+theme_override_fonts/font = SubResource("1")
 text = "R"

@@ -1,47 +1,84 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwj0c2fqmtlme"]
+[gd_scene load_steps=9 format=3 uid="uid://bwj0c2fqmtlme"]
 
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="1"]
 [ext_resource type="Script" path="res://src/custom/CGFCardFront.gd" id="2"]
 [ext_resource type="Theme" uid="uid://b50sjum3qm447" path="res://themes/darktheme/darktheme.theme" id="3"]
 [ext_resource type="Texture2D" uid="uid://dkqjx6ko07s7" path="res://assets/icons/fist.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://4vkl4w7vn30h" path="res://assets/icons/rupee.png" id="5"]
 
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.145098, 0.145098, 0.145098, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="2"]
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="FontFile" id="3"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
 [node name="Front" type="Panel"]
+custom_minimum_size = Vector2(150, 240)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1130.0
+offset_bottom = -480.0
 mouse_filter = 2
 theme = ExtResource("3")
+theme_override_styles/panel = SubResource("1")
 script = ExtResource("2")
 
 [node name="Margin" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(150, 240)
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
 
 [node name="CardText" type="VBoxContainer" parent="Margin"]
+custom_minimum_size = Vector2(0, 139)
 layout_mode = 2
 mouse_filter = 2
 
 [node name="Name" type="Label" parent="Margin/CardText"]
+custom_minimum_size = Vector2(146, 19)
 layout_mode = 2
 size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 0.4, 0, 1)
+theme_override_styles/normal = SubResource("2")
 text = "Card Name"
 
 [node name="Type" type="Label" parent="Margin/CardText"]
+custom_minimum_size = Vector2(146, 13)
 layout_mode = 2
 size_flags_vertical = 1
 text = "Type"
 uppercase = true
 
 [node name="Tags" type="Label" parent="Margin/CardText"]
+custom_minimum_size = Vector2(146, 17)
 layout_mode = 2
 size_flags_vertical = 1
 text = "Tag1 - Tag2"
 uppercase = true
 
 [node name="Requirements" type="Label" parent="Margin/CardText"]
+custom_minimum_size = Vector2(146, 14)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.290196, 0.752941, 0, 1)
 text = "Requirements"
 
 [node name="Abilities" type="RichTextLabel" parent="Margin/CardText"]
@@ -53,10 +90,13 @@ text = "This is the card ability text.
 scroll_active = false
 
 [node name="HB" type="HBoxContainer" parent="Margin/CardText"]
+custom_minimum_size = Vector2(146, 13)
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = -3
 
 [node name="CostIcon" type="TextureRect" parent="Margin/CardText/HB"]
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("5")
@@ -64,7 +104,10 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Cost" type="Label" parent="Margin/CardText/HB"]
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.658824, 0.541176, 0, 1)
+theme_override_fonts/font = SubResource("3")
 text = "0"
 
 [node name="Push" type="Control" parent="Margin/CardText/HB"]
@@ -73,6 +116,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="PowerIcon" type="TextureRect" parent="Margin/CardText/HB"]
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("4")
@@ -80,5 +124,8 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Power" type="Label" parent="Margin/CardText/HB"]
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.658824, 0.541176, 0, 1)
+theme_override_fonts/font = SubResource("3")
 text = "0"

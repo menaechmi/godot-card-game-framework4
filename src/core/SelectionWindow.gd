@@ -23,7 +23,7 @@ var is_cancelled := false
 var _card_dupe_map := {}
 
 @onready var _card_grid = $GridContainer
-@onready var _tween: Tween
+@onready var _tween := WeakRef.new()
 
 
 func _ready() -> void:
@@ -137,7 +137,7 @@ func initiate_selection(
 			dupe_selection.properties = card.properties.duplicate()
 		card_sample = dupe_selection
 		var card_grid_obj = grid_card_object_scene.instantiate()
-		_card_grid._add_child(card_grid_obj)
+		_card_grid.add_child(card_grid_obj)
 		# This is necessary setup for the card grid container
 		card_grid_obj.preview_popup.focus_info.info_panel_scene = info_panel_scene
 		card_grid_obj.preview_popup.focus_info.setup()
@@ -166,14 +166,16 @@ func initiate_selection(
 	# Spawning all the duplicates is a bit heavy
 	# So we delay showing the tween to avoid having it look choppy
 	#await get_tree().create_timer(0.2).timeout
-	if _tween:
-		_tween.custom_step(5)
+	var tween = _tween.get_ref() as Tween
+	if tween:
+		tween.custom_step(5)
 	# We do a nice alpha-modulate tween
-	_tween.create_tween()
-	_tween.stop()
-	_tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
+	tween.create_tween()
+	tween.stop()
+	tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-	_tween.play()
+	_tween = weakref(_tween)
+	tween.play()
 	emit_signal(
 			"selection_window_opened",
 			self,

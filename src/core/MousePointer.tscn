@@ -1,9 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://bojp6qn6kff2m"]
+[gd_scene load_steps=6 format=3 uid="uid://bojp6qn6kff2m"]
 
 [ext_resource type="Script" path="res://src/core/MousePointer.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://b6pvb2340aa4v" path="res://fonts/comfortaa/Comfortaa-Bold.ttf" id="2"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 2.0
+
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="FontFile" id="3"]
+fallbacks = Array[Font]([ExtResource("2")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="MousePointer" type="Area2D"]
 z_index = 100
@@ -16,6 +39,14 @@ shape = SubResource("1")
 
 [node name="DebugShape" type="Panel" parent="."]
 visible = false
+offset_right = 10.0
+offset_bottom = 10.0
+theme_override_styles/panel = SubResource("2")
 
 [node name="current_focused_card" type="Label" parent="DebugShape"]
 layout_mode = 0
+offset_left = -90.0
+offset_top = -45.0
+offset_right = -50.0
+offset_bottom = -31.0
+theme_override_fonts/font = SubResource("3")

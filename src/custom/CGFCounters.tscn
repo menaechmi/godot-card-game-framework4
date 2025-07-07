@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://chanfc7nfb7xb" path="res://src/custom/CGFCounter.tscn" id="2"]
 
 [node name="Counters" type="PanelContainer"]
+offset_right = 14.0
+offset_bottom = 14.0
 script = ExtResource("1")
 counter_scene = ExtResource("2")
 

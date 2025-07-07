@@ -1,5 +1,19 @@
-[gd_scene format=3 uid="uid://fxyemiyumfbk"]
+[gd_scene load_steps=3 format=3 uid="uid://fxyemiyumfbk"]
+
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="1"]
+
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
 [node name="ManipulationButton" type="Button"]
+offset_right = 29.0
+offset_bottom = 26.0
 mouse_filter = 1
+theme_override_fonts/font = SubResource("1")
 text = "T"

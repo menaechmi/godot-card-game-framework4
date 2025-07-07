@@ -9,4 +9,8 @@
 layout_mode = 2
 
 [node name="Label" parent="Control" index="0"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 495.0
+offset_bottom = 23.0
 text = "This Grid has a modified label"

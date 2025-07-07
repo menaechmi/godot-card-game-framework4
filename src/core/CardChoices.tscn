@@ -1,10 +1,39 @@
-[gd_scene load_steps=2 format=3 uid="uid://bnm7qr3y0723c"]
+[gd_scene load_steps=6 format=3 uid="uid://bnm7qr3y0723c"]
 
 [ext_resource type="Script" path="res://src/core/CardChoices.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://cmcqa6fj5rko4" path="res://fonts/Xolonium-Regular.ttf" id="2"]
+
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("2")])
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+
+[sub_resource type="StyleBoxFlat" id="2"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_left = 3
+border_width_right = 3
+border_color = Color(2.2, 1.6, 3, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxFlat" id="3"]
+bg_color = Color(1, 1, 1, 1)
+draw_center = false
+border_width_top = 3
+border_width_bottom = 3
+border_color = Color(1.5, 1.1, 2, 1)
+corner_radius_top_left = 3
+corner_radius_bottom_right = 3
 
 [node name="CardChoices" type="PopupMenu"]
-size = Vector2i(257, 100)
+size = Vector2i(279, 100)
 visible = true
+theme_override_fonts/font = SubResource("1")
 item_count = 3
 item_0/text = "Title"
 item_0/id = 0
@@ -19,10 +48,16 @@ item_2/separator = true
 script = ExtResource("1")
 
 [node name="HorizontalHighlights" type="Panel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("2")
 
 [node name="VecticalHighlights" type="Panel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("3")
 
 [connection signal="id_pressed" from="." to="." method="_on_CardChoices_id_pressed"]
 [connection signal="popup_hide" from="." to="." method="_on_CardChoices_popup_hide"]

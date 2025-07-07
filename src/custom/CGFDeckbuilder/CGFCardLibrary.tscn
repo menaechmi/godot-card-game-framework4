@@ -15,6 +15,16 @@ property_width_exceptions = {
 info_panel_scene = ExtResource("3")
 list_card_object_scene = ExtResource("4")
 
+[node name="MC" parent="VBC/HBC" index="0"]
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="Name" parent="VBC/HBC/MC/AvailableCards/CardListHeaders" index="0"]
+custom_minimum_size = Vector2(0, 0)
+
+[node name="Type" parent="VBC/HBC/MC/AvailableCards/CardListHeaders" index="1"]
+custom_minimum_size = Vector2(100, 0)
+
 [node name="Back" type="Button" parent="VBC/HBC/MC/AvailableCards/Settings" index="0"]
 layout_mode = 2
 text = "Back"

@@ -16,3 +16,9 @@ layout_mode = 2
 
 [node name="BoardPlacementSlot4" parent="GridContainer" index="3" instance=ExtResource("1")]
 layout_mode = 2
+
+[node name="Label" parent="Control" index="0"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 495.0
+offset_bottom = 23.0

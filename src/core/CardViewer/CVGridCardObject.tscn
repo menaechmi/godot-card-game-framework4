@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" path="res://src/core/CardViewer/CVPreviewPopup.tscn" id="2"]
 
 [node name="GridCardObject" type="CenterContainer"]
+custom_minimum_size = Vector2(150, 240)
+offset_right = 150.0
+offset_bottom = 240.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1")
