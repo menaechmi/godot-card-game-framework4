@@ -2005,7 +2005,7 @@ func _organize_attachments() -> void:
 			# We don't want to try and move it if it's still tweening.
 			# But if it isn't, we make sure it always follows its parent is_running()
 			var tween = card._tween.get_ref() as Tween
-			if (not tween and tween.is_valid()
+			if (not tween
 				and card.state in [CardState.ON_PLAY_BOARD,CardState.FOCUSED_ON_BOARD]
 				):
 				card.global_position = (global_position +

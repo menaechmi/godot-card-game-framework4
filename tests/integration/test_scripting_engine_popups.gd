@@ -236,5 +236,6 @@ class TestAskIntegerWithModTokens:
 		await wait_seconds(0.2)
 		#FIXME: This token doesn't get added to the card because Drawer doesn't have a
 		#VBoxContainer node, which should be from CardTemplate
+		# Bio_token is null
 		var bio_token: Token = card.tokens.get_token("bio")
 		assert_eq(3,bio_token.count,"Token increased by specified amount")

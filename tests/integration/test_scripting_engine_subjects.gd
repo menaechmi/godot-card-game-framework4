@@ -16,6 +16,7 @@ class TestSubjectTarget:
 		var scripting_engine = await card.execute_scripts()
 		await yield_to(card.targeting_arrow, "initiated_targeting", 0.2) 
 		watch_signals(scripting_engine)
+		#FIXME
 		await yield_to(await target_card(card,card), "completed", 0.1) 
 		var tween = card._tween.get_ref() as Tween
 		if tween:

@@ -469,6 +469,8 @@ class SignalPropagator:
 		# drags the card on the grid itself. If the player drags the card
 		# To an empty spot, it works fine
 		# It also fails to execute if I use any other flag than GROUP_CALL_UNIQUE
+		# All of the execute_scripts() calls here are asynchronous.
+		# So you need to await card.scripts_executed if you're waiting for them to finish
 		for card in cfc.get_tree().get_nodes_in_group("cards"):
 			if not trigger_card:
 				card.execute_scripts(card, trigger, details)
