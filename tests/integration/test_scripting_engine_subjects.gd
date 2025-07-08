@@ -4,7 +4,7 @@ class TestSubjectTarget:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_subject_target():
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.scripts = {"manual": {"board": [
 				{"name": "rotate_card",
 				"subject": "target",
@@ -38,8 +38,8 @@ class TestSubjectBoardseek:
 		var target2: Card = cards[2]
 		var ttype : String = target.properties["Type"]
 		var ttype2 : String = target2.properties["Type"]
-		await table_move(target, Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		table_move(target, Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -93,8 +93,8 @@ class TestSubjectPrevious:
 		var target2: Card = cards[2]
 		@warning_ignore("unused_variable")
 		var ttype : String = target.properties["Type"]
-		await table_move(target, Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		table_move(target, Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -219,11 +219,11 @@ class TestSubjectPreviousWithFilters:
 		card._debugger_hook = true
 		await execute_with_target(card,cards[2])
 		await wait_seconds(0.3) 
-		assert_eq(await board.counters.get_counter("research"),2,
+		assert_eq(board.counters.get_counter("research"),2,
 				"Counter increased by specified amount")
 		await execute_with_target(card,cards[4])
 		await wait_seconds(0.3) 
-		assert_eq(await board.counters.get_counter("research"),3,
+		assert_eq(board.counters.get_counter("research"),3,
 				"Counter increased by specified amount")
 
 class TestSubjectsNext:
@@ -260,6 +260,6 @@ class TestSubjectsNext:
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		assert_eq(await board.counters.get_counter("research"),3,
+		assert_eq(board.counters.get_counter("research"),3,
 				"Counter set to the specified amount")
 

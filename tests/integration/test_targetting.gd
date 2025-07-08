@@ -37,8 +37,8 @@ func test_targetting():
 	assert_false(cards[4].highlight.visible,
 			"Test that a highlights disappears once targetting ends")
 
-	await table_move(cards[3],Vector2(300,300))
-	await table_move(cards[2],Vector2(350,400))
+	table_move(cards[3],Vector2(300,300))
+	table_move(cards[2],Vector2(350,400))
 	card.targeting_arrow.initiate_targeting()
 	board._UT_interpolate_mouse_move(cards[2].global_position,card.global_position,3)
 	await wait_seconds(0.6)

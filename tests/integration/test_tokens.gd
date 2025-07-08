@@ -6,7 +6,7 @@ class TestBoardTokens:
 	func test_board_tokens():
 		var card : Card
 		card = cards[0]
-		await table_move(card, Vector2(600,200))
+		table_move(card, Vector2(600,200))
 		await move_mouse(card.global_position)
 		assert_false(card.tokens.is_drawer_open, "is_drawer_open flag should be false")
 		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
@@ -116,7 +116,7 @@ class TestBoardTokens:
 
 
 		card = cards[3]
-		await table_move(card, Vector2(200,300))
+		table_move(card, Vector2(200,300))
 		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("magic", 10),
 				"Adding new token with larger amount returns a CHANGED result")
 		var magic_token: Token = card.tokens.get_token("magic")
@@ -151,7 +151,7 @@ class TestOffBoardTokens:
 		cfc._ut_show_token_buttons = false
 		var card : Card
 		card = cards[3]
-		await table_move(card, Vector2(1000,100))
+		table_move(card, Vector2(1000,100))
 		card._on_Card_mouse_entered()
 		await wait_seconds(0.1)
 		# warning-ignore:return_value_discarded

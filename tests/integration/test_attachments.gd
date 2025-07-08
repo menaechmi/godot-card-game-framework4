@@ -29,6 +29,7 @@ class TestAttachAndSwitch:
 		assert_eq(card.current_host_card,cards[0],
 				"Attached card has its parent in the current_host_card var")
 		#FIXME: Error: can't take value from empty array
+		# The attachments array is the empty one
 		assert_eq(card,cards[0].attachments.front(),
 				"Card with hosted card has its children attachments array")
 		assert_eq(1,len(cards[0].attachments),
@@ -117,7 +118,7 @@ class TestAttachAndSwitch:
 		await drag_drop(card,Vector2(630,230))
 		assert_eq(card.current_host_card,cards[4],
 				"Attached card can attach to another and clears out previous attachments")
-		#FIXME: Can't take vlue from empty array
+		#FIXME: Can't take value from empty array - attachments[] is empty
 		assert_eq(card,cards[4].attachments.front(),
 				"Reattached card is added to new host correctly")
 		assert_false(card in cards[0].attachments,

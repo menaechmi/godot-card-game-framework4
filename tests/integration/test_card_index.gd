@@ -8,7 +8,7 @@ func before_each():
 	cards.clear()
 
 func after_all():
-	await teardown_board()
+	teardown_board()
 
 func test_hand_z_index():
 	for _iter in range(0,8):
@@ -23,10 +23,10 @@ func test_table_hand_z_index():
 		cards.append(hand.draw_card())
 		await wait_seconds(0.07) 
 	await wait_seconds(1) 
-	await table_move(cards[0],Vector2(300,100))
-	await table_move(cards[1],Vector2(300,200))
-	await table_move(cards[5],Vector2(300,300))
-	await table_move(cards[7],Vector2(300,400))
+	table_move(cards[0],Vector2(300,100))
+	table_move(cards[1],Vector2(300,200))
+	table_move(cards[5],Vector2(300,300))
+	table_move(cards[7],Vector2(300,400))
 	await drag_drop(cards[0],Vector2(300,600))
 	cards.append(hand.draw_card())
 	await wait_seconds(0.1) 

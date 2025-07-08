@@ -14,7 +14,7 @@ func before_each():
 
 func test_highlight_priority():
 	var card : Card = cards[0]
-	await table_move(cards[2], Vector2(550,500))
+	table_move(cards[2], Vector2(550,500))
 	card.attachment_mode = Card.AttachmentMode.ATTACH_BEHIND
 	await drag_card(card, Vector2(600,500))
 	assert_null(grid.get_highlighted_slot(),

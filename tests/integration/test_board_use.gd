@@ -15,28 +15,33 @@ class TestCardBoardDrop:
 		await drag_card(card, Vector2(300,300))
 		await move_mouse(Vector2(500,200))
 		drop_card(card,board._UT_mouse_position)
-		#tween = card._tween.get_ref() as Tween
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref() as Tween
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(Vector2(500, 200),card.global_position,Vector2(2,2),
 				"Card dragged in correct global position")
 		card.card_rotation = 90
-		#tween = card._tween.get_ref()
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(90.0,card.get_node("Control").rotation,2.0,
 				"Card rotates 90")
 		card.card_rotation = 180
-		#tween = card._tween.get_ref()
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(180.0,card.get_node("Control").rotation,2.0,
 				"Card rotates 180")
 		card.set_card_rotation(180,false)
-		#tween = card._tween.get_ref()
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(180.0,card.get_node("Control").rotation,2.0,
 				"Card rotation doesn't revert without toggle")
 		card.set_card_rotation(180,true)
-		#tween = card._tween.get_ref()
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(0.0,card.get_node("Control").rotation,2.0,
 				"Card rotation toggle works to reset to 0")
 		assert_eq(2,card.set_card_rotation(111),
@@ -51,8 +56,9 @@ class TestCardBoardDrop:
 				"Rotation remains while card is being dragged")
 		await move_mouse(cfc.NMAP.discard.position)
 		drop_card(card,board._UT_mouse_position)
-		#tween = card._tween.get_ref()
-		#await wait_for_signal(tween.finished, 0.5)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(0.0,card.get_node("Control").rotation,
 				"Rotation reset to 0 while card is moving to hand")
 		cfc.game_settings.hand_use_oval_shape = true
@@ -62,7 +68,7 @@ class TestCardBoardDrop:
 		# Reminder that card should not have trigger script definitions, to avoid
 		# messing with the tests
 		var card = cards[1]
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.card_rotation = 180
 		await drag_drop(card, Vector2(400,600))
 		var tween = card._tween.get_ref() as Tween
@@ -120,7 +126,7 @@ class TestBoardToBoardMove:
 	func test_board_to_board_move():
 		var card: Card
 		card = cards[0]
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.card_rotation = 90
 		await drag_drop(card, Vector2(800,200))
 		assert_eq(90.0,card.get_node("Control").rotation,
@@ -132,7 +138,7 @@ class TestBoardPause:
 	func test_pause():
 		var card: Card
 		card = cards[0]
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		await move_mouse(Vector2(0,0))
 		cfc.game_paused = true
 		await drag_drop(card, Vector2(700,300))

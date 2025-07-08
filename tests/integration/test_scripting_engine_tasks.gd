@@ -26,7 +26,7 @@ class TestRotateCard:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 90}]}}
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
@@ -262,7 +262,7 @@ class TestAttachCard:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_attach_to_card():
-		await table_move(target, Vector2(500,400))
+		table_move(target, Vector2(500,400))
 		card.scripts = {"manual": {"hand": [
 				{"name": "attach_to_card",
 				"subject": "target"}]}}
@@ -278,7 +278,7 @@ class TestHostCard:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_host_card():
-		await table_move(card, Vector2(500,400))
+		table_move(card, Vector2(500,400))
 		card.scripts = {"manual": {"board": [
 				{"name": "host_card",
 				"subject": "target"}]}}
@@ -326,7 +326,7 @@ class TestModCounters:
 				"modification": 5,
 				"counter_name":  "research"}]}}
 		card.execute_scripts()
-		assert_eq(5,await board.counters.get_counter("research"),
+		assert_eq(5, board.counters.get_counter("research"),
 				"Counter increased by specified amount")
 		card.scripts = {"manual": {"hand": [
 				{"name": "mod_counter",
@@ -334,7 +334,7 @@ class TestModCounters:
 				"set_to_mod": true,
 				"counter_name": "credits"}]}}
 		card.execute_scripts()
-		assert_eq(2,await board.counters.get_counter("credits"),
+		assert_eq(2, board.counters.get_counter("credits"),
 				"Counter set to the specified amount")
 
 	func test_draw_more_cards_than_pile_max():

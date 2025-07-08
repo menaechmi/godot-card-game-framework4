@@ -11,7 +11,7 @@ func before_each():
 	deck2 = autoqfree(_PILE_SCENE.instantiate())
 
 func after_all():
-	await teardown_board()
+	teardown_board()
 
 
 func test_anchor_positioning_and_groups():

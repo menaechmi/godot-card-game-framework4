@@ -12,7 +12,7 @@ func before_each():
 	await setup_board()
 
 func after_each():
-	await teardown_board()
+	teardown_board()
 
 func test_get_card_methods():
 	var pile : Pile = cfc.NMAP.deck
@@ -51,7 +51,7 @@ func test_popup_view():
 	var ordered_card_names := []
 	for o in ordered_cards:
 		ordered_card_names.append(o.canonical_name)
-	await pile.populate_popup()
+	pile.populate_popup()
 	#await wait_seconds(1)
 	assert_eq(pile.get_all_cards(), card_order,\
 			"Retrieved card order remains when viewed in pile")
@@ -59,7 +59,7 @@ func test_popup_view():
 			"Viewed card order from topleft, to botright")
 	pile.pile_popup.hide()
 	await wait_seconds(1)
-	await pile.populate_popup(true)
+	pile.populate_popup(true)
 	print("Card order should change when viewed in order")
 	assert_ne_deep(retrieve_popup_order(pile), card_order)
 	var popup_card_names := []

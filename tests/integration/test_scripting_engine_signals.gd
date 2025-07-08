@@ -17,7 +17,7 @@ class TestSignals:
 				"subject": "self",
 				"set_faceup": false}],
 				"trigger": "self"}}
-		await table_move(card, Vector2(100,100))
+		table_move(card, Vector2(100,100))
 		card.card_rotation = 90
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 1)
@@ -32,7 +32,7 @@ class TestSignals:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		await table_move(target, Vector2(500,100))
+		table_move(target, Vector2(500,100))
 		target.card_rotation = 90
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 1)
@@ -109,8 +109,8 @@ class TestCardPropertiesFilter:
 				"filter_state_trigger": [{"filter_properties": {"Type": ttype2}}],
 				"trigger": "another"}}
 		await wait_seconds(0.5)
-		await table_move(target, Vector2(500,100))
-		await table_move(target2, Vector2(900,100))
+		table_move(target, Vector2(500,100))
+		table_move(target2, Vector2(900,100))
 		target.card_rotation = 90
 		await wait_seconds(0.5)
 		assert_false(card.targeting_arrow.is_targeting,
@@ -180,7 +180,7 @@ class TestCardRotates:
 					"set_faceup": false}],
 				"filter_degrees": 0,
 				"trigger": "another"}}
-		await table_move(target, Vector2(500,100))
+		table_move(target, Vector2(500,100))
 		target.card_rotation = 90
 		var tween = card._tween.get_ref() as Tween
 		if tween:
@@ -255,7 +255,7 @@ class TestCardViewed:
 					"set_faceup": false}],
 				"trigger": "another"}}
 
-		await table_move(target, Vector2(600,100))
+		table_move(target, Vector2(600,100))
 		target.is_faceup = false
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 1)
@@ -624,8 +624,8 @@ class TestCardUnattached:
 					"subject": "self",
 					"set_faceup": false}],
 				"trigger": "another"}}
-		await table_move(host, Vector2(500,100))
-		await table_move(target, Vector2(500,50))
+		table_move(host, Vector2(500,100))
+		table_move(target, Vector2(500,50))
 		target.attach_to_host(host)
 		await wait_seconds(0.1)
 		assert_signal_emitted_with_parameters(

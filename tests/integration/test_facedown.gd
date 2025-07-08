@@ -18,7 +18,7 @@ func test_board_facedown():
 	card = cards[3]
 	var card_front = card.get_node("Control/Front")
 	var card_back = card.get_node("Control/Back")
-	await table_move(card, Vector2(600,200))
+	table_move(card, Vector2(600,200))
 	card.is_faceup = false
 	var tween = card._tween.get_ref() as Tween
 	if tween:

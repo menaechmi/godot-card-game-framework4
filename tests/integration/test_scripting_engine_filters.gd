@@ -7,9 +7,9 @@ class TestFilterGtGeLtLe:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_property_filter_gt_ge_lt_le():
-		await table_move(cards[1], Vector2(200,200))
-		await table_move(cards[2], Vector2(500,200))
-		await table_move(cards[3], Vector2(700,200))
+		table_move(cards[1], Vector2(200,200))
+		table_move(cards[2], Vector2(500,200))
+		table_move(cards[3], Vector2(700,200))
 		cards[1].modify_property("Cost", 1)
 		cards[2].modify_property("Cost", 2)
 		cards[3].modify_property("Cost", 3)
@@ -90,10 +90,10 @@ class TestTokensFilterGtGeLtLe:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_tokens_filter_gt_ge_lt_le():
-		await table_move(cards[1], Vector2(200,200))
-		await table_move(cards[2], Vector2(500,200))
-		await table_move(cards[3], Vector2(700,200))
-		await table_move(cards[4], Vector2(900,200))
+		table_move(cards[1], Vector2(200,200))
+		table_move(cards[2], Vector2(500,200))
+		table_move(cards[3], Vector2(700,200))
+		table_move(cards[4], Vector2(900,200))
 		cards[2].tokens.mod_token("void",1)
 		cards[3].tokens.mod_token("void",2)
 		cards[4].tokens.mod_token("void",3)
@@ -199,8 +199,8 @@ class TestAnd:
 
 	func test_and():
 		var type : String = cards[0].properties["Type"]
-		await table_move(cards[0], Vector2(500,200))
-		await table_move(cards[4], Vector2(800,200))
+		table_move(cards[0], Vector2(500,200))
+		table_move(cards[4], Vector2(800,200))
 		cards[4].modify_property("Cost", 2)
 		cards[1].scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
@@ -222,8 +222,8 @@ class TestAnd:
 
 	func test_or():
 		var type : String = target.properties["Type"]
-		await table_move(target, Vector2(500,200))
-		await table_move(cards[4], Vector2(800,200))
+		table_move(target, Vector2(500,200))
+		table_move(cards[4], Vector2(800,200))
 		cards[4].modify_property("Cost", 2)
 		card.scripts = {"manual": {"hand": [
 				{"name": "flip_card",
@@ -248,8 +248,8 @@ class TestStateFilterRotation:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_state_filter_rotation():
-		await table_move(cards[1], Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		table_move(cards[1], Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -257,7 +257,7 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_degrees": 0}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		await wait_seconds(0.2)
+		wait_seconds(0.2)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -274,8 +274,8 @@ class TestStateFilterRotation:
 				"Card on board matching rotation state should be rotated 90 degrees")
 
 	func test_state_filter_faceup():
-		await table_move(cards[1], Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		table_move(cards[1], Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -306,8 +306,8 @@ class TestFilterTokens:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_state_filter_tokens():
-		await table_move(cards[1], Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		table_move(cards[1], Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
 		cards[1].tokens.mod_token("void",5)
 		cards[2].tokens.mod_token("void",5)
 		card.scripts = {"manual": {"hand": [
@@ -388,8 +388,8 @@ class TestFilterParent:
 		board.counters.mod_counter("research", 3)
 		cards[4].modify_property("Cost", 2)
 		cards[0].modify_property("Cost", 3)
-		await table_move(cards[0], Vector2(500,200))
-		await table_move(cards[4], Vector2(800,200))
+		table_move(cards[0], Vector2(500,200))
+		table_move(cards[4], Vector2(800,200))
 		cards[1].scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -424,7 +424,7 @@ class TestFilterParent:
 				"Matching comparison  rotated")
 				
 	func test_state_filter_parent():
-		await table_move(cards[1], Vector2(500,200))
+		table_move(cards[1], Vector2(500,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "flip_card",
 				"subject": "target",

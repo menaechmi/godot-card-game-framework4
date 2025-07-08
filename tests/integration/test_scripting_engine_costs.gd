@@ -20,14 +20,14 @@ class TestSelfandRotate:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
 				"card turn face-down because "
 				+ "rotation cost could be paid")
-		await table_move(cards[1], Vector2(500,200))
+		table_move(cards[1], Vector2(500,200))
 		cards[1].card_rotation = 90
 		cards[1].execute_scripts()
 		if cards[1]._flip_tween:
@@ -56,7 +56,7 @@ class TestTargetCosts:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		await table_move(target, Vector2(100,200))
+		table_move(target, Vector2(100,200))
 		card.execute_scripts()
 		await target_card(card,target)
 		if card._flip_tween:
@@ -89,7 +89,7 @@ class TestMultipleCosts:
 				"subject": "self",
 				"is_cost": true,
 				"set_faceup": false}]}}
-		await table_move(target, Vector2(100,200))
+		table_move(target, Vector2(100,200))
 		target.is_faceup = false
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.5)
@@ -115,7 +115,7 @@ class TestFlipCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 90},]}}
-		await table_move(card, Vector2(100,200))
+		table_move(card, Vector2(100,200))
 		card.is_faceup = false
 		card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
@@ -137,7 +137,7 @@ class TestTokenCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 90}]}}
-		await table_move(card, Vector2(1000,200))
+		table_move(card, Vector2(1000,200))
 		card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
@@ -363,7 +363,7 @@ class TestCountersCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 90}]}}
-		await table_move(card, Vector2(200,200))
+		table_move(card, Vector2(200,200))
 		card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
@@ -398,5 +398,5 @@ class TestCountersCost:
 			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(180,card.card_rotation,
 				"Card not rotated because negative counter cost could not be be paid")
-		assert_eq(1, await board.counters.get_counter("research"),
+		assert_eq(1, board.counters.get_counter("research"),
 				"Token count that could not be paid remains the same")

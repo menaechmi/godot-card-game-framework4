@@ -19,9 +19,9 @@ class TestCostsWithAlterants:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 90}]}}
-		await table_move(card, Vector2(200,200))
+		table_move(card, Vector2(200,200))
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),5,
+		assert_eq(board.counters.get_counter("research"),5,
 				"Counter not modifed because it brought cost too high")
 		assert_eq(card.card_rotation,0,
 				"Card not rotated because counter + alterant cost cannot be paid")
@@ -35,7 +35,7 @@ class TestCostsWithAlterants:
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		assert_eq(await board.counters.get_counter("research"),4,
+		assert_eq(board.counters.get_counter("research"),4,
 				"Counter modified to modification + alterant")
 		assert_eq(card.card_rotation,90,
 				"Card rotated because counter + alterant cost can be be paid")
@@ -54,7 +54,7 @@ class TestAlterantsRespectState:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),3,
+		assert_eq(board.counters.get_counter("research"),3,
 				"Counter set to the specified amount because alterant not state-applicable")
 
 class TestSelfAlterants:
@@ -77,7 +77,7 @@ class TestSelfAlterants:
 			}
 		}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),6,
+		assert_eq(board.counters.get_counter("research"),6,
 				"Altered self execution")
 
 class TestAlterantsPer:
@@ -97,7 +97,7 @@ class TestAlterantsPer:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),13,
+		assert_eq(board.counters.get_counter("research"),13,
 				"Altered counter per other counter")
 
 
@@ -117,7 +117,7 @@ class TestAlterantsRespectSingleTag:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),3,
+		assert_eq(board.counters.get_counter("research"),3,
 				"Counter not altered because single tag doesn't match")
 		target.scripts = {"alterants": {"hand": [
 				{"filter_task": "mod_counter",
@@ -126,7 +126,7 @@ class TestAlterantsRespectSingleTag:
 				"filter_counter_name": "research",
 				"alteration": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),9,
+		assert_eq(board.counters.get_counter("research"),9,
 				"Counter altered single tag as string matches")
 
 
@@ -146,7 +146,7 @@ class TestAlterantsRespectMultipleTags:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),3,
+		assert_eq(board.counters.get_counter("research"),3,
 				"Counter not altered because tag doesn't match")
 		target.scripts = {"alterants": {"hand": [
 				{"filter_task": "mod_counter",
@@ -155,7 +155,7 @@ class TestAlterantsRespectMultipleTags:
 				"filter_counter_name": "research",
 				"alteration": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),9,
+		assert_eq(board.counters.get_counter("research"),9,
 				"Counter altered because single tag in array matches")
 		card.scripts = {"manual": {"hand": [
 				{"name": "mod_counter",
@@ -164,7 +164,7 @@ class TestAlterantsRespectMultipleTags:
 				"modification": 3}]}}
 		await wait_seconds(0.5)
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),15,
+		assert_eq(board.counters.get_counter("research"),15,
 				"Counter altered because tag matches one of the tags defined in task")
 		target.scripts = {"alterants": {"hand": [
 				{"filter_task": "mod_counter",
@@ -173,7 +173,7 @@ class TestAlterantsRespectMultipleTags:
 				"filter_counter_name": "research",
 				"alteration": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),18,
+		assert_eq(board.counters.get_counter("research"),18,
 				"Counter not altered one of the filtered tags does not match")
 		target.scripts = {"alterants": {"hand": [
 				{"filter_task": "mod_counter",
@@ -182,7 +182,7 @@ class TestAlterantsRespectMultipleTags:
 				"filter_counter_name": "research",
 				"alteration": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),24,
+		assert_eq(board.counters.get_counter("research"),24,
 				"Counter altered because all of filtered tags  match")
 
 class TestDifferentAlterants:
@@ -201,7 +201,7 @@ class TestDifferentAlterants:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),4,
+		assert_eq(board.counters.get_counter("research"),4,
 				"Research counter not affected by token alterant")
 
 
@@ -227,7 +227,7 @@ class TestAlterantsRespectFilterState:
 				"modification": 1}]}}
 		card.execute_scripts()
 		cards[1].execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),5,
+		assert_eq(board.counters.get_counter("research"),5,
 				"Research counter not affected by token alterant of not matching trigger card")
 
 
@@ -247,7 +247,7 @@ class TestAlterantsRespectPolarity:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),5,
+		assert_eq(board.counters.get_counter("research"),5,
 				"Alterant cannot turn a positive amount into a negative")
 	# warning-ignore:return_value_discarded
 		board.counters.mod_counter("research", 5, true)
@@ -261,7 +261,7 @@ class TestAlterantsRespectPolarity:
 				"counter_name":  "research",
 				"modification": -3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),5,
+		assert_eq(board.counters.get_counter("research"),5,
 				"Alterant cannot turn a negative amount into a positive")
 
 
@@ -283,9 +283,9 @@ class TestCounterAlterants:
 				"counter_name":  "research",
 				"modification": 3}]}}
 		card.execute_scripts()
-		assert_eq(await board.counters.get_counter("research"),4,
+		assert_eq(board.counters.get_counter("research"),4,
 				"Counter set to the specified amount + alterant")
-		assert_eq(await board.counters.get_counter("credits"),100,
+		assert_eq(board.counters.get_counter("credits"),100,
 				"Credits counter not modified")
 
 
@@ -307,7 +307,7 @@ class TestTokenAlterants:
 				"subject": "self",
 				"modification": 3,
 				"token_name":  "industry"}]}}
-		await table_move(card, Vector2(200,200))
+		table_move(card, Vector2(200,200))
 		card.execute_scripts()
 		var industry_token: Token = card.tokens.get_token("industry")
 		var blood_token: Token = card.tokens.get_token("blood")
@@ -356,9 +356,9 @@ class TestGetCounterAlterants:
 				"trigger": "another",
 				"filter_counter_name": "research",
 				"alteration": 3},]}}
-		assert_eq(await board.counters.get_counter("research",target),3,
+		assert_eq(board.counters.get_counter("research",target),3,
 				"Alterant modifies retrieved counter value")
-		assert_eq(await board.counters.get_counter("research",card),0,
+		assert_eq(board.counters.get_counter("research",card),0,
 				"Alterant not modified retrieved counter value when trigger is self")
 		var type : String = target.properties["Type"]
 		card.scripts = {"alterants": {"hand": [
@@ -368,9 +368,9 @@ class TestGetCounterAlterants:
 				"filter_state_trigger": [{
 					"filter_properties": {"Type": type}
 				}],},]}}
-		assert_eq(await board.counters.get_counter("research",target),3,
+		assert_eq(board.counters.get_counter("research",target),3,
 				"Alterant modifies retrieved counter value when filter matches")
-		assert_eq(await board.counters.get_counter("research",card),0,
+		assert_eq(board.counters.get_counter("research",card),0,
 				"Alterant not modified retrieved counter value when filter does not match")
 
 
@@ -378,7 +378,7 @@ class TestGetTokenAlterants:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_get_token_alterants():
-		await table_move(target, Vector2(200,200))
+		table_move(target, Vector2(200,200))
 	# warning-ignore:return_value_discarded
 		target.tokens.mod_token("blood")
 	# warning-ignore:return_value_discarded

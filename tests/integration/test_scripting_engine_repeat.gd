@@ -10,7 +10,7 @@ class TestRepeat:
 				"repeat": 3,
 				"counter_name":  "research"}]}}
 		card.execute_scripts()
-		assert_eq(9,await board.counters.get_counter("research"),
+		assert_eq(9,  board.counters.get_counter("research"),
 				"Counter increased by specified amount")
 		card.scripts = {"manual": {"hand": [
 				{"name": "mod_counter",
@@ -19,7 +19,7 @@ class TestRepeat:
 				"set_to_mod": true,
 				"counter_name": "credits"}]}}
 		card.execute_scripts()
-		assert_eq(2,await board.counters.get_counter("credits"),
+		assert_eq(2, board.counters.get_counter("credits"),
 				"Counter set to the specified amount")
 
 class TestRepeatWithTarget:
@@ -36,5 +36,6 @@ class TestRepeatWithTarget:
 		await target_card(card,target)
 		# My scripts are slower now
 		await wait_seconds(0.2)
+		#FIXME: Invalid get index 'count'. industry_token is null
 		var industry_token: Token = target.tokens.get_token("industry")
 		assert_eq(6,industry_token.count,"Token set to specified amount")
