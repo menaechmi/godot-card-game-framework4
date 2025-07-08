@@ -77,12 +77,12 @@ func get_property(property: String, default = null):
 # Figures out what the subjects of this script is supposed to be.
 #
 # Returns a Card object if subjects is defined, else returns null.
-func _find_subjects(stored_integer := 0) -> Array:
+func _find_subjects(stored_integer := 0, sub = get_property(SP.KEY_SUBJECT)) -> Array:
 	var subjects_array := []
 	# See SP.KEY_SUBJECT doc
 	#HACK: Conditionals make co-routines not work - but we also want this not to be a coroutine
 	#await Engine.get_main_loop().process_frame
-	match get_property(SP.KEY_SUBJECT):
+	match sub:
 		# Ever task retrieves the subjects used in the previous task.
 		# if the value "previous" is given to the "subjects" key,
 		# it simple reuses the same ones.
@@ -104,18 +104,10 @@ func _find_subjects(stored_integer := 0) -> Array:
 					if not SP.check_validity(c, script_definition, "subject"):
 						is_valid = false
 		SP.KEY_SUBJECT_V_TARGET:
-			#HACK: We prevent _find_subjects from needing to be awaited by
-			#moving this to another call stack & waiting for a signal
-			# it means in the case of a KEY_SUBJECT_V_TARGET, we can't know the validity until later
-			_initiate_card_targeting()
-			# If the target is null, it means the player pointed at nothing
-			#if c.return:
-				#is_valid = SP.check_validity(c.return, script_definition, "subject")
-				#subjects_array.append(c.return)
-			#else:
-				## If the script required a target and it didn't find any
-				## we consider it invalid
-				#is_valid = false
+			_initiate_card_targeting(subjects_array)
+			#This lets calling functions know that the script can't be primed yet
+			subjects_array.append("awaiting_target")
+			return(subjects_array)
 		SP.KEY_SUBJECT_V_BOARDSEEK:
 			subjects_array = _boardseek_subjects(stored_integer)
 		SP.KEY_SUBJECT_V_TUTOR:
@@ -139,36 +131,38 @@ func _find_subjects(stored_integer := 0) -> Array:
 				if not SP.check_validity(c, script_definition, "subject"):
 					is_valid = false
 	if get_property(SP.KEY_NEEDS_SELECTION):
-		var selection_count = get_property(SP.KEY_SELECTION_COUNT)
-		var selection_type = get_property(SP.KEY_SELECTION_TYPE)
-		var selection_optional = get_property(SP.KEY_SELECTION_OPTIONAL)
-		if get_property(SP.KEY_SELECTION_IGNORE_SELF):
-			subjects_array.erase(owner)
-		#This used to require an await
-		var select_return = cfc.ov_utils.select_card(
-				subjects_array, selection_count, selection_type, selection_optional, cfc.NMAP.board)
-		# In case the owner card is still focused (say because script was triggered
-		# on double-click and card was not moved
-		# Then we need to ensure it's unfocused
-		# Otherwise its z-index will make it draw on top of the popup.
-		if owner as Card:
-			if owner.state in [Card.CardState.FOCUSED_IN_HAND]:
-				# We also reorganize the whole hand to avoid it getting
-				# stuck like this.
-				for c in owner.get_parent().get_all_cards():
-					c.interruptTweening()
-					c.reorganize_self()
-			# If the return is not an array, it means that the selection
-			# was cancelled (either because there were not enough cards
-			# or because the player pressed cancel
-			# in which case we consider the task invalid
-			if typeof(select_return) == TYPE_ARRAY:
-				subjects_array = select_return
-			else:
-				is_valid = false
+		_key_needs_selection(subjects_array)
 	subjects = subjects_array
 	return(subjects_array)
 
+# This was separated from _find_subjecst so it could be called by _initiate_targeting
+func _key_needs_selection(subjects_array):
+	var selection_count = get_property(SP.KEY_SELECTION_COUNT)
+	var selection_type = get_property(SP.KEY_SELECTION_TYPE)
+	var selection_optional = get_property(SP.KEY_SELECTION_OPTIONAL)
+	if get_property(SP.KEY_SELECTION_IGNORE_SELF):
+		subjects_array.erase(owner)
+	var select_return = cfc.ov_utils.select_card(
+			subjects_array, selection_count, selection_type, selection_optional, cfc.NMAP.board)
+	# In case the owner card is still focused (say because script was triggered
+	# on double-click and card was not moved
+	# Then we need to ensure it's unfocused
+	# Otherwise its z-index will make it draw on top of the popup.
+	if owner as Card:
+		if owner.state in [Card.CardState.FOCUSED_IN_HAND]:
+			# We also reorganize the whole hand to avoid it getting
+			# stuck like this.
+			for c in owner.get_parent().get_all_cards():
+				c.interruptTweening()
+				c.reorganize_self()
+		# If the return is not an array, it means that the selection
+		# was cancelled (either because there were not enough cards
+		# or because the player pressed cancel
+		# in which case we consider the task invalid
+		if typeof(select_return) == TYPE_ARRAY:
+			subjects_array = select_return
+		else:
+			is_valid = false
 
 func _boardseek_subjects(stored_integer: int) -> Array:
 	var subjects_array := []
@@ -314,37 +308,37 @@ func _index_seek_subjects(stored_integer: int) -> Array:
 	return(subjects_array)
 
 
-# Handles initiation of target seeking.
-# and yields until it's found.
-#
-# Returns a Card object.
-func _initiate_card_targeting() -> void: #used to return Card
+# This initializes targeting as an asynchronous co-routine. It finishes priming the script
+# Always await script.primed before continuing, as this may block script priming until input.
+# But this also prevents needing to wait for subjects to be found
+func _initiate_card_targeting(subjects_array: Array = []) -> void:
 	# We wait a centisecond, to prevent the card's _input function from seeing
 	# The double-click which started the script and immediately triggerring
 	# the target completion
-	# If we keep this await, everything touched by ScriptObjects needs to be awaited.
-	#await owner.get_tree().create_timer(0.1).timeout
+	await owner.get_tree().create_timer(0.1).timeout
 	owner.targeting_arrow.initiate_targeting()
 	# We wait until the targetting has been completed to continue
-	owner.targeting_arrow.target_selected.connect(_on_target_selected)
-	#await owner.targeting_arrow.target_selected
-	#var target = owner.targeting_arrow.target_object
-	#owner.targeting_arrow.target_object = null
-	##owner_card.target_object = null
-	#return(target)
-
-func _on_target_selected():
-	var subjects_array := []
+	await owner.targeting_arrow.target_selected
+	# Cleaning up the subjects_array, just in case
+	if subjects_array.has("awaiting_target"):
+		subjects_array.erase("awaiting_target")
 	var target = owner.targeting_arrow.target_object
 	owner.targeting_arrow.target_object = null
 	# If the target is null, it means the player pointed at nothing
-	if target.return:
-		is_valid = SP.check_validity(target.return, script_definition, "subject")
-		subjects_array.append(target.return)
+	if target:
+		is_valid = SP.check_validity(target, script_definition, "subject")
+		subjects_array.append(target)
 	else:
 		# If the script required a target and it didn't find any
 		# we consider it invalid
 		is_valid = false
+	if get_property(SP.KEY_NEEDS_SELECTION):
+		_key_needs_selection(subjects_array)
+	subjects = subjects_array
+	is_primed = true
+	emit_signal("primed")
+	#owner_card.target_object = null
+
 
 # Handles looking for intensifiers of a current effect via the board state
 #

@@ -68,13 +68,14 @@ func prime(_prev_subjects: Array, run_type: int, sceng_stored_int: int) -> void:
 			and (is_cost or needs_subject))):
 		# We discover which other card this task will affect, if any
 		# Used to be an await
-		_find_subjects(sceng_stored_int)
-	#print_debug(str(subjects), str(cost_dry_run))
-	# We emit a signal when done so that our ScriptingEngine
-	# knows we're ready to continue
-	is_primed = true
-	emit_signal("primed")
-#	print_debug("skipped: " + str(is_skipped) +  " valid: " + str(is_valid))
+		var ret = _find_subjects(sceng_stored_int)
+		if ret.has("awaiting_target"):
+			# The targeting function will prime the script for us when ready
+			ret.erase("awaiting_target")
+		else:
+			# If we're not waiting on a target, the script is primed
+			is_primed = true
+			emit_signal("primed")
 
 func check_confirm() -> bool:
 	var owner_name = ''

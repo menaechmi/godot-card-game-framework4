@@ -18,11 +18,13 @@ func _init(per_msg: perMessage) -> void:
 	else:
 		prev_subjects = per_msg.subjects
 	#await _find_subjects()
-	_find_subjects()
-	# We emit a signal when done so that our ScriptingEngine
-	# knows we're ready to continue
-	emit_signal("primed")
-	is_primed = true
+	var ret = _find_subjects()
+	if ret.has("awaiting_target"):
+		#The targeting function will prime the script for us when ready
+		ret.erase("awaiting_target")
+	else:
+		is_primed = true
+		emit_signal("primed")
 
 
 # Goes through the subjects specied for this per calculation

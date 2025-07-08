@@ -45,21 +45,17 @@ func _init(
 		if script_definition.get("is_optional_" + "task"):
 			_async_confirm(script_definition,
 				owner.canonical_name, script_name)
-	if is_valid:
-		# The alterant might require counting other cards to see if it's valid.
-		# So we just run it through the _find_subjects() to see if it will
-		# set is_valid to false.
-		#await _find_subjects(0) <- there's no reason to await the answer
-		_find_subjects(0)
-		#Alters needing confirmation are not yet primed, only these ones
-		is_primed = true
-		emit_signal("primed")
-	# We emit a signal when done so that our ScriptingEngine
-	# knows we're ready to continue
-	#HACK: Conditionals make co-routines not work
-	#await Engine.get_main_loop().process_frame
-	#is_primed = false
-	#emit_signal("primed")
+		else:
+			# The alterant might require counting other cards to see if it's valid.
+			# So we just run it through the _find_subjects() to see if it will
+			# set is_valid to false.
+			var ret = _find_subjects(0)
+			if ret.has("awaiting_target"):
+				#The targeting function will prime the script for us when ready
+				ret.erase("awaiting_target")
+			else:
+				is_primed = true
+				emit_signal("primed")
 
 @warning_ignore("unused_parameter", "shadowed_variable")
 func _async_confirm(script_definintion, canonical_name, script_name):
@@ -69,6 +65,11 @@ func _async_confirm(script_definintion, canonical_name, script_name):
 			script_name)
 	is_valid = c
 	if is_valid:
-		_find_subjects(0)
-	is_primed = true
-	emit_signal("primed")
+		var ret = _find_subjects()
+		if ret.has("awaiting_target"):
+			ret.erase("awaiting_target")
+		else:
+			is_primed = true
+			emit_signal("primed")
+	#is_primed = true
+	#emit_signal("primed")

@@ -490,7 +490,7 @@ func _on_Card_gui_input(event) -> void:
 					and get_state_exec() == "hand")
 					or get_state_exec() == "board"):
 				cfc.card_drag_ongoing = null
-				execute_scripts()
+				await execute_scripts()
 			# If it's a long click it might be because
 			# they want to drag the card
 			else:

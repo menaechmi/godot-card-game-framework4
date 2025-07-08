@@ -9,13 +9,15 @@ class TestCustomScript:
 		# Custom scripts have to be predefined in code
 		# So not possible to specify them as runtime scripts
 		card.execute_scripts()
-		await wait_seconds(0.1)
+		await wait_for_signal(card.scripts_executed, 1, "Card did not execute scripts")
 		assert_freed(card, "Test Card 2")
 		card = cards[1]
 		target = cards[3]
 		card.execute_scripts()
+		await wait_for_signal(card.scripts_executed, 1, "Card did not execute script")
 		await target_card(card,target)
-		await wait_seconds(0.3)
+		#We have to wait for a process_frame or the card isn't freed
+		await wait_for_signal(get_tree().process_frame, 1)
 		assert_freed(target, "Test Card 1")
 
 class TestRotateCard:
