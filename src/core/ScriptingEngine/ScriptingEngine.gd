@@ -222,6 +222,9 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 					card.temp_properties_modifiers.erase(self)
 #	print_debug(str(card_owner) + 'Scripting: All done!') # Debug
 	all_tasks_completed = true
+	#FIXME: I think these errors can be fixed by removing unneeded awaits
+	#Resumed function 'execute_scripts' after await, but script is gone
+	#ScriptingEngine.gd:225 @ execute(): Attempt to disconnect a nonexistent connection from '<RefCounted#-9223356146750841254>'. Signal: 'tasks_completed', callable: 'GDScriptFunctionState::_signal_callback'.
 	emit_signal("tasks_completed")
 	# checking costs on multiple targeted cards in the same script,
 	# is not supported at the moment due to the exponential complexities
@@ -407,7 +410,7 @@ func mod_tokens(script: ScriptTask) -> int:
 		modification = script.get_property(SP.KEY_MODIFICATION)
 	var set_to_mod: bool = script.get_property(SP.KEY_SET_TO_MOD)
 	if not set_to_mod:
-		alteration = await _check_for_alterants(script, modification)
+		alteration = _check_for_alterants(script, modification)
 	var token_diff := 0
 	for card in script.subjects:
 		var current_tokens: int
@@ -465,7 +468,7 @@ func spawn_card(script: ScriptTask) -> void:
 		count = per_msg.found_things
 	else:
 		count = script.get_property(SP.KEY_OBJECT_COUNT)
-	alteration = await _check_for_alterants(script, count)
+	alteration = _check_for_alterants(script, count)
 	var spawned_cards := []
 	if grid_name:
 		var grid: BoardPlacementGrid
@@ -569,7 +572,7 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 		count = per_msg.found_things
 	else:
 		count = script.get_property(SP.KEY_OBJECT_COUNT)
-	alteration = await _check_for_alterants(script, count)
+	alteration = _check_for_alterants(script, count)
 	var spawned_cards := []
 	for iter in range(count + alteration):
 		card = cfc.instance_card(canonical_name)
@@ -690,7 +693,7 @@ func modify_properties(script: ScriptTask) -> int:
 				# We do not check for alterants on card numer properties
 				# which are set as strings (e.g. things like 'X')
 				if typeof(card.get_property(property)) == TYPE_INT:
-					alteration = await _check_for_property_alterants(
+					alteration = _check_for_property_alterants(
 							script,
 							card.get_property(property),
 							new_value,
@@ -825,7 +828,7 @@ func mod_counter(script: ScriptTask) -> int:
 		modification = script.get_property(SP.KEY_MODIFICATION)
 	var set_to_mod: bool = script.get_property(SP.KEY_SET_TO_MOD)
 	if not set_to_mod:
-		alteration = await _check_for_alterants(script, modification)
+		alteration = _check_for_alterants(script, modification)
 	if script.get_property(SP.KEY_STORE_INTEGER):
 		var current_count = cfc.NMAP.board.counters.get_counter(
 				counter_name, script.owner)

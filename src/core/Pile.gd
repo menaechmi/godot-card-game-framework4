@@ -493,6 +493,7 @@ func shuffle_cards(animate = true) -> void:
 				# The bigger the deck, the smallest the percentage of cards
 				# in it, that will bounce
 				var resize_div: float = 2 + 0.1 * random_cards.size()
+				@warning_ignore("narrowing_conversion")
 				random_cards.resize(random_cards.size() / resize_div)
 				for card in random_cards:
 					card.animate_shuffle(anim_speed, CFConst.ShuffleStyle.OVERHAND)

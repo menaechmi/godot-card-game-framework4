@@ -469,7 +469,7 @@ func parse_replacements() -> void:
 								else:
 									card = trigger_object
 								var owner_token_count :=\
-										await card.tokens.get_token_count(
+										card.tokens.get_token_count(
 										token_filters["filter_" + SP.KEY_TOKEN_NAME])
 								token_filters[SP.FILTER_COUNT] =\
 										owner_token_count
