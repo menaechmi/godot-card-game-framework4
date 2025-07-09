@@ -1877,7 +1877,6 @@ func animate_shuffle(anim_speed : float, style : int) -> void:
 	if rot_anim:
 		_add_tween_rotation(0,random_rot,rot_speed,rot_anim,Tween.EASE_OUT)
 	tween.play()
-	#await tween.finished
 	tween = create_tween()
 	tween.stop()
 	_tween = weakref(tween)
@@ -1886,6 +1885,7 @@ func animate_shuffle(anim_speed : float, style : int) -> void:
 	if rot_anim:
 		_add_tween_rotation(random_rot,0,rot_speed,rot_anim,Tween.EASE_IN)
 	tween.play()
+	#await tween.finished
 
 
 # This function can be overriden by any class extending Card, in order to provide
@@ -2228,7 +2228,7 @@ func _add_tween_position(
 		trans_type = Tween.TRANS_CUBIC,
 		ease_type = Tween.EASE_OUT):
 	var tween := _tween.get_ref() as Tween
-	tween.tween_property(self, "position", target_position, runtime)#.from(expected_position)
+	tween.tween_property(self, "position", target_position, runtime).from(expected_position)
 	tween.set_trans(trans_type).set_ease(ease_type)
 
 
@@ -2241,7 +2241,7 @@ func _add_tween_global_position(
 		trans_type = Tween.TRANS_BACK,
 		ease_type = Tween.EASE_IN_OUT):
 	var tween := _tween.get_ref() as Tween
-	tween.tween_property(self, "global_position", target_position, runtime)#.from(expected_position)
+	tween.tween_property(self, "global_position", target_position, runtime).from(expected_position)
 	tween.set_trans(trans_type).set_ease(ease_type)
 
 
@@ -2287,6 +2287,7 @@ func _process_card_state() -> void:
 					_add_tween_rotation($Control.rotation,_target_rotation,
 						in_hand_tween_duration)
 					tween.play()
+					#await tween.finished
 			tween = _tween.get_ref()
 			if not tween:
 				state_finalized = true
@@ -2368,6 +2369,7 @@ func _process_card_state() -> void:
 					# warning-ignore:return_value_discarded
 					set_card_rotation(0)
 				tween.play()
+				#await tween.finished
 				_focus_completed = true
 				# We don't change state yet, only when the focus is removed
 				# from this card
@@ -2477,6 +2479,7 @@ func _process_card_state() -> void:
 				_add_tween_rotation($Control.rotation,_target_rotation,
 					reorganization_tween_duration)
 				tween.play()
+				#await tween.finished
 				set_state(CardState.IN_HAND)
 
 		CardState.PUSHED_ASIDE:
@@ -2566,7 +2569,6 @@ func _process_card_state() -> void:
 			# so we tween it to the right location
 			tween = _tween.get_ref()
 			if not tween:
-				#$Tween.remove(self,'position') # We make sure to remove other tweens of the same type to avoid a deadlock
 				_target_position = _determine_board_position_from_mouse()
 				# The below ensures the card doesn't leave the viewport dimentions
 				#NOTE: this used to include a call to play_area_scale.x or .y, it didn't work so it was removed
@@ -2590,6 +2592,7 @@ func _process_card_state() -> void:
 					_add_tween_scale(scale, Vector2(1,1) * play_area_scale, to_board_tween_duration,
 							Tween.TRANS_BOUNCE, Tween.EASE_OUT)
 				tween.play()
+				#await tween.finished
 				set_state(CardState.ON_PLAY_BOARD)
 
 		CardState.FOCUSED_ON_BOARD:

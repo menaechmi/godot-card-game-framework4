@@ -459,7 +459,7 @@ class SignalPropagator:
 	# This method requirses that each signal also passes its own name in the
 	# trigger variable, is this is the key sought in the CardScriptDefinitions
 	func _on_signal_received(
-			trigger_card: Card = null, trigger: String = "manual", details: Dictionary = {}):
+			trigger_card: Card, trigger: String, details: Dictionary):
 		# We use Godot groups to ask every card to check if they
 		# have [ScriptingEngine] triggers for this signal.
 		#
@@ -472,17 +472,11 @@ class SignalPropagator:
 		# All of the execute_scripts() calls here are asynchronous.
 		# So you need to await card.scripts_executed if you're waiting for them to finish
 		for card in cfc.get_tree().get_nodes_in_group("cards"):
-			if not trigger_card:
-				card.execute_scripts(card, trigger, details)
-			else:
-				card.execute_scripts(trigger_card,trigger,details)
+			card.execute_scripts(trigger_card,trigger,details)
 		# If we need other objects than cards to trigger scripts via signals
 		# add them to the 'scriptables' group ang ensure they have
 		# an "execute_scripts" function
 		for card in cfc.get_tree().get_nodes_in_group("scriptables"):
-			if not trigger_card:
-				card.execute_scripts(card, trigger, details)
-			else:
 				card.execute_scripts(trigger_card,trigger,details)
 #		cfc.get_tree().call_group_flags(SceneTree.GROUP_CALL_UNIQUE  ,"cards",
 #				"execute_scripts",trigger_card,trigger,details)

@@ -518,7 +518,7 @@ func shuffle_cards(animate = true) -> void:
 		# if we're already running another animation, just shuffle
 		super.shuffle_cards()
 	reorganize_stack()
-	shuffle_completed.emit()
+	emit_signal("shuffle_completed", self)
 
 
 # Overrides the re_place() function of [Pile] in order

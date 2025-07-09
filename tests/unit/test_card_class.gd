@@ -89,19 +89,19 @@ func test_card_name_setget():
 	await wait_for_signal(get_tree().process_frame, 5)
 	card.set_card_name("Testing Name Change 1")
 	# We need a yield to allow the richtextlabel setup complete
-	assert_eq("Testing Name Change 1",card.canonical_name,
+	assert_eq(card.canonical_name, "Testing Name Change 1",
 			'card_name variable is set correctly')
 	#str() conversion used because GUT doesn't consider StringName a String
 	assert_string_contains(str(card.name), "Testing Name Change 1")
-	assert_eq("Testing Name Change 1",card.card_front.card_labels["Name"].text,
+	assert_eq(card.card_front.card_labels["Name"].text, "Testing Name Change 1",
 			'Name Label text is set correctly')
 	card.canonical_name = "Testing Name Change 2"
 	await wait_for_signal(get_tree().process_frame, 0.1)
-	assert_eq("Testing Name Change 2",card.canonical_name,
+	assert_eq(card.canonical_name, "Testing Name Change 2",
 			'card_name variable is set correctly')
 	#str() conversion used because GUT doesn't consider StringName a String
 	assert_string_contains(str(card.name), "Testing Name Change 2")
-	assert_eq("Testing Name Change 2",card.card_front.card_labels["Name"].text,
+	assert_eq(card.card_front.card_labels["Name"].text, "Testing Name Change 2",
 			'Name Label text is set correctly')
 
 func test_CardDefinition_properties():
