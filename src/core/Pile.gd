@@ -60,7 +60,6 @@ func _ready():
 		Callable(cfc.signal_propagator, 
 			"_on_signal_received")\
 			.bind(
-				null,
 				"shuffle_completed",
 				{"source": name}
 				)
@@ -518,7 +517,10 @@ func shuffle_cards(animate = true) -> void:
 		# if we're already running another animation, just shuffle
 		super.shuffle_cards()
 	reorganize_stack()
-	emit_signal("shuffle_completed", self)
+	# This previous emitted "self" which prevents the signal from being propogated
+	# Because Godot can't convert between Pile and Card. Nothing needed to know
+	# which pile sent the signal, but if it ever does, this will need to be changed
+	emit_signal("shuffle_completed", null)
 
 
 # Overrides the re_place() function of [Pile] in order
