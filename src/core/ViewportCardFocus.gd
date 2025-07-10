@@ -80,7 +80,7 @@ func _process(_delta) -> void:
 		# insteas, we just hide them.
 		var tween = _tween.get_ref() as Tween
 		if _current_focus_source != c\
-				and not tween.is_running():
+				and not tween:
 			current_dupe_focus.visible = false
 	if not is_instance_valid(_current_focus_source)\
 			and $VBC/Focus.modulate.a != 0\

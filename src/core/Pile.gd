@@ -100,8 +100,7 @@ func _on_ViewSorted_Button_pressed() -> void:
 func _on_ViewPopup_about_to_show() -> void:
 	var tween = _tween.get_ref() as Tween
 	if tween and tween.is_running():
-		tween.custom_step(5)
-		#await tween.finished
+		await tween.finished
 	#We have to add an override here to change the theme
 	var styleBox: StyleBoxFlat = $ViewPopup.get_theme_stylebox("panel").duplicate()
 	$ViewPopup.add_theme_stylebox_override("panel", styleBox)
@@ -114,8 +113,7 @@ func _on_ViewPopup_about_to_show() -> void:
 func _on_ViewPopup_popup_hide() -> void:
 	var tween = _tween.get_ref() as Tween
 	if tween and tween.is_running():
-		tween.custom_step(5)
-		#await tween.finished
+		await tween.finished
 	tween = create_tween()
 	tween.stop()
 	_tween = weakref(tween)
@@ -152,6 +150,7 @@ func _on_ViewPopup_popup_hide() -> void:
 
 
 # Populated the popup card viewer with the cards and displays them
+#Should be awaited, but Godot doesn't recognize it as a co-routine
 func populate_popup(sorted:= sorted_popup) -> void:
 	# We prevent the button from being pressed twice while the popup is open
 	# as it will bug-out
@@ -164,7 +163,7 @@ func populate_popup(sorted:= sorted_popup) -> void:
 		card_array.sort_custom(Callable(CFUtils, "sort_scriptables_by_name"))
 	for card in card_array:
 		# We remove the card to rehost it in the popup grid container
-		_remove_child(card)
+		await _remove_child(card)
 		_slot_card_into_popup(card)
 	# Finally we Pop the Up :)
 	$ViewPopup.popup_centered()
@@ -229,7 +228,7 @@ func _after_child_add(node: Node):
 # when a Card class is removed. In that case it also shows
 # this container's "floor" if it was the last card in the pile.
 func _remove_child(node, _legible_unique_name=false) -> void:
-	super.remove_child(node)
+	node.get_parent().remove_child(node)
 	card_count_label.text = str(get_card_count())
 	# When we put the first card in the pile, we make sure the
 	# Panel is made transparent so that the card backs are seen instead
@@ -238,8 +237,8 @@ func _remove_child(node, _legible_unique_name=false) -> void:
 		reorganize_stack()
 		var opacity_tween = _opacity_tween.get_ref() as Tween
 		if opacity_tween:
-			#await opacity_tween.finished
-			opacity_tween.custom_step(2)
+			await opacity_tween.finished
+			#opacity_tween.custom_step(2)
 		opacity_tween = create_tween()
 		opacity_tween.stop()
 		_opacity_tween = weakref(opacity_tween)

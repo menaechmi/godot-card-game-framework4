@@ -23,6 +23,7 @@ func test_board_facedown():
 	var tween = card._tween.get_ref() as Tween
 	if tween:
 		await wait_for_signal(tween.finished, 1)
+	await wait_frames(60)
 	assert_false(card_front.visible,
 			"Front should be invisible when card is turned face down")
 	assert_almost_eq(card_front.scale.x, 0.0, 0.1,
@@ -116,10 +117,11 @@ func test_board_facedown():
 #	yield(wait_seconds(0.2), YIELD) # Wait to allow dupe to be destroyed
 	await move_mouse(card.global_position)
 #	yield(wait_seconds(0.2), YIELD) # Wait to allow dupe to be created
+	await wait_frames(60)
 	dupe = main._previously_focused_cards[card]
 	dupe_front = dupe.get_node("Control/Front")
 	assert_true(dupe_front.visible,
-			"Dupe is visible after moving mouse in and out to restart focus")
+			"Dupe is not visible after moving mouse in and out to restart focus")
 
 	card.is_faceup = true
 	await wait_for_signal(card._flip_tween.finished, 1)

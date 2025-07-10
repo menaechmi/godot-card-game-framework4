@@ -350,7 +350,8 @@ func _init_card_layout() -> void:
 	# Because we duplicate the card when adding to the viewport focus
 	# It already has a CardBack node, so we don't want to replicate it
 	# so we only add a CardBack node, if we know it's not a dupe focus
-	if get_parent().name != "SubViewport":
+	# Dupes no longer seem to have the Back/Front nodes
+	#if get_parent().name != "SubViewport":
 		var card_front_instance = card_front_design.instantiate()
 		_card_front_container.add_child(card_front_instance)
 		card_front = card_front_instance
@@ -367,10 +368,10 @@ func _init_card_layout() -> void:
 	# If it is a viewport focus dupe, we still need to setup the
 	# card_back variable, as the .duplicate() method does not copy
 	# internal variables.
-	else:
-		#TODO: Front is not index 0, instead index 2. Need to find out why
-		card_back = _card_back_container.get_child(0)
-		card_front = _card_front_container.get_child(0)
+	#else:
+	#	#TODO: Front is not index 0, instead index 2. Need to find out why
+	#	card_back = _card_back_container.get_child(0)
+	#	card_front = _card_front_container.get_child(0)
 
 
 # Ensures that the canonical card name is set in all fields which use it.
@@ -1249,7 +1250,7 @@ func move_to(targetHost: Node,
 		if parentHost is Pile:
 			parentHost._remove_child(self)
 		else:
-			get_parent().remove_child(self)
+			self.get_parent().remove_child(self)
 		targetHost._add_child(self)
 		# The below is used when a specific card position is requested
 		# It converts the requested card position, to absolute node position
@@ -1529,7 +1530,7 @@ func execute_scripts(
 		common_pre_run(sceng)
 		# In case the script involves targetting, we need to wait on further
 		# execution until targetting has completed
-		await sceng.execute(CFInt.RunType.COST_CHECK)
+		sceng.execute(CFInt.RunType.COST_CHECK)
 		if not sceng.all_tasks_completed:
 			await sceng.tasks_completed
 		# If the dry-run of the ScriptingEngine returns that all
@@ -1539,7 +1540,7 @@ func execute_scripts(
 			# The ScriptingEngine is where we execute the scripts
 			# We cannot use its class reference,
 			# as it causes a cyclic reference error when parsing
-			await sceng.execute()
+			sceng.execute()
 			if not sceng.all_tasks_completed:
 				await sceng.tasks_completed
 			# warning-ignore:void_assignment

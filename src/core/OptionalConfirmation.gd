@@ -15,17 +15,22 @@ func _ready() -> void:
 
 
 func prep(card, task_name: String) -> void:
+	var _name: String
+	if card is Card:
+		_name = card.canonical_name
 		callback_card = card
-		dialog_text =  callback_card.canonical_name + ": Do you want to activate " + task_name + "?"
-		cfc.NMAP.board._add_child(self)
-		# We spawn the dialogue at the middle of the screen.
-		popup_centered()
-		# One again we need two different Panels due to 
-		# https://github.com/godotengine/godot/issues/32030
-		$HorizontalHighlights.size = size
-		$HorizontalHighlights.position = Vector2(0,0)
-		$VecticalHighlights.size = size
-		$VecticalHighlights.position = Vector2(0,0)
+	else:
+		_name = card
+	dialog_text =  _name + ": Do you want to activate " + task_name + "?"
+	cfc.NMAP.board._add_child(self)
+	# We spawn the dialogue at the middle of the screen.
+	popup_centered()
+	# One again we need two different Panels due to 
+	# https://github.com/godotengine/godot/issues/32030
+	$HorizontalHighlights.size = size
+	$HorizontalHighlights.position = Vector2(0,0)
+	$VecticalHighlights.size = size
+	$VecticalHighlights.position = Vector2(0,0)
 
 
 func _on_OptionalConfirmation_confirmed() -> void:
@@ -37,4 +42,5 @@ func _on_OptionalConfirmation_cancelled() -> void:
 	is_accepted = false
 	emit_signal("selected", false)
 	#We need to be sure to cancel targeting
-	callback_card.targeting_arrow.complete_targeting()
+	if callback_card:
+		callback_card.targeting_arrow.complete_targeting()

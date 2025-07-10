@@ -18,9 +18,9 @@ func before_each():
 func test_title_and_buttons():
 	confirm.prep("UT Card","UT Execution")
 	assert_eq("Please Confirm...", confirm.get_window().title)
-	assert_eq("UT Card: Do you want to activate UT Execution?", confirm.dialog_text)
-	assert_eq("No", confirm.get_cancel_button().text)
-	assert_eq("Yes", confirm.get_ok_button().text)
+	assert_eq(confirm.dialog_text, "UT Card: Do you want to activate UT Execution?")
+	assert_eq(confirm.get_cancel_button().text, "No")
+	assert_eq(confirm.get_ok_button().text, "Yes")
 
 func test_no():
 	watch_signals(confirm)

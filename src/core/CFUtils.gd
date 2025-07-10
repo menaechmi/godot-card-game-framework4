@@ -124,7 +124,7 @@ static func list_imported_in_directory(path: String, full_path := false) -> Arra
 # Caller is used to set a callback for async confirmation
 static func confirm(
 		script: Dictionary,
-		card: Card,
+		card,
 		task_name: String,
 		type := "task") -> bool:
 	var is_accepted := true

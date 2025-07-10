@@ -43,7 +43,7 @@ func test_faceup_cards():
 
 func test_popup_view():
 	var pile : Pile = cfc.NMAP.deck
-	await wait_seconds(1)
+	await wait_seconds(0.2)
 	var card_order := pile.get_all_cards()
 	var ordered_cards := pile.get_all_cards()
 	ordered_cards.sort_custom(Callable(CFUtils, "sort_scriptables_by_name"))
@@ -52,14 +52,14 @@ func test_popup_view():
 	for o in ordered_cards:
 		ordered_card_names.append(o.canonical_name)
 	pile.populate_popup()
-	#await wait_seconds(1)
+	await wait_frames(60)
 	assert_eq(pile.get_all_cards(), card_order,\
 			"Retrieved card order remains when viewed in pile")
 	assert_eq(pile.get_all_cards(), retrieve_popup_order(pile),\
 			"Viewed card order from topleft, to botright")
 	pile.pile_popup.hide()
-	await wait_seconds(1)
-	pile.populate_popup(true)
+	await wait_frames(60)
+	await pile.populate_popup(true)
 	print("Card order should change when viewed in order")
 	assert_ne_deep(retrieve_popup_order(pile), card_order)
 	var popup_card_names := []
@@ -68,9 +68,10 @@ func test_popup_view():
 	print("Cards should be ordered in view popup")
 	assert_eq_deep(popup_card_names, ordered_card_names)
 	pile.pile_popup.hide()
-	await wait_seconds(1)
 	print("Pile order should be resumed after being viewed order")
 	assert_eq_deep(pile.get_all_cards(), card_order)
+	#This ensures we're not freeing items more than once
+	await wait_frames(60)
 
 func retrieve_popup_order(pile: Pile) -> Array:
 	var popup_cards := []
