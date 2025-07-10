@@ -66,6 +66,7 @@ func execute() -> void:
 	if len(skipped_tasks):
 		alterants_queue = skipped_tasks
 		call_deferred("execute")
+		return
 	all_alterations_completed = true
 	emit_signal("alterations_completed")
 

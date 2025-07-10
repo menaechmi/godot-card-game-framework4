@@ -5,6 +5,7 @@ extends ConfirmationDialog
 signal selected(is_accepted: bool)
 
 var is_accepted := false
+var callback_card : Card
 
 func _ready() -> void:
 	get_cancel_button().text = "No"
@@ -13,8 +14,9 @@ func _ready() -> void:
 	get_cancel_button().connect("pressed", Callable(self, "_on_OptionalConfirmation_cancelled"))
 
 
-func prep(card_name: String, task_name: String) -> void:
-		dialog_text =  card_name + ": Do you want to activate " + task_name + "?"
+func prep(card, task_name: String) -> void:
+		callback_card = card
+		dialog_text =  callback_card.canonical_name + ": Do you want to activate " + task_name + "?"
 		cfc.NMAP.board._add_child(self)
 		# We spawn the dialogue at the middle of the screen.
 		popup_centered()
@@ -34,3 +36,5 @@ func _on_OptionalConfirmation_confirmed() -> void:
 func _on_OptionalConfirmation_cancelled() -> void:
 	is_accepted = false
 	emit_signal("selected", false)
+	#We need to be sure to cancel targeting
+	callback_card.targeting_arrow.complete_targeting()

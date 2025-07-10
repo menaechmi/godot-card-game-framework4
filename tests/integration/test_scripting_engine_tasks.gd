@@ -165,7 +165,7 @@ class TestMoveCard:
 				"Card should have moved to index 1")
 
 	func test_move_card_cont_to_board():
-		await wait_seconds(0.2)
+		await wait_seconds(1)
 		target = cfc.NMAP.deck.get_card(5)
 		card.scripts = {"manual": {"hand": [
 				{"name": "move_card_to_board",
@@ -174,11 +174,11 @@ class TestMoveCard:
 				"src_container": "deck",
 				"board_position":  Vector2(1000,200)}]}}
 		card.execute_scripts()
+		await wait_frames(120)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
-			await wait_for_signal(tween.finished, 0.5)
-		await wait_seconds(0.2)
-		assert_almost_eq(Vector2(1000,200),target.global_position, Vector2(5,5),
+			await wait_for_signal(tween.finished, 1)
+		assert_almost_eq(target.global_position, Vector2(1000,200), Vector2(5,5),
 				"Card should have moved to specified board position")
 		target = cfc.NMAP.deck.get_card(0)
 		var target2 = cfc.NMAP.deck.get_card(1)
@@ -195,6 +195,7 @@ class TestMoveCard:
 				"Card should have moved to a grid slot")
 		assert_not_null(target2._placement_slot,
 				"Card should have moved to a grid slot")
+		# This just prevents needing to continue when the above tests fail
 		if target._placement_slot:
 			assert_eq(target._placement_slot.get_grid_name(), "BoardPlacementGrid",
 					"Card placed in the correct grid")

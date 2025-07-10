@@ -315,9 +315,10 @@ func _initiate_card_targeting(subjects_array: Array = []) -> void:
 	# We wait a centisecond, to prevent the card's _input function from seeing
 	# The double-click which started the script and immediately triggerring
 	# the target completion
-	await owner.get_tree().create_timer(0.1).timeout
+	#await owner.get_tree().create_timer(0.1).timeout
 	owner.targeting_arrow.initiate_targeting()
 	# We wait until the targetting has been completed to continue
+	reference()
 	await owner.targeting_arrow.target_selected
 	# Cleaning up the subjects_array, just in case
 	if subjects_array.has("awaiting_target"):
@@ -337,6 +338,7 @@ func _initiate_card_targeting(subjects_array: Array = []) -> void:
 	subjects = subjects_array
 	is_primed = true
 	emit_signal("primed")
+	unreference()
 	#owner_card.target_object = null
 
 

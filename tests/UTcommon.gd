@@ -146,6 +146,9 @@ func target_card(source: Card,
 		await wait_seconds(mouse_yield_wait)
 		repeat += 1
 	unclick_card_anywhere(source)
+	# The goal of this is to wait for the targeting to finish so it can clean up
+	# Resumed function execute_scripts after await, but script is gone
+	await wait_seconds(1)
 
 
 func table_move(card: Card, pos: Vector2) -> void:
@@ -165,4 +168,4 @@ func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void
 
 func execute_with_target(card: Card, target: Card) -> void:
 	var _sceng = await card.execute_scripts()
-	target_card(card,target,"slow")
+	await target_card(card,target,"slow")

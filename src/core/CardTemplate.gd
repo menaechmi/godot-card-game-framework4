@@ -233,7 +233,7 @@ var attachments := []
 var current_host_card : Card = null
 # If true, the card will be displayed faceup. If false, it will be facedown
 var is_faceup := true: 
-	get: return get_is_faceup()
+	get: return _is_faceup
 	set(value): set_is_faceup(value)
 #Private value to get around Godot set get limitation
 var _is_faceup := true
@@ -1245,10 +1245,11 @@ func move_to(targetHost: Node,
 			scale *= parent_scale * target_scale
 		# We need to remove the current parent node before adding a different one
 		# Because we can't override remove_child(), we check for it first
+		# remove_child() expects to be made at a call of get_parent()
 		if parentHost is Pile:
 			parentHost._remove_child(self)
 		else:
-			parentHost.remove_child(self)
+			get_parent().remove_child(self)
 		targetHost._add_child(self)
 		# The below is used when a specific card position is requested
 		# It converts the requested card position, to absolute node position
@@ -1487,7 +1488,7 @@ func execute_scripts(
 	# Then you'd include an "is_optional_board" key at the same level as "board"
 	var confirm_return = await CFUtils.confirm(
 		card_scripts,
-		canonical_name,
+		self,
 		trigger,
 		state_exec)
 
@@ -1528,7 +1529,7 @@ func execute_scripts(
 		common_pre_run(sceng)
 		# In case the script involves targetting, we need to wait on further
 		# execution until targetting has completed
-		sceng.execute(CFInt.RunType.COST_CHECK)
+		await sceng.execute(CFInt.RunType.COST_CHECK)
 		if not sceng.all_tasks_completed:
 			await sceng.tasks_completed
 		# If the dry-run of the ScriptingEngine returns that all
@@ -1538,7 +1539,7 @@ func execute_scripts(
 			# The ScriptingEngine is where we execute the scripts
 			# We cannot use its class reference,
 			# as it causes a cyclic reference error when parsing
-			sceng.execute()
+			await sceng.execute()
 			if not sceng.all_tasks_completed:
 				await sceng.tasks_completed
 			# warning-ignore:void_assignment
@@ -1549,7 +1550,7 @@ func execute_scripts(
 		# execute the "is_else" tasks
 		elif not sceng.can_all_costs_be_paid and not only_cost_check:
 			#print("DEBUG:" + str(state_scripts))
-			sceng.execute(CFInt.RunType.ELSE)
+			await sceng.execute(CFInt.RunType.ELSE)
 			if not sceng.all_tasks_completed:
 				await sceng.tasks_completed
 		is_executing_scripts = false
@@ -2174,6 +2175,7 @@ func _flip_card(to_invisible: Control, to_visible: Control, instant := false) ->
 	else:
 		# We clear existing tweens to avoid a deadlocks
 		_flip_tween = create_tween().set_parallel(true)
+		_flip_tween.stop()
 		_flip_tween.tween_property(to_invisible,'scale', Vector2(0,1), 0.4).from(to_invisible.scale)\
 			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		_flip_tween.tween_property(to_invisible,'position', Vector2(to_invisible.size.x/2,0), 0.4)\
@@ -2186,10 +2188,12 @@ func _flip_card(to_invisible: Control, to_visible: Control, instant := false) ->
 		_flip_tween.tween_property(highlight,'position', Vector2((highlight.size.x-3)/2,0), 0.4)\
 				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		_flip_tween.play()
-		#await _flip_tween.finished
+		_flip_tween.reference()
+		await _flip_tween.finished
 		to_visible.visible = true
 		to_invisible.visible = false
 		_flip_tween = create_tween().set_parallel(true)
+		_flip_tween.stop()
 		_flip_tween.tween_property(to_visible,'scale', Vector2(1,1), 0.4).from(to_visible.scale)\
 				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		_flip_tween.tween_property(to_visible,'position',Vector2(0,0), 0.4).from(to_visible.position)\
@@ -2199,6 +2203,7 @@ func _flip_card(to_invisible: Control, to_visible: Control, instant := false) ->
 		_flip_tween.tween_property(highlight,'position', Vector2(-3,-3), 0.4).from(highlight.position)\
 				.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		_flip_tween.play()
+		_flip_tween.unreference()
 
 
 # Card rotation animation

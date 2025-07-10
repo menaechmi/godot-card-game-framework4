@@ -106,3 +106,4 @@ func test_submit():
 	#This used to be "popup_hide", but AcceptDialog no longer has that signal
 	#I think it's to confirm the popup is gone, so focus_exited should be fine
 	assert_signal_emitted(ask_integer,"focus_exited", "AskInt exits on submit")
+	assert_signal_emitted(ask_integer, "visibility_changed", "AskInt hides on submit")

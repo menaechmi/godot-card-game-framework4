@@ -124,7 +124,7 @@ static func list_imported_in_directory(path: String, full_path := false) -> Arra
 # Caller is used to set a callback for async confirmation
 static func confirm(
 		script: Dictionary,
-		card_name: String,
+		card: Card,
 		task_name: String,
 		type := "task") -> bool:
 	var is_accepted := true
@@ -132,7 +132,7 @@ static func confirm(
 	# references when calling CFUtils from SP
 	if script.get("is_optional_" + type):
 		var confirmation = _OPTIONAL_CONFIRM_SCENE.instantiate()
-		confirmation.prep(card_name,task_name)
+		confirmation.prep(card,task_name)
 		# We have to wait until the player has finished selecting an option
 		#TODO: Refactor this better so that TokenDrawer->Token->get_count_and_alterants
 		#->CFScriptUtils.get_altered_value->cfc.alterant_engine.new->scriptAlter.new()->this

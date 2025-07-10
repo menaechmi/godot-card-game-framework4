@@ -27,7 +27,7 @@ class TestFilteredMultipleChoice:
 		}
 		table_move(card, Vector2(100,200))
 		target.is_faceup = false
-		await wait_seconds(0.1)
+		await wait_seconds(0.2)
 		var menu = board.get_node("CardChoices")
 		assert_true(menu.visible)
 		menu._on_CardChoices_id_pressed(3)
@@ -56,6 +56,7 @@ class TestFilteredMultipleChoice:
 			confirm._on_OptionalConfirmation_confirmed()
 			assert_true(confirm.is_accepted, "Confirmation dialog accepted")
 			confirm.hide()
+		await wait_for_signal(confirm.visibility_changed, 1)
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
@@ -79,7 +80,8 @@ class TestFilteredMultipleChoice:
 			assert_false(confirm.is_accepted, "Confirmation dialog not accepted")
 			confirm.hide()
 		if target._flip_tween:
-			await wait_for_signal(target._flip_tween.finished, 0.5) 
+			await wait_for_signal(target._flip_tween.finished, 0.5)
+		#await wait_seconds(1)
 		assert_false(target.is_faceup,
 				"Card should be face-down after even afer other optional task canceled")
 		assert_false(target.targeting_arrow.is_targeting,
@@ -99,6 +101,7 @@ class TestTaskConfimDialogueTarget:
 				{"name": "move_card_to_container",
 				"subject": "target",
 				"dest_container": "discard"}]}}
+		assert_true(card.is_faceup, "Card is not faceup")
 		card.execute_scripts()
 		confirm = board.get_node("OptionalConfirmation")
 		assert_not_null(confirm)
@@ -106,7 +109,7 @@ class TestTaskConfimDialogueTarget:
 			confirm._on_OptionalConfirmation_cancelled()
 			confirm.hide()
 		if target._flip_tween:
-			await wait_for_signal(target._flip_tween.finished, 0.5) 
+			await wait_for_signal(target._flip_tween.finished, 0.5)
 		assert_true(card.is_faceup,
 				"Card should not be face-down with a canceled cost dialog")
 		assert_false(card.targeting_arrow.is_targeting,
@@ -161,6 +164,7 @@ class TestScriptConfirmDialog:
 		if confirm:
 			confirm._on_OptionalConfirmation_cancelled()
 			confirm.hide()
+		await wait_for_signal(card.scripts_executed, 2)
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_true(card.is_faceup,
@@ -173,8 +177,9 @@ class TestScriptConfirmDialog:
 		if confirm:
 			confirm._on_OptionalConfirmation_confirmed()
 			confirm.hide()
+		await wait_for_signal(card.scripts_executed, 1)
 		if target._flip_tween:
-			await wait_for_signal(target._flip_tween.finished, 0.5) 
+			await wait_for_signal(target._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
 				"Card execute all tasks properly after script confirm")
 		assert_eq(180, card.card_rotation,
@@ -205,10 +210,11 @@ class TestAskIntegerWithCardMoves:
 		var ask_integer = board.get_node("AskInteger")
 		ask_integer.number = 2
 		ask_integer.hide()
+		await wait_for_signal(ask_integer.visibility_changed, 1)
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		assert_eq(2,discard.get_card_count(), "2 cards should have been discarded")
+		assert_eq(discard.get_card_count(), 2, "2 cards should have been discarded")
 
 class TestAskIntegerWithModTokens:
 	extends "res://tests/ScEng_common.gd"

@@ -44,7 +44,7 @@ func _init(
 		#HACK: This prevents Tokens being a co-routine/needing to be awaited by finishing async
 		if script_definition.get("is_optional_" + "task"):
 			_async_confirm(script_definition,
-				owner.canonical_name, script_name)
+				owner, script_name)
 		else:
 			# The alterant might require counting other cards to see if it's valid.
 			# So we just run it through the _find_subjects() to see if it will
@@ -58,10 +58,10 @@ func _init(
 				emit_signal("primed")
 
 @warning_ignore("unused_parameter", "shadowed_variable")
-func _async_confirm(script_definintion, canonical_name, script_name):
+func _async_confirm(script_definintion, owner, script_name):
 	var c = await CFUtils.confirm(
 			script_definition,
-			owner.canonical_name,
+			owner,
 			script_name)
 	is_valid = c
 	if is_valid:

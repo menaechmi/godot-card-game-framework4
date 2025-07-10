@@ -59,7 +59,12 @@ func prime(_prev_subjects: Array, run_type: int, sceng_stored_int: int) -> void:
 		# We check if the player confirms it, before looking for targets
 		# We check for optional confirmations only during
 		# The normal run (i.e. not in a cost dry-run)
-		await check_confirm()
+		# Async, so that function control can wait for the script to be primed
+		check_confirm(run_type, sceng_stored_int)
+	_finish_priming(run_type, sceng_stored_int)
+
+
+func _finish_priming(run_type: int, sceng_stored_int: int) -> void:
 	# If any confirmation is accepted, then we only draw a target
 	# if either the card is a cost and we're doing a cost-dry run,
 	# or the card is not a cost and we're in the normal run
@@ -77,12 +82,14 @@ func prime(_prev_subjects: Array, run_type: int, sceng_stored_int: int) -> void:
 			is_primed = true
 			emit_signal("primed")
 
-func check_confirm() -> bool:
-	var owner_name = ''
-	if is_instance_valid(owner):
-		owner_name = owner.canonical_name
-	await CFUtils.confirm(
+func check_confirm(run_type = null, sceng_stored_int = null) -> void:
+	var owner_name = owner
+	if not is_instance_valid(owner):
+		owner_name = ''
+	is_accepted = await CFUtils.confirm(
 			script_definition,
 			owner_name,
 			script_name)
-	return(is_accepted)
+	#This lets us still call check_confirm() as usual
+	if not is_primed:
+		_finish_priming(run_type, sceng_stored_int)

@@ -168,7 +168,7 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 						"requesting_object": script.owner,
 						"modifier": _retrieve_temp_modifiers(script, "properties")
 					}
-				var retcode = call(script.script_name, script)
+				var retcode = await call(script.script_name, script)
 				#retcode = await retcode #.completed
 				# We set the previous subjects only after the execution, because some tasks
 				# might change the previous subjects for the future tasks
@@ -312,6 +312,7 @@ func move_card_to_container(script: ScriptTask) -> int:
 			if not card == null:
 				card.move_to(dest_container,dest_index, null, tags)
 			# TODO: Sometimes script.owner is empty, which causes a similar error
+			# Typically something isn't awaiting properly, so script has been freed
 			await script.owner.get_tree().create_timer(0.05).timeout
 	if script.get_property(SP.KEY_STORE_INTEGER):
 		stored_integer = script.subjects.size()
@@ -749,7 +750,7 @@ func ask_integer(script: ScriptTask) -> void:
 	# We have to wait until the player has finished selecting an option
 	#TODO: AcceptDialog is no longer a popup so popup_hide isn't available
 	#I think close_requested covers accept & not accept, but I'm not 100% sure
-	await integer_dialog.close_requested
+	await integer_dialog.visibility_changed
 	stored_integer = integer_dialog.number
 	# Garbage cleanup
 	integer_dialog.queue_free()
