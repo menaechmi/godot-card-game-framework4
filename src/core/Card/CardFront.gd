@@ -50,11 +50,13 @@ var font_thread: Thread
 # As the string becomes longer, the font size becomes smaller
 @warning_ignore("shadowed_variable_base_class")
 func set_label_text(node: Label, value, scale: float = 1):
-	while font_thread and font_thread.is_alive():
-		await get_tree().process_frame
-	font_thread = Thread.new()
+#	while font_thread and font_thread.is_alive():
+#		await get_tree().process_frame
+#	font_thread = Thread.new()
 ## warning-ignore:return_value_discarded
 #	font_thread.start(self, "_set_label_text", [node,value], Thread.PRIORITY_LOW)
+	#This turns set_label_text into an asynchronous coroutine.
+	await get_tree().process_frame
 	if node in resizing_labels:
 		return
 	resizing_labels.append(node)
@@ -65,9 +67,6 @@ func set_label_text(node: Label, value, scale: float = 1):
 	if cached_font_size:
 		add_theme_font_size_override("font_size", cached_font_size)
 	else:
-		# We add a yield here to allow the calling function to continue
-		# and thus avoid the game waiting for the label to resize
-		await get_tree().process_frame
 		var working_value: String
 		# If the label node has been set to uppercase the text
 		# Then we need to work off-of uppercased text value

@@ -86,9 +86,9 @@ func test_init_card_name():
 			'Name Label text is set correctly')
 
 func test_card_name_setget():
-	await wait_for_signal(get_tree().process_frame, 5)
 	card.set_card_name("Testing Name Change 1")
 	# We need a yield to allow the richtextlabel setup complete
+	await wait_for_signal(get_tree().process_frame, 5)
 	assert_eq(card.canonical_name, "Testing Name Change 1",
 			'card_name variable is set correctly')
 	#str() conversion used because GUT doesn't consider StringName a String
@@ -211,7 +211,7 @@ func test_refresh_card_front():
 		"Power": "+3",
 	}
 	new_card.refresh_card_front()
-	await wait_for_signal(get_tree().process_frame, 0.1)
+	await wait_for_signal(get_tree().process_frame, 0.2)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"U",
 			"Number Property refreshed as string")
 	assert_eq(new_card.card_front.card_labels["Power"].text, '3',
