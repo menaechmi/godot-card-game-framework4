@@ -146,9 +146,6 @@ func target_card(source: Card,
 		await wait_seconds(mouse_yield_wait)
 		repeat += 1
 	unclick_card_anywhere(source)
-	# The goal of this is to wait for the targeting to finish so it can clean up
-	# Resumed function execute_scripts after await, but script is gone
-	await wait_seconds(1)
 
 
 func table_move(card: Card, pos: Vector2) -> void:

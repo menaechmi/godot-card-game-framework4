@@ -21,7 +21,7 @@ class TestSelfandRotate:
 				"subject": "self",
 				"set_faceup": false}]}}
 		table_move(card, Vector2(100,200))
-		card.execute_scripts()
+		await card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
@@ -58,7 +58,8 @@ class TestTargetCosts:
 				"set_faceup": false}]}}
 		table_move(target, Vector2(100,200))
 		card.execute_scripts()
-		await target_card(card,target)
+		target_card(card,target)
+		await card.scripts_executed
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.5)
 		assert_false(card.is_faceup,
@@ -117,7 +118,7 @@ class TestFlipCost:
 				"degrees": 90},]}}
 		table_move(card, Vector2(100,200))
 		card.is_faceup = false
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -138,7 +139,7 @@ class TestTokenCost:
 				"subject": "self",
 				"degrees": 90}]}}
 		table_move(card, Vector2(1000,200))
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -153,7 +154,7 @@ class TestTokenCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 180}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -168,7 +169,7 @@ class TestTokenCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 0}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -189,7 +190,7 @@ class TestModifyProperties:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -204,7 +205,7 @@ class TestModifyProperties:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
@@ -218,7 +219,7 @@ class TestModifyProperties:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		target.execute_scripts()
+		await target.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
@@ -240,7 +241,7 @@ class TestMoveCardContToCont:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
@@ -257,7 +258,7 @@ class TestMoveCardContToCont:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		target.execute_scripts()
+		await target.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
@@ -279,7 +280,7 @@ class TestMoveCardContToBoard:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
@@ -296,7 +297,7 @@ class TestMoveCardContToBoard:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		target.execute_scripts()
+		await target.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
@@ -318,7 +319,7 @@ class TestMoveCardToGrid:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(card.is_faceup,
@@ -336,7 +337,7 @@ class TestMoveCardToGrid:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		target.execute_scripts()
+		await target.execute_scripts()
 		if card._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_true(target.is_faceup,
@@ -344,7 +345,7 @@ class TestMoveCardToGrid:
 				+ "grid did not have enough slots for all cards")
 		var grid = board.get_grid("BoardPlacementGrid")
 		grid.auto_extend = true
-		target.execute_scripts()
+		await target.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(card._flip_tween.finished, 0.4)
 		assert_false(target.is_faceup,
@@ -364,7 +365,7 @@ class TestCountersCost:
 				"subject": "self",
 				"degrees": 90}]}}
 		table_move(card, Vector2(200,200))
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -378,7 +379,7 @@ class TestCountersCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 180}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -392,7 +393,7 @@ class TestCountersCost:
 				{"name": "rotate_card",
 				"subject": "self",
 				"degrees": 0}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)

@@ -306,14 +306,10 @@ func move_card_to_container(script: ScriptTask) -> int:
 			# We don't allow to draw more cards than the hand size
 			# But we don't consider it a failed cost (as most games allow you
 			# to try and draw more cards when you're full but just won't draw any)
-			
-			# TODO: Attempt to call function 'move_to' in base 'previously freed' on a null instance
-			# when the card is null. This is related to several GODOT open issues
 			if not card == null:
 				card.move_to(dest_container,dest_index, null, tags)
-			# TODO: Sometimes script.owner is empty, which causes a similar error
-			# Typically something isn't awaiting properly, so script has been freed
 			await script.owner.get_tree().create_timer(0.05).timeout
+			# If you get an error here, you likely need to await scripts_execute()
 	if script.get_property(SP.KEY_STORE_INTEGER):
 		stored_integer = script.subjects.size()
 	return(retcode)
@@ -355,6 +351,8 @@ func move_card_to_board(script: ScriptTask) -> int:
 						# Setting the highlight lets the move_to() method
 						# Know we're moving into that slot
 						card.move_to(cfc.NMAP.board, -1, slot, tags)
+						# If you have an error here, you likely need to await
+						# script execution
 		else:
 			# If the named grid  was not found, we inform the developer.
 			print_debug("WARNING: Script from card '"
@@ -374,6 +372,8 @@ func move_card_to_board(script: ScriptTask) -> int:
 			if not costs_dry_run():
 				card.move_to(cfc.NMAP.board, -1, board_position, tags)
 				await script.owner.get_tree().create_timer(0.05).timeout
+				# If you have an error here, you likely need to await
+				# either scripts_execute() or execute()
 	return(retcode)
 
 
@@ -597,6 +597,7 @@ func spawn_card_to_container(script: ScriptTask) -> void:
 		await cfc.get_tree().create_timer(yield_time).timeout
 		spawned_cards.append(card)
 	script.subjects = spawned_cards
+
 
 # Task from shuffling a CardContainer
 # * Requires the following keys:
@@ -913,13 +914,15 @@ func nested_script(script: ScriptTask) -> int:
 	# If the dry-run of the ScriptingEngine returns that all
 	# costs can be paid, then we proceed with the actual run
 	if sceng.can_all_costs_be_paid:
-		sceng.execute()
+		await sceng.execute()
 		if not sceng.all_tasks_completed:
 			await sceng.tasks_completed
 	# This will only trigger when costs could not be paid, and will
 	# execute the "is_else" tasks
 	elif not sceng.can_all_costs_be_paid:
-		sceng.execute(CFInt.RunType.ELSE)
+		await sceng.execute(CFInt.RunType.ELSE)
+		if not sceng.all_tasks_completed:
+			await sceng.tasks_completed
 	# If the nested task had a cost which could not be paid
 	# we return a failed result. This means that if the nested_script task
 	# was also marked as a cost itself, then it will block execution of

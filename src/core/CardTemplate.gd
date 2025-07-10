@@ -1450,6 +1450,7 @@ func move_to(targetHost: Node,
 
 
 # Executes the tasks defined in the card's scripts in order.
+# Coroutine. Most of the time you may need to await it or scripts_executed signal
 #
 # Returns a [ScriptingEngine] object but that it not statically typed
 # As it causes the parser think there's a cyclic dependency.
@@ -1530,7 +1531,7 @@ func execute_scripts(
 		common_pre_run(sceng)
 		# In case the script involves targetting, we need to wait on further
 		# execution until targetting has completed
-		sceng.execute(CFInt.RunType.COST_CHECK)
+		await sceng.execute(CFInt.RunType.COST_CHECK)
 		if not sceng.all_tasks_completed:
 			await sceng.tasks_completed
 		# If the dry-run of the ScriptingEngine returns that all
@@ -1540,7 +1541,7 @@ func execute_scripts(
 			# The ScriptingEngine is where we execute the scripts
 			# We cannot use its class reference,
 			# as it causes a cyclic reference error when parsing
-			sceng.execute()
+			await sceng.execute()
 			if not sceng.all_tasks_completed:
 				await sceng.tasks_completed
 			# warning-ignore:void_assignment

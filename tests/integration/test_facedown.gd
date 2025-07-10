@@ -53,10 +53,10 @@ func test_board_facedown():
 			"Back position.x == size.x/2 when card is turned face up again")
 
 	await move_mouse(card.global_position)
-	await wait_seconds(5) # Wait to allow dupe to be created
-	#or some reason _previously_focused_cards doesn't populate in this test
-	# but only when called with "run all" test
+	await wait_seconds(1) # Wait to allow dupe to be created
+	#_previously_focused_cards doesn't always populate when "run all" Gut tests
 	if not len(main._previously_focused_cards):
+		assert_not_null(main._previously_focused_cards)
 		return
 	var dupe: Card = main._previously_focused_cards[card]
 	var dupe_front = dupe.get_node("Control/Front")
@@ -112,12 +112,10 @@ func test_board_facedown():
 			"View function returns FAILED requesting false when card is_viewed == true while facedown")
 	assert_true(viewed_icon.visible,
 			"View icon is visible while card is is_viewed()")
-
+	# Wait for the dupe to be deleted
 	await move_mouse(card.global_position - Vector2(0,100))
-#	yield(wait_seconds(0.2), YIELD) # Wait to allow dupe to be destroyed
-	await move_mouse(card.global_position)
-#	yield(wait_seconds(0.2), YIELD) # Wait to allow dupe to be created
-	await wait_frames(60)
+	# If you wait for this second move_mouse, the tween finishes and visible is unset
+	move_mouse(card.global_position)
 	dupe = main._previously_focused_cards[card]
 	dupe_front = dupe.get_node("Control/Front")
 	assert_true(dupe_front.visible,
