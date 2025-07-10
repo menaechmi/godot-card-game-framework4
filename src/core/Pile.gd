@@ -130,6 +130,7 @@ func _on_ViewPopup_popup_hide() -> void:
 		# If it is, we move it to the root.
 		#print_debug(card.canonical_name, card.get_parent().name)
 		if "CardPopUpSlot" in card.get_parent().name:
+			# get_parent() is required to prevent errors related to who self is
 			card.get_parent().remove_child(card)
 			_add_child(card)
 			_after_child_add(card)
