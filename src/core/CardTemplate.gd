@@ -130,7 +130,6 @@ signal scripts_executed(card, sceng, trigger)
 @export var is_viewed  := false: 
 	get: return _is_viewed
 	set(value): set_is_viewed(value)
-#To overcome current limitation of get set
 var _is_viewed := false
 # Specifies the card rotation in increments of 90 degrees
 @export var card_rotation: int = 0: # (int, 0, 270, 90)
@@ -139,8 +138,7 @@ var _is_viewed := false
 		get: 
 			return _card_rotation
 #NOTE: Private variable to avoid GODOT 4 limit on setting optional/default args
-@warning_ignore("unused_private_class_variable")
-var _card_rotation = 0
+var _card_rotation: int = 0
 # Specifies where on the board the card may be placed
 @export var board_placement: BoardPlacement = BoardPlacement.ANYWHERE
 @export var mandatory_grid_name : String
@@ -213,15 +211,16 @@ var _card_rotation = 0
 # if that is also not set, will be set.
 # to the human-readable value of the "name" node property.
 var canonical_name : String: 
-	get: return get_card_name()
+	get: return _canonical_name
 	set(value): set_card_name(value)
 #To avoid Godot not allowing optional parameters in setters
 var _canonical_name: String
 # Ensures all nodes fit inside this rect.
 var card_size := canonical_size:
 	set(value): set_card_size(value)
+	get: return _card_size
 #This private value is to overcome a current Godot get/set limitation of default values
-var _card_size
+var _card_size := canonical_size
 # Starting state for each card get_card_name()
 var state : int = CardState.PREVIEW: set = set_state
 var state_finalized := false
@@ -1074,7 +1073,7 @@ func set_card_rotation(
 		retcode = CFConst.ReturnCode.FAILED
 	# If the card is already in the specified rotation
 	# and a toggle was not requested, we consider we did nothing
-	elif value == _card_rotation and not toggle:
+	elif value == card_rotation and not toggle:
 		retcode = CFConst.ReturnCode.OK
 		# We add this check because hand oval rotation
 		# does not change the card_rotation property
@@ -1203,7 +1202,8 @@ func move_to(targetHost: Node,
 					var grid = cfc.NMAP.board.get_grid(mandatory_grid_name)
 					if grid:
 						slot = grid.find_available_slot()
-						await get_tree().create_timer(0.1).timeout
+						#This prevents non-awaited calls to move_to() to not finish
+						#await get_tree().create_timer(0.1).timeout
 						if slot:
 							board_position = slot
 						else:
@@ -1250,7 +1250,7 @@ func move_to(targetHost: Node,
 		if parentHost is Pile:
 			parentHost._remove_child(self)
 		else:
-			self.get_parent().remove_child(self)
+			get_parent().remove_child(self)
 		targetHost._add_child(self)
 		# The below is used when a specific card position is requested
 		# It converts the requested card position, to absolute node position

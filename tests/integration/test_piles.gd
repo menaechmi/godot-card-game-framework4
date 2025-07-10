@@ -116,7 +116,7 @@ class TestPopupView:
 	func test_popup_deck_view():
 		var deck = cfc.NMAP.deck
 		var card: Card = deck.get_top_card()
-		deck._on_View_Button_pressed()
+		await deck._on_View_Button_pressed()
 		#await yield_to(deck.get_node('ViewPopup/Tween'), "finished", 0.5) 
 		card.move_to(deck)
 		await wait_seconds(0.3)
@@ -127,7 +127,8 @@ class TestPopupView:
 		assert_true(card.is_faceup,
 				"Moving card from popup back to the same pile, should do nothing")
 		deck.get_node("ViewPopup").hide()
-		await wait_seconds(1) 
+		await wait_for_signal(deck.popup_closed, 1)
+		assert_false(deck.faceup_cards, "Pile expects cards to be facedown")
 		assert_false(card.is_faceup,
 				"Cards returning from popup should respect piles card facing")
 

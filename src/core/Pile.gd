@@ -87,13 +87,13 @@ func _process(_delta) -> void:
 # Populates the popup view window with all the cards in the deck
 # then displays it
 func _on_View_Button_pressed() -> void:
-	populate_popup()
+	await populate_popup()
 
 
 # Populates the popup view window with all the cards in the deck sorted by name
 # then displays it
 func _on_ViewSorted_Button_pressed() -> void:
-	populate_popup(true)
+	await populate_popup(true)
 
 
 # Ensures the popup window interpolates to visibility when opened

@@ -29,6 +29,9 @@ class TestFilteredMultipleChoice:
 		target.is_faceup = false
 		await wait_seconds(0.2)
 		var menu = board.get_node("CardChoices")
+		if not menu:
+			await assert_not_null(menu, "CardChoices node not found, aborting test")
+			return
 		assert_true(menu.visible)
 		menu._on_CardChoices_id_pressed(3)
 		assert_eq("Rotate This Card",menu.selected_key)
