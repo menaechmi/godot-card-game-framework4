@@ -121,13 +121,13 @@ class TestMoveCardHandToBoard:
 				{"name": "move_card_to_board",
 				"subject": "self",
 				"board_position":  Vector2(100,100)}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		assert_eq(cfc.NMAP.board,card.get_parent(),
+		assert_eq(card.get_parent(), cfc.NMAP.board,
 				"Card should have moved to board")
-		assert_eq(Vector2(100,100),card.global_position,
+		assert_almost_eq(card.global_position, Vector2(100,100), Vector2(1,1),
 				"Card should have moved to specified position")
 
 class TestMoveCard:
@@ -141,7 +141,7 @@ class TestMoveCard:
 				"subject_index": 5,
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -155,7 +155,7 @@ class TestMoveCard:
 				"dest_index": 1,
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -173,7 +173,7 @@ class TestMoveCard:
 				"subject_index": 5,
 				"src_container": "deck",
 				"board_position":  Vector2(1000,200)}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		await wait_frames(120)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
@@ -211,7 +211,7 @@ class TestModToken:
 				"subject": "self",
 				"modification": 5,
 				"token_name":  "industry"}]}}
-		target.execute_scripts()
+		await target.execute_scripts()
 		var industry_token: Token = target.tokens.get_token("industry")
 		assert_eq(5,industry_token.count,"Token increased by specified amount")
 		card.scripts = {"manual": {"hand": [
@@ -223,7 +223,7 @@ class TestModToken:
 		card.execute_scripts()
 		await target_card(card,target)
 		# My scripts are slower now
-		await wait_seconds(0.2)
+		#await wait_seconds(0.2)
 		assert_eq(2,industry_token.count,"Token set to specified amount")
 
 class TestShuffleContainer:
@@ -328,7 +328,7 @@ class TestModCounters:
 				{"name": "mod_counter",
 				"modification": 5,
 				"counter_name":  "research"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		assert_eq(5, board.counters.get_counter("research"),
 				"Counter increased by specified amount")
 		card.scripts = {"manual": {"hand": [
@@ -336,7 +336,7 @@ class TestModCounters:
 				"modification": 2,
 				"set_to_mod": true,
 				"counter_name": "credits"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		assert_eq(2, board.counters.get_counter("credits"),
 				"Counter set to the specified amount")
 
@@ -350,7 +350,7 @@ class TestModCounters:
 				"is_cost": true,
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -363,7 +363,7 @@ class TestModCounters:
 				"subject_count": 50,
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)

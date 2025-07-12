@@ -13,17 +13,15 @@ class TestSubjectTarget:
 				"subject": "target",
 				"degrees": 90}
 				]}}
-		var scripting_engine = await card.execute_scripts()
-		await yield_to(card.targeting_arrow, "initiated_targeting", 0.2) 
-		watch_signals(scripting_engine)
-		#FIXME
-		await yield_to(await target_card(card,card), "completed", 0.1) 
+		#We execute the scripts async, and then wait for targeting to finish
+		card.execute_scripts()
+		await target_card(card, card)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.4)
 		assert_eq(card.card_rotation, 270,
 				"First rotation should happen before targetting second time")
-		await yield_to(await target_card(card,card), "completed", 0.1) 
+		await target_card(card, card)
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.4)
@@ -79,7 +77,7 @@ class TestSubjectPrevious:
 				{"name": "rotate_card",
 				"subject": "previous",
 				"degrees": 90}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)

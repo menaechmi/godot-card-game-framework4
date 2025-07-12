@@ -119,17 +119,31 @@ func mod_counter(counter_name: String,
 					_set_counter(counter_name,value)
 				else:
 					_set_counter(counter_name, counters[counter_name] + value)
-				emit_signal(
-						"counter_modified",
-						requesting_object,
-						"counter_modified",
-						{
-							SP.TRIGGER_COUNTER_NAME: counter_name,
-							SP.TRIGGER_PREV_COUNT: prev_value,
-							SP.TRIGGER_NEW_COUNT: counters[counter_name],
-							"tags": tags,
-						}
-				)
+				#Godot will let a signal send null but not a null object
+				if requesting_object:
+					emit_signal(
+							"counter_modified",
+							requesting_object,
+							"counter_modified",
+							{
+								SP.TRIGGER_COUNTER_NAME: counter_name,
+								SP.TRIGGER_PREV_COUNT: prev_value,
+								SP.TRIGGER_NEW_COUNT: counters[counter_name],
+								"tags": tags,
+							}
+					)
+				else:
+					emit_signal(
+							"counter_modified",
+							null,
+							"counter_modified",
+							{
+								SP.TRIGGER_COUNTER_NAME: counter_name,
+								SP.TRIGGER_PREV_COUNT: prev_value,
+								SP.TRIGGER_NEW_COUNT: counters[counter_name],
+								"tags": tags,
+							}
+					)
 	return(retcode)
 
 

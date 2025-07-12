@@ -18,3 +18,5 @@ mono_crash.*.json
 demo.txt
 reference.json
 .vscode
+tests/gut_output.xml
+todo

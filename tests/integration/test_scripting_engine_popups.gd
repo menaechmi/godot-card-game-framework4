@@ -27,10 +27,10 @@ class TestFilteredMultipleChoice:
 		}
 		table_move(card, Vector2(100,200))
 		target.is_faceup = false
-		await wait_seconds(0.2)
+		await wait_seconds(0.5)
 		var menu = board.get_node("CardChoices")
 		if not menu:
-			await assert_not_null(menu, "CardChoices node not found, aborting test")
+			assert_not_null(menu, "CardChoices node not found, aborting test")
 			return
 		assert_true(menu.visible)
 		menu._on_CardChoices_id_pressed(3)
@@ -44,24 +44,30 @@ class TestFilteredMultipleChoice:
 		await wait_seconds(0.1)
 		menu = board.get_node("CardChoices")
 		assert_null(menu, "menu should not appear when filter does not match")
-	#
+
 	func test_task_confirm_dialog() -> void:
 		card.scripts = {"manual": {"hand": [
 					{"name": "flip_card",
 					"subject": "self",
 					"is_optional_task": true,
 					"set_faceup": false}]}}
+		#Can't be awaited, because we need to cancel the confirmation
 		card.execute_scripts()
 		var confirm = board.get_node("OptionalConfirmation")
 		assert_not_null(confirm)
 		if confirm:
 			assert_true(confirm.visible)
+			watch_signals(confirm)
 			confirm._on_OptionalConfirmation_confirmed()
-			assert_true(confirm.is_accepted, "Confirmation dialog accepted")
+			assert_true(confirm.is_accepted, "Confirmation dialog should be accepted")
 			confirm.hide()
-		await wait_for_signal(confirm.visibility_changed, 1)
+			#This signal can be so quick that we can't await it
+			assert_signal_emitted(confirm, "visibility_changed")
 		if target._flip_tween:
-			await wait_for_signal(target._flip_tween.finished, 0.5) 
+			await wait_for_signal(target._flip_tween.finished, 0.5)
+		else:
+			#We need to wait here or the following tests will fail
+			await wait_for_signal(get_tree().process_frame, 1)
 		assert_false(card.is_faceup,
 				"Card should be face-down after accepted dialog")
 
@@ -79,12 +85,14 @@ class TestFilteredMultipleChoice:
 		confirm = board.get_node("OptionalConfirmation")
 		assert_not_null(confirm)
 		if confirm:
+			watch_signals(confirm)
 			confirm._on_OptionalConfirmation_cancelled()
-			assert_false(confirm.is_accepted, "Confirmation dialog not accepted")
+			assert_false(confirm.is_accepted, "Confirmation dialog should not be cancelled")
 			confirm.hide()
+			assert_signal_emitted(confirm, "visibility_changed", 
+				"Confirmation dialog should emit signal")
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5)
-		#await wait_seconds(1)
 		assert_false(target.is_faceup,
 				"Card should be face-down after even afer other optional task canceled")
 		assert_false(target.targeting_arrow.is_targeting,
@@ -211,9 +219,11 @@ class TestAskIntegerWithCardMoves:
 						}]}}
 		card.execute_scripts()
 		var ask_integer = board.get_node("AskInteger")
+		watch_signals(ask_integer)
 		ask_integer.number = 2
 		ask_integer.hide()
-		await wait_for_signal(ask_integer.visibility_changed, 1)
+		assert_signal_emitted(ask_integer, "visibility_changed")
+		await wait_for_signal(get_tree().process_frame, 1)
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)

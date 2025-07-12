@@ -162,10 +162,10 @@ func _apply_filters(active_filters: Array) -> void:
 	var counter := 0
 	var total_count := 0
 	for card_object in _available_cards.get_children():
-		var set_visible = true
+		var make_visible = true
 		for filter in active_filters:
 			if not filter.assess_card_object(card_object):
-				set_visible = false
+				make_visible = false
 		for property in filter_button_properties:
 			var active_button_values = []
 			for button in _filter_buttons.get_children():
@@ -174,15 +174,15 @@ func _apply_filters(active_filters: Array) -> void:
 						and button.property == property:
 					active_button_values.append(button.value)
 			if not card_object.card_properties.get(property):
-				set_visible = false
+				make_visible = false
 			elif not card_object.card_properties[property]\
 					in active_button_values:
-				set_visible = false
+				make_visible = false
 		if not _check_custom_filters(card_object):
-			set_visible = false
-		card_object.set_visibility(set_visible)
+			make_visible = false
+		card_object.set_visibility(make_visible)
 		total_count += 1
-		if set_visible:
+		if make_visible:
 			counter += 1
 	if counter == total_count:
 		_card_count.text = "Total: " + str(counter)

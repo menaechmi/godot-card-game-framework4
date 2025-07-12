@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dr6pgvdp7arwi"]
+[gd_scene load_steps=8 format=3 uid="uid://dr6pgvdp7arwi"]
 
 [ext_resource type="Script" path="res://src/core/Card/ManipulationButtons.gd" id="1"]
 [ext_resource type="Script" path="res://src/core/CardTemplate.gd" id="2"]

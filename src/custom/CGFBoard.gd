@@ -46,22 +46,23 @@ func _on_OvalHandToggle_toggled(_button_pressed: bool) -> void:
 
 # Reshuffles all Card objects created back into the deck
 func _on_ReshuffleAllDeck_pressed() -> void:
-	reshuffle_all_in_pile(cfc.NMAP.deck)
+	await reshuffle_all_in_pile(cfc.NMAP.deck)
 
 
 func _on_ReshuffleAllDiscard_pressed() -> void:
-	reshuffle_all_in_pile(cfc.NMAP.discard)
+	await reshuffle_all_in_pile(cfc.NMAP.discard)
 
+#Coroutine, should be awaited or the shuffle may never happen
 func reshuffle_all_in_pile(pile: Pile = cfc.NMAP.deck):
-	for c in get_tree().get_nodes_in_group("cards"):
+	for c: Card in get_tree().get_nodes_in_group("cards"):
 		if c.get_parent() != pile and c.state != Card.CardState.DECKBUILDER_GRID:
 			c.move_to(pile)
 			await get_tree().create_timer(0.1).timeout
 	# Last card in, is the top card of the pile
 	var last_card : Card = pile.get_top_card()
 	var tween = last_card._tween.get_ref() as Tween
-	if tween:
-		tween.custom_step(5)
+	if tween and tween.is_running():
+		await tween.finished
 	await get_tree().create_timer(0.2).timeout
 	pile.shuffle_cards()
 

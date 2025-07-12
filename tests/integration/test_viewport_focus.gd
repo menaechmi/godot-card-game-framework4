@@ -4,7 +4,7 @@ var cards := []
 
 func before_each():
 	await setup_main()
-	cards = draw_test_cards(5)
+	cards = await draw_test_cards(5)
 	await wait_seconds(1)
 
 func test_single_card_focus():
@@ -15,11 +15,12 @@ func test_single_card_focus():
 	if tween:
 		await wait_for_signal(tween.finished, 1)
 	var focus_dupe = main._previously_focused_cards[card]
+	await wait_frames(60)
 	assert_eq(main.card_focus.get_node('SubViewport').get_child_count(),2,
 			"Duplicate card has been added for viewport focus")
 	assert_eq(focus_dupe.scale,Vector2(1,1),
 			"Duplicate card is scaled correctly")
-	assert_eq(focus_dupe.get_node("Control").rotation,0.0,
+	assert_eq(focus_dupe.get_node("Control").rotation_degrees,0.0,
 			"Duplicate card is rotated correctly")
 	assert_false(focus_dupe.is_in_group("cards"),
 			"Duplicate card does not belong to the 'cards' group")
@@ -44,12 +45,13 @@ func test_single_card_focus():
 
 func test_for_leftover_focus_objects():
 	var card : Card = cards[2]
+	#TODO: Cards aren't properly removed from the focus
 	await drag_drop(card,cfc.NMAP.discard.position)
-	await wait_seconds(0.5)
-	assert_eq(2,main.card_focus.get_node('SubViewport').get_child_count(),
+	await wait_for_signal(get_tree().process_frame, 1)
+	assert_eq(main.card_focus.get_node('SubViewport').get_child_count(), 2,
 			"The top face-up card of the deck is now in focus")
 	await move_mouse(Vector2(0,0), 'slow')
-	assert_eq(2,main.card_focus.get_node('SubViewport').get_child_count(),
+	assert_eq(main.card_focus.get_node('SubViewport').get_child_count(), 2,
 			"Duplicate card object still remains")
 	assert_false(main._previously_focused_cards[card].visible,
 			"Duplicate is hidden")
@@ -104,8 +106,9 @@ func test_FocusInfoPanel():
 			"Illustration label visible")
 	await move_mouse(Vector2(0,0), "slow")
 	await move_mouse(card.global_position)
-	await wait_seconds(1)
+	await wait_frames(60)
 	focus_dupe = main._previously_focused_cards[card]
+	#TODO this fails because the viewport skips in and out but sometimes works!
 	assert_eq(main.focus_info.modulate.a, 0.0,
 			"FocusInfoPanel visible when illustration does not exist")
 	assert_false(main.focus_info.existing_details['illustration'].visible,

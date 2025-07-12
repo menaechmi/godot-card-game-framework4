@@ -69,7 +69,7 @@ func draw_test_cards(count: int, fast := true) -> Array:
 			card.state = Card.CardState.IN_HAND
 			cards.append(card)
 		else:
-			cards.append(hand.draw_card())
+			cards.append(await hand.draw_card())
 	for c in cards:
 		c.interruptTweening()
 		c.reorganize_self()
@@ -112,7 +112,7 @@ func drop_card(card: Card, drop_location: Vector2) -> void:
 	card._on_Card_gui_input(fc)
 	var tween = card._tween.get_ref() as Tween
 	if tween and tween.is_running():
-		tween.custom_step(1)
+		await tween.finished
 
 
 # Takes care of simple drag&drop requests
@@ -130,7 +130,8 @@ func target_card(source: Card,
 	if source == target:
 		# If the target is the same as the source, we need to wait a bit
 		# because otherwise the _is_targeted might not be set yet.
-		await wait_seconds(0.6)
+		#await wait_seconds(0.6)
+		pass
 	# We need to offset a bit towards the card rect, to ensure the arrow
 	# Area2D collides
 	var extra_offset = Vector2(10,10)
@@ -149,10 +150,10 @@ func target_card(source: Card,
 
 
 func table_move(card: Card, pos: Vector2) -> void:
-	card.move_to(board, -1, pos)
+	await card.move_to(board, -1, pos)
 	var tween = card._tween.get_ref() as Tween
 	if tween and tween.is_running():
-		tween.custom_step(0.5)
+		await wait_for_signal(tween.finished, 0.5)
 	if cfc.game_settings.fancy_movement and tween:
 		tween.custom_step(0.5)
 
@@ -164,5 +165,6 @@ func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void
 
 
 func execute_with_target(card: Card, target: Card) -> void:
-	var _sceng = await card.execute_scripts()
+	#We run execute_scripts asynchronously, so that we can target the card
+	card.execute_scripts()
 	await target_card(card,target,"slow")

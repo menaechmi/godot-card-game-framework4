@@ -5,7 +5,7 @@ func before_each():
 #TODO: The final card doesn't get added to the hand properly for some reason
 func test_single_card_draw_use_rectangle():
 	cfc.game_settings.hand_use_oval_shape = false
-	var card0: Card = hand.draw_card()
+	var card0: Card = await hand.draw_card()
 	assert_eq(len(hand.get_children()), 5,
 			"Correct amount of cards drawn")
 	assert_true(card0.visible,
@@ -16,17 +16,17 @@ func test_single_card_draw_use_rectangle():
 	assert_almost_eq(card0.recalculate_position().y, 0.0, 5.0,
 			"Card position y is recalculated correctly")
 	assert_almost_eq(card0.global_position,
-			card0.recalculate_position(),
+			hand.to_global(card0.recalculate_position()),
 			Vector2(2,2),
 			"Card placed in correct global position")
-	assert_almost_eq(hand.to_local(card0.position), card0.recalculate_position(), Vector2(2,2),
+	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card placed in correct position")
 	cfc.game_settings.hand_use_oval_shape = true
 
 
 func test_single_card_draw_use_oval():
 	cfc.game_settings.hand_use_oval_shape = true
-	var card0: Card = hand.draw_card()
+	var card0: Card = await hand.draw_card()
 	assert_eq(len(hand.get_children()), 5,
 			"Correct amount of cards drawn")
 	assert_true(card0.visible,
@@ -47,15 +47,15 @@ func test_single_card_draw_use_oval():
 
 func test_draw_multiple_cards_slow_use_rectangle():
 	cfc.game_settings.hand_use_oval_shape = false
-	var card0: Card = hand.draw_card()
+	var card0: Card = await hand.draw_card()
 	await wait_seconds(1)
-	var card1: Card = hand.draw_card()
+	var card1: Card = await hand.draw_card()
 	await wait_seconds(1)
 	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
 	assert_almost_eq(card1.position, card1.recalculate_position(), Vector2(2,2),
 			"Card at index 1 placed in correct position")
-	var card2: Card = hand.draw_card()
+	var card2: Card = await hand.draw_card()
 	await wait_seconds(3)
 	assert_almost_eq(250.0,card0.recalculate_position().x,5.0,
 			"Index 0 card position x is recalculated correctly")
@@ -80,15 +80,15 @@ func test_draw_multiple_cards_slow_use_rectangle():
 
 func test_draw_multiple_cards_slow_use_oval():
 	cfc.game_settings.hand_use_oval_shape = true
-	var card0: Card = hand.draw_card()
+	var card0: Card = await hand.draw_card()
 	await wait_seconds(2)
-	var card1: Card = hand.draw_card()
+	var card1: Card = await hand.draw_card()
 	await wait_seconds(2)
 	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
 	assert_almost_eq(card1.position, card1.recalculate_position(), Vector2(2,2),
 			"Card at index 1 placed in correct position")
-	var card2: Card = hand.draw_card()
+	var card2: Card = await hand.draw_card()
 	await wait_seconds(2)
 	assert_almost_eq(238.0,card0.recalculate_position().x,5.0,
 			"Index 0 card position x is recalculated correctly")
@@ -112,17 +112,17 @@ func test_draw_multiple_cards_slow_use_oval():
 #
 #
 func test_draw_multiple_cards_fast():
-	var card0: Card = hand.draw_card()
+	var card0: Card = await hand.draw_card()
 	await wait_seconds(0.2)
-	var card1: Card = hand.draw_card()
+	var card1: Card = await hand.draw_card()
 	await wait_seconds(0.1)
-	var card2: Card = hand.draw_card()
+	var card2: Card = await hand.draw_card()
 	await wait_seconds(0.3)
-	var card3: Card = hand.draw_card()
+	var card3: Card = await hand.draw_card()
 	await wait_seconds(0.5)
-	var card4: Card = hand.draw_card()
+	var card4: Card = await hand.draw_card()
 	await wait_seconds(0.1)
-	var card5: Card = hand.draw_card()
+	var card5: Card = await hand.draw_card()
 	await wait_seconds(2)
 	assert_almost_eq(card0.position, card0.recalculate_position(), Vector2(2,2),
 			"Card at index 0 placed in correct position")
@@ -149,7 +149,7 @@ func test_container_custom_card_functions():
 	hand.draw_card()
 	# warning-ignore:return_value_discarded
 	hand.draw_card()
-	var card5: Card = hand.draw_card()
+	var card5: Card = await hand.draw_card()
 	await wait_seconds(2)
 	assert_eq(len(hand.get_all_cards()), 6,
 			"get_all_cards() returns right amount of cards")
@@ -162,13 +162,13 @@ func test_container_custom_card_functions():
 
 
 func test_card_does_not_become_focused_during_movement():
-	var card = hand.draw_card()
+	var card = await hand.draw_card()
 	card._on_Card_mouse_entered()
 	assert_eq(Card.CardState.MOVING_TO_CONTAINER, card.state, "Card state is still MovingToContainer")
 
 
 func test_card_not_draggable_without_focus_first():
-	var card = hand.draw_card()
+	var card = await hand.draw_card()
 	await wait_seconds(2)
 	click_card(card, false)
 	await wait_seconds(0.2)
@@ -178,21 +178,21 @@ func test_card_not_draggable_without_focus_first():
 func test_excess_cards_disallowed():
 	hand.excess_cards = Hand.ExcessCardsBehaviour.DISALLOW
 	hand.hand_size = 3
-	var cards = draw_test_cards(5, false)
+	var cards = await draw_test_cards(5, false)
 	assert_eq(hand.get_card_count(), 3)
 	assert_eq(cards[3], cards[4])
 
 func test_excess_cards_allowed():
 	hand.excess_cards = Hand.ExcessCardsBehaviour.ALLOW
 	hand.hand_size = 3
-	var cards = draw_test_cards(5, false)
+	var cards = await draw_test_cards(5, false)
 	assert_eq(hand.get_card_count(), 5)
 	assert_ne(cards[3], cards[4])
 
 func test_excess_cards_discard_drawn():
 	hand.excess_cards = Hand.ExcessCardsBehaviour.DISCARD_DRAWN
 	hand.hand_size = 3
-	var cards = draw_test_cards(5, false)
+	var cards = await draw_test_cards(5, false)
 	assert_eq(hand.get_card_count(), 3)
 	assert_eq(cards[3].get_parent(), discard)
 	assert_eq(cards[4].get_parent(), discard)
@@ -200,7 +200,7 @@ func test_excess_cards_discard_drawn():
 func test_excess_cards_discard_oldest():
 	hand.excess_cards = Hand.ExcessCardsBehaviour.DISCARD_OLDEST
 	hand.hand_size = 3
-	var cards = draw_test_cards(5, false)
+	var cards = await draw_test_cards(5, false)
 	assert_eq(hand.get_card_count(), 3)
 	assert_eq(cards[0].get_parent(), discard)
 	assert_eq(cards[1].get_parent(), discard)

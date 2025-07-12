@@ -20,7 +20,7 @@ class TestCardMovedToSignalTags:
 					"set_faceup": false}],
 				"filter_tags": "Scripted",
 				"trigger": "another"}}
-		target.move_to(hand)
+		await target.move_to(hand)
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1) 

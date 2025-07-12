@@ -36,14 +36,14 @@ class TestStateExecutions:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
 			"Target should be face-down")
 		card.is_faceup = true
 		card.state = Card.CardState.PUSHED_ASIDE
-		card.execute_scripts()
+		await card.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
@@ -52,7 +52,7 @@ class TestStateExecutions:
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		card.state = Card.CardState.FOCUSED_IN_HAND
-		card.execute_scripts()
+		await card.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
@@ -65,7 +65,7 @@ class TestStateExecutions:
 				"subject": "self",
 				"set_faceup": false}]}}
 		table_move(card, Vector2(500,100))
-		card.execute_scripts()
+		await card.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
@@ -74,40 +74,36 @@ class TestStateExecutions:
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		card.state = Card.CardState.FOCUSED_ON_BOARD
-		card.execute_scripts()
+		await card.execute_scripts()
 		if target._flip_tween:
 			await wait_for_signal(target._flip_tween.finished, 0.5) 
 		assert_false(card.is_faceup,
 			"Target should be face-down")
-		card.move_to(cfc.NMAP.discard)
-		if card._tween.get_ref():
-			var tween = card._tween.get_ref()	
-			if tween:
-				await wait_for_signal(tween.finished, 0.5) 
+		await card.move_to(cfc.NMAP.discard)
+		var tween = card._tween.get_ref()	
+		if tween:
+			await wait_for_signal(tween.finished, 0.5) 
 		card.scripts = {"manual": {"pile": [
 				{"name": "move_card_to_board",
 				"subject": "self",
 				"board_position":  Vector2(100,100)}]}}
 		discard._on_View_Button_pressed()
 		await wait_seconds(1) 
-		card.execute_scripts()
-		if card._tween.get_ref():
-			var tween = card._tween.get_ref()
-			if tween:
-				await wait_for_signal(tween.finished, 0.5) 
+		await card.execute_scripts()
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5) 
 		assert_eq(Vector2(100,100),card.global_position,
 				"Card should have moved to specified position")
 		card.move_to(cfc.NMAP.discard)
-		if card._tween.get_ref():
-			var tween = card._tween.get_ref()
-			if tween:
-				await wait_for_signal(tween.finished, 0.5) 
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5) 
 		card.state = Card.CardState.FOCUSED_IN_POPUP
-		card.execute_scripts()
-		if card._tween.get_ref():
-			var tween = card._tween.get_ref()
-			if tween:
-				await wait_for_signal(tween.finished, 0.5) 
+		await card.execute_scripts()
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 0.5) 
 		assert_eq(Vector2(100,100),card.global_position,
 				"Card should have moved to specified position")
 

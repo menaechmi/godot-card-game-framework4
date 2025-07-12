@@ -41,7 +41,7 @@ func setup(_card_name: String) -> void:
 func setup_grid_card_object() -> void:
 	if not grid_card_object:
 		grid_card_object = card_viewer.grid_card_object_scene.instantiate()
-		card_viewer._card_grid._add_child(grid_card_object)
+		card_viewer._card_grid.add_child(grid_card_object)
 		# warning-ignore:return_value_discarded
 		grid_card_object.setup(card_name)
 		grid_card_object.card_list_object = self

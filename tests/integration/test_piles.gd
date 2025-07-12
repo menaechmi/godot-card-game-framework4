@@ -55,12 +55,12 @@ class TestMoveToContainer:
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
 	# warning-ignore:return_value_discarded
-		hand.draw_card()
+		await hand.draw_card()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		assert_almost_eq(hand.to_global(card.recalculate_position()),
-				card.global_position,Vector2(2,2),
+		assert_almost_eq(card.global_position,
+			hand.to_global(card.recalculate_position()),Vector2(2,2),
 				"Card finished move to hand from deck from board")
 
 class TestPileFacing:
@@ -68,13 +68,13 @@ class TestPileFacing:
 
 	func test_pile_facing():
 		var card: Card = cfc.NMAP.deck.get_top_card()
-		card.move_to(cfc.NMAP.discard)
+		await card.move_to(cfc.NMAP.discard)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
 		assert_true(card.is_faceup, "Card should be faceup in discard")
 		card = cards[0]
-		card.move_to(cfc.NMAP.deck)
+		await card.move_to(cfc.NMAP.deck)
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
@@ -84,26 +84,30 @@ class TestPopupView:
 	extends "res://tests/Basic_common.gd"
 
 	func test_popup_discard_view():
-		var discard = cfc.NMAP.discard
+		discard = cfc.NMAP.discard
+		#This lets us change the node structure, without needing to update the tests
+		var node_count := len(discard.get_children())
+		var card_count := len(cfc.NMAP.deck.get_all_cards())
 		for card in cfc.NMAP.deck.get_all_cards():
-			card.move_to(discard)
+			await card.move_to(discard)
 		await wait_seconds(1) 
 		discard._on_View_Button_pressed()
 		await wait_seconds(1) 
-		assert_eq(6,len(discard.get_children()),
+		assert_eq(len(discard.get_children()), node_count,
 				"No cards should appear in the pile root after popup")
-		assert_eq(12,discard.get_card_count(),
+		assert_eq(discard.get_card_count(), card_count,
 				"Cards in popup should be returned with get_all_cards()")
-		assert_eq(12,discard.get_node("ViewPopup/CardView").get_child_count(),
+		assert_eq(discard.get_node("ViewPopup/CardView").get_child_count(), card_count,
 				"All cards all migrated to popup window")
 		#94: ViewPopup is now a Window, not a Control and cannot modulate
-		#assert_eq(1.0,discard.get_node("ViewPopup").modulate[3],
-				#"ViewPopup should be visible")
-		cards[1].move_to(discard)
-		await wait_seconds(1) 
-		assert_eq(13,discard.get_node("ViewPopup/CardView").get_child_count(),
+		assert_eq(discard.get_node("ViewPopup").get_theme_stylebox("panel").bg_color.a, 1.0,
+				"ViewPopup should be visible")
+				#'theme_override_styles/panel:bg_color:a'
+		await cards[1].move_to(discard)
+		#await wait_seconds(1) 
+		assert_eq(discard.get_node("ViewPopup/CardView").get_child_count(), 13,
 				"Hosting a card in the pile, while popup is open, puts it in the popup")
-		assert_eq(Vector2(0.75,0.75),cards[1].scale,
+		assert_eq(cards[1].scale, Vector2(0.75,0.75),
 				"Moving a card into the popup, should scale it")
 		pending("Drawing a card from the pile, picks it from the popup")
 		assert_false(discard.get_node("Control/ManipulationButtons").visible,
@@ -114,11 +118,10 @@ class TestPopupView:
 				"Cards returning from popup should respect piles card facing")
 
 	func test_popup_deck_view():
-		var deck = cfc.NMAP.deck
+		deck = cfc.NMAP.deck
 		var card: Card = deck.get_top_card()
-		await deck._on_View_Button_pressed()
-		#await yield_to(deck.get_node('ViewPopup/Tween'), "finished", 0.5) 
-		card.move_to(deck)
+		deck._on_View_Button_pressed()
+		await card.move_to(deck)
 		await wait_seconds(0.3)
 		assert_eq(Vector2(0,0),card.position,
 				"Moving card from popup back to the same pile, should do nothing")
@@ -136,16 +139,16 @@ class TestStacking:
 	extends "res://tests/Basic_common.gd"
 
 	func test_stacking():
-		var deck : Pile = cfc.NMAP.deck
+		deck = cfc.NMAP.deck
 		var card: Card = cards[4]
-		card.move_to(deck)
+		await card.move_to(deck)
 		var tween = card._tween.get_ref() as Tween
 		if card._tween:
 			await wait_for_signal(tween.finished, 0.5)
 		assert_eq(deck.get_stack_position(card),card.position,
 				"Card moved in, placed in stack position")
 		card = cards[2]
-		card.move_to(deck)
+		await card.move_to(deck)
 		tween = card._tween.get_ref() as Tween
 		if card._tween:
 			await wait_for_signal(tween.finished, 0.5)

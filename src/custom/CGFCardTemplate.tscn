@@ -8,9 +8,6 @@
 [node name="Card" instance=ExtResource("1")]
 script = ExtResource("2")
 
-[node name="Highlight" parent="Control" index="0"]
-anchors_preset = 0
-
 [node name="Front" parent="Control" index="2"]
 custom_minimum_size = Vector2(150, 240)
 

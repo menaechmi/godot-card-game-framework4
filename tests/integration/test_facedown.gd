@@ -10,7 +10,7 @@ func after_all():
 
 func before_each():
 	await setup_main()
-	cards = draw_test_cards(5)
+	cards = await draw_test_cards(5)
 	await wait_seconds(0.1)
 
 func test_board_facedown():

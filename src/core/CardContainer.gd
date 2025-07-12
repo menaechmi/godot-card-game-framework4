@@ -153,7 +153,7 @@ func _on_viewport_resized() -> void:
 func are_cards_still_animating() -> bool:
 	for c in get_all_cards():
 		var tt := c._tween.get_ref() as Tween
-		if (tt and tt.is_running): #is_running()
+		if (tt): #is_running()
 			return(true)
 	return(false)
 

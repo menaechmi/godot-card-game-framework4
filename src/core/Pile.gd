@@ -87,13 +87,13 @@ func _process(_delta) -> void:
 # Populates the popup view window with all the cards in the deck
 # then displays it
 func _on_View_Button_pressed() -> void:
-	await populate_popup()
+	populate_popup()
 
 
 # Populates the popup view window with all the cards in the deck sorted by name
 # then displays it
 func _on_ViewSorted_Button_pressed() -> void:
-	await populate_popup(true)
+	populate_popup(true)
 
 
 # Ensures the popup window interpolates to visibility when opened
@@ -163,7 +163,7 @@ func populate_popup(sorted:= sorted_popup) -> void:
 		card_array.sort_custom(Callable(CFUtils, "sort_scriptables_by_name"))
 	for card in card_array:
 		# We remove the card to rehost it in the popup grid container
-		await _remove_child(card)
+		_remove_child(card)
 		_slot_card_into_popup(card)
 	# Finally we Pop the Up :)
 	$ViewPopup.popup_centered()
@@ -229,16 +229,16 @@ func _after_child_add(node: Node):
 # this container's "floor" if it was the last card in the pile.
 func _remove_child(node, _legible_unique_name=false) -> void:
 	node.get_parent().remove_child(node)
-	card_count_label.text = str(get_card_count())
+	var _card_count := get_card_count()
+	card_count_label.text = str(_card_count)
 	# When we put the first card in the pile, we make sure the
 	# Panel is made transparent so that the card backs are seen instead
-	if get_card_count() == 0:
+	if _card_count == 0:
 		_has_cards = false
 		reorganize_stack()
 		var opacity_tween = _opacity_tween.get_ref() as Tween
 		if opacity_tween:
-			await opacity_tween.finished
-			#opacity_tween.custom_step(2)
+			opacity_tween.kill()
 		opacity_tween = create_tween()
 		opacity_tween.stop()
 		_opacity_tween = weakref(opacity_tween)

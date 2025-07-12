@@ -307,7 +307,7 @@ func move_card_to_container(script: ScriptTask) -> int:
 			# But we don't consider it a failed cost (as most games allow you
 			# to try and draw more cards when you're full but just won't draw any)
 			if not card == null:
-				card.move_to(dest_container,dest_index, null, tags)
+				await card.move_to(dest_container,dest_index, null, tags)
 			await script.owner.get_tree().create_timer(0.05).timeout
 			# If you get an error here, you likely need to await scripts_execute()
 	if script.get_property(SP.KEY_STORE_INTEGER):
@@ -350,7 +350,7 @@ func move_card_to_board(script: ScriptTask) -> int:
 					if slot:
 						# Setting the highlight lets the move_to() method
 						# Know we're moving into that slot
-						card.move_to(cfc.NMAP.board, -1, slot, tags)
+						await card.move_to(cfc.NMAP.board, -1, slot, tags)
 						# If you have an error here, you likely need to await
 						# script execution
 		else:
@@ -370,7 +370,7 @@ func move_card_to_board(script: ScriptTask) -> int:
 			count += 1
 			# We assume cards moving to board want to be face-up
 			if not costs_dry_run():
-				card.move_to(cfc.NMAP.board, -1, board_position, tags)
+				await card.move_to(cfc.NMAP.board, -1, board_position, tags)
 				await script.owner.get_tree().create_timer(0.05).timeout
 				# If you have an error here, you likely need to await
 				# either scripts_execute() or execute()
@@ -479,7 +479,7 @@ func spawn_card(script: ScriptTask) -> void:
 			for _iter in range(count + alteration):
 				slot = grid.find_available_slot()
 				# We need a small delay, to allow a potential new slot to instance
-				await script.owner.get_tree().create_timer(0.05).timeout
+				await script.owner.get_tree().process_frame
 				if slot:
 					card = cfc.instance_card(canonical_name)
 					cfc.NMAP.board._add_child(card)

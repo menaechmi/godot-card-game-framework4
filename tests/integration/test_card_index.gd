@@ -12,7 +12,7 @@ func after_all():
 
 func test_hand_z_index():
 	for _iter in range(0,8):
-		cards.append(hand.draw_card())
+		cards.append(await hand.draw_card())
 		await wait_seconds(0.07) 
 	await wait_seconds(1) 
 	for card in cards:
@@ -20,7 +20,7 @@ func test_hand_z_index():
 
 func test_table_hand_z_index():
 	for _iter in range(0,8):
-		cards.append(hand.draw_card())
+		cards.append(await hand.draw_card())
 		await wait_seconds(0.07) 
 	await wait_seconds(1) 
 	table_move(cards[0],Vector2(300,100))
@@ -28,9 +28,9 @@ func test_table_hand_z_index():
 	table_move(cards[5],Vector2(300,300))
 	table_move(cards[7],Vector2(300,400))
 	await drag_drop(cards[0],Vector2(300,600))
-	cards.append(hand.draw_card())
+	cards.append(await hand.draw_card())
 	await wait_seconds(0.1) 
-	cards.append(hand.draw_card())
+	cards.append(await hand.draw_card())
 	await wait_seconds(0.7) 
 	await drag_drop(cards[1],Vector2(300,600))
 	await move_mouse(Vector2(0,0))

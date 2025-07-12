@@ -38,18 +38,18 @@ func test_move_to():
 	var card4 = cfc.NMAP.deck.get_card(3)
 	var card5 = cfc.NMAP.deck.get_card(4)
 	var card6 = cfc.NMAP.deck.get_card(5)
-	card.move_to(discard)
-	card2.move_to(discard)
+	await card.move_to(discard)
+	await card2.move_to(discard)
 	assert_eq(1,discard.get_card_index(card2),
 			'move_to without arguments puts card at the end')
-	card3.move_to(discard, 0)
+	await card3.move_to(discard, 0)
 	assert_eq(0,discard.get_card_index(card3),
 			'move_to can move card to the top')
-	card4.move_to(discard, 2)
+	await card4.move_to(discard, 2)
 	assert_eq(2,discard.get_card_index(card4),
 			'move_to can move card between others')
-	card5.move_to(discard,2)
-	card6.move_to(discard,2)
+	await card5.move_to(discard,2)
+	await card6.move_to(discard,2)
 	assert_eq(2,discard.get_card_index(card6),
 			'move_to can takeover/push index spots of other cards')
 	assert_eq(3,discard.get_card_index(card5),

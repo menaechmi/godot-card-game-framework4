@@ -11,7 +11,7 @@ class TestBoardseekWithSubjectCount:
 				{"name": "move_card_to_container",
 				"subject": "boardseek",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -23,7 +23,7 @@ class TestBoardseekWithSubjectCount:
 				"subject": "boardseek",
 				"subject_count": 2,
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -35,7 +35,7 @@ class TestBoardseekWithSubjectCount:
 				"subject": "boardseek",
 				"subject_count": "all",
 				"dest_container": "discard"}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -52,8 +52,8 @@ class TestTutorWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard",
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
+		await card.execute_scripts()
+		#await wait_seconds(0.5)
 		assert_eq(1,discard.get_card_count(),
 				"tutor defaults to subject_count 1")
 		for c in discard.get_all_cards():
@@ -66,8 +66,8 @@ class TestTutorWithSubjectCount:
 				"dest_container": "discard",
 				"subject_count": 2,
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
+		await card.execute_scripts()
+		#await wait_seconds(0.5)
 		assert_eq(3,discard.get_card_count(),
 				"2 cards in should have been tutored")
 		for c in discard.get_all_cards():
@@ -80,8 +80,8 @@ class TestTutorWithSubjectCount:
 				"dest_container": "discard",
 				"subject_count": "all",
 				"filter_state_tutor": [{"filter_properties": {"Type": "Blue"}}]}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
+		await card.execute_scripts()
+		#await wait_seconds(0.5)
 		for c in deck.get_all_cards():
 			assert_ne("Blue", c.properties.Type,
 				"Tutor correctly discarded all Blue cards")
@@ -98,7 +98,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -114,7 +114,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -130,7 +130,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_top_card()
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -138,7 +138,7 @@ class TestIndexWithSubjectCount:
 				"all cards should be discarded")
 		assert_eq(discard,target.get_parent(), "bottom card should be in discard")
 		# Making sure trying to draw more cards than the deck doesn't crash
-		card.execute_scripts()
+		await card.execute_scripts()
 
 
 	func test_index_with_subject_count_from_bottom():
@@ -150,7 +150,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_bottom_card()
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -165,7 +165,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_bottom_card()
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -182,7 +182,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_card(5)
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -195,7 +195,7 @@ class TestIndexWithSubjectCount:
 				"src_container": "deck",
 				"dest_container": "discard"}]}}
 		target = deck.get_card(5)
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)

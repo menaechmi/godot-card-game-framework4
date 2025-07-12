@@ -107,8 +107,7 @@ class TestBoardTokens:
 		#await yield_to(card.get_node('Control/Tokens/Tween'), "finished", 0.5)
 		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
 				"Drawer reopens once Flip is completed")
-		card.move_to(cfc.NMAP.discard)
-		await wait_seconds(0.4)
+		await card.move_to(cfc.NMAP.discard)
 		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
 				"Drawer closes on moveTo")
 		await wait_seconds(0.8)
@@ -170,8 +169,7 @@ class TestOffBoardTokens:
 		await wait_seconds(0.2)
 		assert_eq(1.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
 				"Drawer appears when card gets tokens while card focused")
-		card.move_to(cfc.NMAP.discard)
-		await wait_seconds(0.8)
+		await card.move_to(cfc.NMAP.discard)
 		assert_false(card.tokens.get_all_tokens().is_empty(),
 				"Tokens not removed when card leaves with tokens_only_on_board == false")
 		cfc._ut_tokens_only_on_board = true

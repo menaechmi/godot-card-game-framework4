@@ -63,7 +63,7 @@ func _on_Shuffle_Button_pressed() -> void:
 func _on_DiscardRandom_Button_pressed() -> void:
 	var card = get_random_card()
 	if card:
-		card.move_to(cfc.NMAP.discard)
+		await card.move_to(cfc.NMAP.discard)
 
 
 # A wrapper for the CardContainer's get_last_card()
@@ -96,7 +96,7 @@ func draw_card(pile : Pile = cfc.NMAP.deck) -> Card:
 	var card: Card = pile.get_top_card()
 	# A basic function to pull a card from out deck into our hand.
 	if card:
-		card.move_to(self)
+		await card.move_to(self)
 	return(card)
 
 

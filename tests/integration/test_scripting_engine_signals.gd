@@ -52,7 +52,7 @@ class TestCardPropertiesFilter:
 		
 
 	func test_card_properties_filter():
-		cards += draw_test_cards(1)
+		cards += await draw_test_cards(1)
 		var target2: Card = cards[9]
 		var ttype : String = target.properties["Type"]
 		var ttype2 : String = target2.properties["Type"]
@@ -280,7 +280,7 @@ class TestCardMovedToHand:
 					"subject": "self",
 					"set_faceup": false}],
 				"trigger": "another"}}
-		target.move_to(hand)
+		await target.move_to(hand)
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -304,7 +304,7 @@ class TestCardMovedToBoard:
 					"trigger": "another",
 					"set_faceup": false}],
 				"trigger": "another"}}
-		target.move_to(board, -1, Vector2(100,100))
+		await target.move_to(board, -1, Vector2(100,100))
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -372,7 +372,7 @@ class TestCardMovedToPile:
 					"set_faceup": false}],
 				"filter_destination": "Discard",
 				"trigger": "another"}}
-		target.move_to(discard)
+		await target.move_to(discard)
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -635,8 +635,8 @@ class TestCardUnattached:
 					"tags": ["Manual"]}])
 		assert_false(card.is_faceup,
 				"Card turned face-down after signal trigger")
-		target.move_to(discard)
-		await wait_seconds(1)
+		await target.move_to(discard)
+		#await wait_seconds(1)
 		assert_signal_emitted_with_parameters(
 					target,"card_unattached",
 					[target,"card_unattached",

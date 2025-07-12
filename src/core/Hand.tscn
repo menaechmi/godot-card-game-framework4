@@ -49,6 +49,10 @@ layout_mode = 0
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [node name="ManipulationButtons" type="HBoxContainer" parent="Control"]
 layout_mode = 0

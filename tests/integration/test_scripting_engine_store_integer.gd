@@ -25,8 +25,7 @@ class TestStoreIntegetInverted:
 						"is_inverted": true,
 						"subject_index": "top"
 					}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
+		await card.execute_scripts()
 		assert_eq(discard.get_card_count(),3, "3 cards should have been discarded")
 
 class TestStoreIntegerWithCounters:
@@ -52,9 +51,8 @@ class TestStoreIntegerWithCounters:
 						"counter_name": "credits",
 						"modification": "retrieve_integer",
 					}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
-		assert_eq(await board.counters.get_counter("credits"),7,
+		await card.execute_scripts()
+		assert_eq(board.counters.get_counter("credits"),7,
 			"2 Credits added")
 
 	func test_store_integer_with_tokens():
@@ -84,8 +82,7 @@ class TestStoreIntegerWithCounters:
 					"subject_count": "retrieve_integer",
 					"subject_index": "top"
 				}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
+		await card.execute_scripts()
 		assert_eq(discard.get_card_count(),2, "2 cards should have been discarded")
 
 class TestRetrieveIntegerTempModProperties:
@@ -197,9 +194,8 @@ class TestAdjustRetrievedInteger:
 						"modification": "retrieve_integer",
 						"adjust_retrieved_integer": 2,
 					}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
-		assert_eq(await board.counters.get_counter("credits"),9,
+		await card.execute_scripts()
+		assert_eq(board.counters.get_counter("credits"),9,
 			"4 Credits added")
 
 	func test_adjust_retrieved_integer_inverted():
@@ -224,8 +220,7 @@ class TestAdjustRetrievedInteger:
 						"adjust_retrieved_integer": 2,
 						"is_inverted": true
 					}]}}
-		card.execute_scripts()
-		await wait_seconds(0.5)
-		assert_eq(await board.counters.get_counter("credits"),3,
+		await card.execute_scripts()
+		assert_eq(board.counters.get_counter("credits"),3,
 			"2 Credits Removed")
 

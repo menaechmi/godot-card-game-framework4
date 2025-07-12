@@ -7,9 +7,9 @@ class TestAttachAndSwitch:
 		var card : Card
 		var card_prev_pos : Vector2
 		var exhost_attachments: Array
-
+		await wait_seconds(2)
 		card = cards[0]
-		await drag_drop(card,Vector2(300,300))
+		await drag_drop(cards[0],Vector2(300,300))
 		card = cards[1]
 		await drag_card(card, Vector2(310,310))
 		assert_true(cards[0].highlight.visible,
@@ -18,6 +18,7 @@ class TestAttachAndSwitch:
 				CFConst.HOST_HOVER_COLOUR,
 				"Hovered host has the right colour highlight")
 		drop_card(card,board._UT_mouse_position)
+		await wait_for_signal(card.card_attached, 1)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
@@ -29,7 +30,8 @@ class TestAttachAndSwitch:
 		assert_eq(card.current_host_card,cards[0],
 				"Attached card has its parent in the current_host_card var")
 		#FIXME: Error: can't take value from empty array
-		# The attachments array is the empty one
+		# The attachments array is the empty one.
+		# Cards aren't being dropped in place properly
 		assert_eq(card,cards[0].attachments.front(),
 				"Card with hosted card has its children attachments array")
 		assert_eq(1,len(cards[0].attachments),
@@ -113,7 +115,13 @@ class TestAttachAndSwitch:
 
 		card = cards[4]
 		await drag_drop(card,Vector2(610,230))
+		assert_almost_eq(cards[3].global_position,cards[0].global_position
+				+ Vector2(0,2) * card.get_node('Control').size.y
+				* CFConst.ATTACHMENT_OFFSET[1].y, Vector2(2,2),
+				"Removing an attachment reorganizes other attachments")
 
+		card = cards[4]
+		await drag_drop(card,Vector2(610,230))
 		card = cards[3]
 		await drag_drop(card,Vector2(630,230))
 		assert_eq(card.current_host_card,cards[4],

@@ -9,7 +9,7 @@ func after_all():
 func test_game_seed_consistency():
 	cfc.game_rng_seed = "GUT"
 	await setup_board()
-	cards = draw_test_cards(10)
+	cards = await draw_test_cards(10)
 	var all_index1 := []
 	hand.shuffle_cards()
 	await wait_seconds(0.2)
@@ -20,7 +20,7 @@ func test_game_seed_consistency():
 	await wait_seconds(0.2)
 	cfc.game_rng_seed = "GUT"
 	await setup_board()
-	cards = draw_test_cards(10)
+	cards = await draw_test_cards(10)
 	# warning-ignore:return_value_discarded
 	randi()
 	randomize()
@@ -38,7 +38,7 @@ func test_game_seed_consistency():
 func test_game_seed_randomization():
 	cfc.game_rng_seed = "GUT"
 	await setup_board()
-	cards = draw_test_cards(10)
+	cards = await draw_test_cards(10)
 	var all_index1 := []
 	hand.shuffle_cards()
 	await wait_seconds(0.2)
@@ -48,7 +48,7 @@ func test_game_seed_randomization():
 	board.queue_free()
 	await wait_seconds(0.2)
 	await setup_board()
-	cards = draw_test_cards(10)
+	cards = await draw_test_cards(10)
 	cfc.game_rng.randomize()
 	var all_index2 := []
 	hand.shuffle_cards()
