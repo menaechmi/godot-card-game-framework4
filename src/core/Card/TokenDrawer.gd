@@ -19,7 +19,6 @@ func _ready() -> void:
 	$Drawer/Area2D/CollisionShape2D.shape = \
 			$Drawer/Area2D/CollisionShape2D.shape.duplicate()
 	# warning-ignore:return_value_discarded
-	#TODO:&"sort_children" ?
 	$Drawer/VBoxContainer.connect("sort_children", self._on_VBoxContainer_sort_children)
 
 
@@ -80,7 +79,7 @@ func token_drawer(requested_state := true) -> void:
 			# We want to consider the drawer closed
 			# only when the animation finished
 			# Otherwise it might start to open immediately again
-			#TODO: Because the tween has a set amount of time, probably just wait 0.2s
+			#TODO: This coroutine should be fine, but might mess up tests
 			await _tween.finished
 			# When it's closed, we hide token names
 			for token in $Drawer/VBoxContainer.get_children():

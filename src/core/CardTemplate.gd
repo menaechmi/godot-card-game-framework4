@@ -356,7 +356,7 @@ func _init_card_layout() -> void:
 		card_front = card_front_instance
 		# We do not need to instance the card_back when card is seen
 		# in a preview card grid
-		#wiuwis 3.: In version 4.3 Script.get_global_name will be exposed and this can be neater
+		#TODO: In version 4.3 Script.get_global_name will be exposed and this can be neater
 		if get_parent() is CVGridCardObject:
 			pass
 		else:
@@ -2281,8 +2281,6 @@ func _process_card_state() -> void:
 			set_control_mouse_filters(true)
 			buttons.set_active(false)
 			# warning-ignore:return_value_discarded
-			#TODO: This makes a tweener, and starts it. So I'm not sure why we do it before
-			#The oval_shape logic. But I'm leaving it as is for now
 			set_card_rotation(0)
 			# warning-ignore:return_value_discarded
 			# When we have an oval shape, we ensure the cards stay

@@ -17,7 +17,6 @@ func after_each():
 func test_get_card_methods():
 	var pile : Pile = cfc.NMAP.deck
 	# The Panel is always put to the bottom with code. Therefore the third child node is always a card
-	#TODO: The problem seems to be that the cards aren't sorted the same in Godot 4 for some reason
 	assert_eq(pile.get_child(3),pile.get_bottom_card(),
 			'get_top_card() returns top card')
 	# Likewise, the first card from the bottom is the previous to last.

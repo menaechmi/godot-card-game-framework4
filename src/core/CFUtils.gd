@@ -78,7 +78,7 @@ static func list_files_in_directory(path: String, prepend_needed := "", full_pat
 	# warning-ignore:return_value_discarded
 	var dir := DirAccess.open(path)
 	# warning-ignore:return_value_discarded
-	dir.list_dir_begin() # TODOConverter3To4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+	dir.list_dir_begin()
 	while true:
 		var file := dir.get_next()
 		if file == "":
@@ -105,7 +105,7 @@ static func list_imported_in_directory(path: String, full_path := false) -> Arra
 	var files := []
 	var dir := DirAccess.open(path)
 	# warning-ignore:return_value_discarded
-	dir.list_dir_begin() # TODOConverter3To4 fill missing arguments https://github.com/godotengine/godot/pull/40547
+	dir.list_dir_begin()
 	while true:
 		var file := dir.get_next()
 		if file == "":

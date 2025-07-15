@@ -160,9 +160,7 @@ func focus_card(card: Card, show_preview := true) -> void:
 		tween = create_tween().set_parallel(true)
 		tween.stop()
 		_tween = weakref(tween)
-		## We do a nice alpha-modulate tween
-		#TODO: Focus is a PopupPanel which is no longer a control
-		#but a window and does not have the modulate property
+		# We do a nice alpha-modulate tween
 		tween.tween_property($VBC/Focus,'modulate', Color(1,1,1,1), 0.25).from($VBC/Focus.modulate)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		if focus_info.visible_details > 0:
