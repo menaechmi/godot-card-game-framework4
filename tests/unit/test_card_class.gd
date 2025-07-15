@@ -210,8 +210,8 @@ func test_refresh_card_front():
 		"Cost": 'U',
 		"Power": "+3",
 	}
-	new_card.refresh_card_front()
-	await wait_frames(60) #We're waiting for two different process_frames
+	await new_card.refresh_card_front()
+	await wait_frames(20)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"U",
 			"Number Property refreshed as string")
 	assert_eq(new_card.card_front.card_labels["Power"].text, '3',
