@@ -6,7 +6,7 @@ extends GutTest
 const MAIN_SCENE = preload("res://tests/UTMain.tscn")
 var BOARD_SCENE = load("res://tests/UTBoard.tscn")
 const MOUSE_SPEED := {
-	"fast": [10,0.3],
+	"fast": [7,0.3],
 	"slow": [3,0.6],
 	"debug": [1,2],
 }
@@ -154,8 +154,8 @@ func table_move(card: Card, pos: Vector2) -> void:
 	var tween = card._tween.get_ref() as Tween
 	if tween and tween.is_running():
 		await wait_for_signal(tween.finished, 0.5)
-	if cfc.game_settings.fancy_movement and tween:
-		tween.custom_step(0.5)
+	#if cfc.game_settings.fancy_movement and tween:
+	#	tween.custom_step(0.5)
 
 func move_mouse(target_position: Vector2, interpolation_speed := "fast") -> void:
 	var mouse_speed = MOUSE_SPEED[interpolation_speed][0]
