@@ -21,13 +21,11 @@ class TestSubjectTarget:
 			await wait_for_signal(tween.finished, 0.4)
 		assert_eq(card.card_rotation, 270,
 				"First rotation should happen before targetting second time")
-		await target_card(card, card)
+		await wait_frames(60)
+		target_card(card, card)
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.4)
-		else:
-			await wait_frames(20)
-		#TODO: Check that waiting 20 frames solved issue
 		assert_eq(card.card_rotation, 90,
 				"Second rotation should also happen")
 
@@ -60,7 +58,6 @@ class TestSubjectBoardseek:
 			await wait_for_signal(tween.finished, 1)
 		else:
 			await wait_frames(20)
-		#TODO: Check that waiting frames fixed the issues
 		assert_eq(target.card_rotation, 180,
 				"Card on board matching property should be rotated 90 degrees")
 		assert_eq(target2.card_rotation, 90,

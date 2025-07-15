@@ -130,7 +130,7 @@ func target_card(source: Card,
 	if source == target:
 		# If the target is the same as the source, we need to wait a bit
 		# because otherwise the _is_targeted might not be set yet.
-		#await wait_seconds(0.6)
+		await wait_seconds(0.6)
 		pass
 	# We need to offset a bit towards the card rect, to ensure the arrow
 	# Area2D collides
