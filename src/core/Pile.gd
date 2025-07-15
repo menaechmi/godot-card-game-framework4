@@ -412,8 +412,8 @@ func shuffle_cards(animate = true) -> void:
 		if style == CFConst.ShuffleStyle.CORGI:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				tween.custom_step(5)
-				#await tween.finished
+				#tween.custom_step(5)
+				await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
@@ -444,15 +444,15 @@ func shuffle_cards(animate = true) -> void:
 		elif style == CFConst.ShuffleStyle.SPLASH:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				tween.custom_step(5)
-				#await tween.finished
+				#tween.custom_step(5)
+				await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
 			tween.play()
-			#await _tween.finished
+			await _tween.finished
 			# The animation speeds have been empirically tested to look good
 			anim_speed = 0.6
 			for card in get_all_cards():
@@ -468,15 +468,15 @@ func shuffle_cards(animate = true) -> void:
 		elif style == CFConst.ShuffleStyle.SNAP:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				tween.custom_step(5)
-				#await tween.finished
+				#tween.custom_step(5)
+				await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)
 			_add_tween_position(position,shuffle_position,0.2)
 			_add_tween_rotation(rotation_degrees,shuffle_rotation,0.2)
 			tween.play()
-			#await _tween.finished
+			await tween.finished
 			anim_speed = 0.2
 			var card = get_random_card()
 			card.animate_shuffle(anim_speed, CFConst.ShuffleStyle.SNAP)
@@ -504,8 +504,8 @@ func shuffle_cards(animate = true) -> void:
 		if position != init_position:
 			var tween = _tween.get_ref() as Tween
 			if tween and tween.is_running():
-				tween.custom_step(5)
-				#await tween.finished
+				#tween.custom_step(5)
+				await tween.finished
 			tween = create_tween()
 			tween.stop()
 			_tween = weakref(tween)

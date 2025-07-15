@@ -34,7 +34,9 @@ func test_table_hand_z_index():
 	await wait_seconds(0.7) 
 	await drag_drop(cards[1],Vector2(300,600))
 	await move_mouse(Vector2(0,0))
-	assert_eq(8,hand.get_card_count(),"Correct amount of cards in hand")
+	await wait_frames(30)
+	#TODO: See if waiting frames fixed this
+	assert_eq(hand.get_card_count(),8,"Correct amount of cards in hand")
 	for c in cards:
 		if c.get_parent() == cfc.NMAP.hand:
 			assert_eq(0,c.z_index,"Card in hand at index 0")

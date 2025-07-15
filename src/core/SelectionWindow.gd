@@ -170,7 +170,7 @@ func initiate_selection(
 	if tween:
 		tween.custom_step(5)
 	# We do a nice alpha-modulate tween
-	tween.create_tween()
+	tween = create_tween()
 	tween.stop()
 	tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)

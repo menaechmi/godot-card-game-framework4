@@ -33,6 +33,7 @@ func test_single_card_focus():
 			"Duplicate card does not have visible highlight")
 	assert_eq(focus_dupe.card_size, CFConst.CARD_SIZE * CFConst.FOCUSED_SCALE,
 			"Duplicate resized correctly")
+	#TODO: Find where the dupe focus's control is supposed to be resized
 	assert_eq(focus_dupe._control.size, CFConst.CARD_SIZE * CFConst.FOCUSED_SCALE,
 			"Duplicate's control resized correctly")
 

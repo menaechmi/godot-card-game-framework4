@@ -68,19 +68,20 @@ func _finish_priming(run_type: int, sceng_stored_int: int) -> void:
 	# If any confirmation is accepted, then we only draw a target
 	# if either the card is a cost and we're doing a cost-dry run,
 	# or the card is not a cost and we're in the normal run
+	var ret = []
 	if not is_skipped and is_accepted and (run_type != CFInt.RunType.COST_CHECK
 			or (run_type == CFInt.RunType.COST_CHECK
 			and (is_cost or needs_subject))):
 		# We discover which other card this task will affect, if any
 		# Used to be an await
-		var ret = _find_subjects(sceng_stored_int)
-		if ret.has("awaiting_target"):
-			# The targeting function will prime the script for us when ready
-			ret.erase("awaiting_target")
-		else:
-			# If we're not waiting on a target, the script is primed
-			is_primed = true
-			emit_signal("primed")
+		ret = _find_subjects(sceng_stored_int)
+	if ret.has("awaiting_target"):
+		# The targeting function will prime the script for us when ready
+		ret.erase("awaiting_target")
+	else:
+		# If we're not waiting on a target, the script is primed
+		is_primed = true
+		emit_signal("primed")
 
 func check_confirm(run_type = null, sceng_stored_int = null) -> void:
 	var owner_name = owner

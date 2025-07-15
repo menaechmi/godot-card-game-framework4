@@ -92,20 +92,23 @@ class TestStateExecutions:
 		await card.execute_scripts()
 		tween = card._tween.get_ref()
 		if tween:
-			await wait_for_signal(tween.finished, 0.5) 
-		assert_eq(Vector2(100,100),card.global_position,
+			await wait_for_signal(tween.finished, 0.5)
+		else:
+			await wait_frames(120)
+		assert_eq(card.global_position, Vector2(100,100),
 				"Card should have moved to specified position")
-		card.move_to(cfc.NMAP.discard)
+		await card.move_to(cfc.NMAP.discard)
 		tween = card._tween.get_ref()
 		if tween:
-			await wait_for_signal(tween.finished, 0.5) 
+			await wait_for_signal(tween.finished, 0.5)
 		card.state = Card.CardState.FOCUSED_IN_POPUP
 		await card.execute_scripts()
 		tween = card._tween.get_ref()
 		if tween:
-			await wait_for_signal(tween.finished, 0.5) 
-		assert_eq(Vector2(100,100),card.global_position,
+			await wait_for_signal(tween.finished, 1)
+		assert_eq(card.global_position, Vector2(100,100),
 				"Card should have moved to specified position")
+		teardown_board()
 
 
 class TestCardScripts:
@@ -118,10 +121,12 @@ class TestCardScripts:
 		table_move(target, Vector2(800,200))
 		table_move(card, Vector2(100,200))
 		card.execute_scripts()
-		target_card(card,target,"slow")
+		await target_card(card,target,"slow")
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
+		else:
+			await wait_frames(60)
 		# This also tests the _common_target set
 		assert_false(target.is_faceup,
 				"Test1 script leaves target facedown")
@@ -133,6 +138,8 @@ class TestCardScripts:
 		tween = cards[4]._tween.get_ref() as Tween
 		if tween: 
 			await wait_for_signal(tween.finished, 1)
+		else:
+			await wait_frames(120)
 		assert_false(cards[4].is_faceup,
 				"Ensure targeting is cleared after first ScriptingEngine")
 
@@ -157,6 +164,7 @@ class TestTargetScriptOnDragFromHand:
 		assert_true(card.targeting_arrow.get_node("ArrowHead").visible,
 				"Targeting has started on long-click")
 		await target_card(card,target)
+		await wait_frames(60)
 		assert_eq(board.counters.get_counter("credits"),8,
 				"Counter reduced by 2")
 		assert_false(target.is_faceup,
@@ -174,6 +182,7 @@ class TestTargetScriptOnDragFromHand:
 		assert_false(card.targeting_arrow.get_node("ArrowHead").visible,
 				"Targeting not started because costs cannot be paid")
 		await target_card(card,target)
+		await wait_frames(60)
 		assert_eq(board.counters.get_counter("credits"),8,
 				"Counter not reduced")
 		assert_true(target.is_faceup,
@@ -191,6 +200,7 @@ class TestTargetScriptOnDragFromHand:
 		assert_true(card.targeting_arrow.get_node("ArrowHead").visible,
 				"Targeting started because targeting is_cost")
 		await target_card(card,target)
+		await wait_frames(60)
 		assert_eq(board.counters.get_counter("credits"),8,
 				"Counter not reduced")
 		assert_true(target.is_faceup,
@@ -205,7 +215,7 @@ class TestTargetScriptOnDragFromHand:
 					"counter_name": "credits"}]}}
 		await drag_card(card, Vector2(300,300))
 		unclick_card_anywhere(card)
-		await wait_seconds(0.1) 
+		await wait_frames(60) 
 		assert_eq(board.counters.get_counter("credits"),8,
 				"Counter not reduced since nothing was targeted")
 		card.scripts = {"manual": {"hand": [

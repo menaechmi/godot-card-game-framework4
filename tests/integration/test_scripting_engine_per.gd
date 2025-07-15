@@ -274,7 +274,8 @@ class TestPerPrevious:
 			]}
 		}
 		await execute_with_target(card,target)
-		assert_eq(5,board.counters.get_counter("research"),
+		await wait_frames(60)
+		assert_eq(board.counters.get_counter("research"), 5,
 				"Counter set to the specified amount")
 
 class TestPerInverted:

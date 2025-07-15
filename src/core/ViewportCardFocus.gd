@@ -50,6 +50,7 @@ func _process(_delta) -> void:
 #		focus_info.rect_size.x = _current_focus_source.canonical_size.x * _current_focus_source.focused_scale * cfc.curr_scale
 	# The below makes sure to display the closeup of the card, only on the side
 	# the player's mouse is not in.
+	var tween
 	if _current_focus_source and is_instance_valid(_current_focus_source)\
 			and _current_focus_source.get_state_exec() != "pile"\
 			and cfc.game_settings.focus_style == CFInt.FocusStyle.BOTH_INFO_PANELS_ONLY:
@@ -78,13 +79,13 @@ func _process(_delta) -> void:
 		var current_dupe_focus: Card = _previously_focused_cards[c]
 		# We don't delete old dupes, to avoid overhead to the engine
 		# insteas, we just hide them.
-		var tween = _tween.get_ref() as Tween
+		tween = _tween.get_ref() as Tween
 		if _current_focus_source != c\
-				and not tween:
+				and ((not tween) or (tween and not tween.is_running())):
 			current_dupe_focus.visible = false
 	if not is_instance_valid(_current_focus_source)\
 			and $VBC/Focus.modulate.a != 0\
-			and not _tween:
+			and ((not tween) or (tween and not tween.is_running())):
 		$VBC/Focus.modulate.a = 0
 
 

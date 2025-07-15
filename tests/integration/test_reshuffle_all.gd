@@ -16,6 +16,7 @@ func test_fancy_reshuffle_all():
 	await drag_drop(cards[4], Vector2(1000,10))
 	board.reshuffle_all_in_pile()
 	await wait_seconds(0.02)
+	#TODO: Fix test which requires precise timing
 	assert_almost_eq(cards[0].global_position, Vector2(300, 300), Vector2(10,10), 
 			"Card is not being teleported from where is expect by Tween")
 	assert_almost_eq(cards[4].global_position, Vector2(1000, 10), Vector2(10,10), 
@@ -30,6 +31,7 @@ func test_basic_reshuffle_all():
 	await drag_drop(cards[4], Vector2(1000,10))
 	board.reshuffle_all_in_pile()
 	await wait_seconds(0.018)
+	#TODO: Fix these tests, which rely on precise timing
 	assert_almost_eq(cards[0].global_position, Vector2(300, 300), Vector2(10,10), 
 			"Card is not being teleported from where is expected by Tween")
 	assert_almost_eq(cards[4].global_position, Vector2(1000, 10), Vector2(10,10), 

@@ -52,7 +52,7 @@ func test_popup_view():
 	for o in ordered_cards:
 		ordered_card_names.append(o.canonical_name)
 	pile.populate_popup()
-	await wait_frames(60)
+	await wait_for_signal(get_tree().physics_frame, 1)
 	assert_eq(pile.get_all_cards(), card_order,\
 			"Retrieved card order remains when viewed in pile")
 	assert_eq(pile.get_all_cards(), retrieve_popup_order(pile),\

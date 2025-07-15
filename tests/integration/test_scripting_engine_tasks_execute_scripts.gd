@@ -95,8 +95,9 @@ class TestExecuteScriptsWithTempModProp:
 		await wait_seconds(0.5)
 		assert_eq(hand.get_card_count(), 7,
 			"Ensure the property does not go negative")
-		target.execute_scripts()
-		await wait_seconds(0.1)
+		await target.execute_scripts()
+		await wait_seconds(0.5)
+		#TODO: Check that waiting longer worked
 		assert_eq(hand.get_card_count(), 8,
 			"Ensure temp property modifiers don't remain")
 

@@ -96,11 +96,12 @@ class TestCardRotatedTags:
 				"subject": "self",
 				"tags": ["GUT"],
 				"degrees": 180}]}}
-		table_move(target, Vector2(500,100))
+		await table_move(target, Vector2(500,100))
 		target.card_rotation = 90
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1) 
+		#TODO: Check if awaiting table_move fixed the test
 		assert_signal_emitted_with_parameters(
 					target,"card_rotated",
 					[target,"card_rotated",
@@ -159,9 +160,10 @@ class TestCardFlippedTags:
 				"Card turned face-down after signal trigger matched tags")
 		assert_true(cards[2].is_faceup,
 				"Card stayed face-up since filter_tags didn't match")
-		cards[4].execute_scripts()
+		await cards[4].execute_scripts()
 		if cards[4]._flip_tween:
 			await wait_for_signal(cards[4]._flip_tween.finished, 1)
+		#TODO See if awaiting scripts fixed this
 		assert_signal_emitted_with_parameters(
 					cards[4],"card_flipped",
 					[cards[4],"card_flipped",

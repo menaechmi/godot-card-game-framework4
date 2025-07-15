@@ -18,7 +18,7 @@ class TestFailCostOnSkip:
 				"modification": 5,
 				"counter_name":  "research"}
 				]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		assert_eq(board.counters.get_counter("credits"),100,
 				"Counter set to the specified amount")
 		assert_eq(board.counters.get_counter("research"),5,

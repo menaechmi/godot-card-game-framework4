@@ -34,26 +34,38 @@ class TestAttachAndSwitch:
 		# Cards aren't being dropped in place properly
 		assert_eq(card,cards[0].attachments.front(),
 				"Card with hosted card has its children attachments array")
-		assert_eq(1,len(cards[0].attachments),
+		assert_eq(len(cards[0].attachments), 1,
 				"Parent attachments array is the right size")
 		assert_eq(cards[0].highlight.modulate, Color(1,1,1),
 				"Attaching card turns attach highlights off")
-
+	
+		#This is where the problem is in the test
 		card = cards[2]
 		await drag_drop(card,Vector2(410,310))
+		await wait_frames(120)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 1)
 		assert_almost_eq(card.global_position,cards[0].global_position
 				+ Vector2(0,2)
 				* card.get_node('Control').size.y
 				* CFConst.ATTACHMENT_OFFSET[1].y, Vector2(2,2),
 				"Multiple attached card are placed in the right position in regards to their parent")
+		assert_eq(len(cards[0].attachments), 2,
+				"Parent attachments array is the right size")
 		card = cards[3]
 		await drag_drop(card,Vector2(310,310))
+		await wait_frames(120)
+		tween = card._tween.get_ref()
+		if tween:
+			await wait_for_signal(tween.finished, 2)
+		#This works in single player, but the attachment is weird in the test
 		assert_almost_eq(card.global_position,cards[0].global_position
 				+ Vector2(0,3)
 				* card.get_node('Control').size.y
 				* CFConst.ATTACHMENT_OFFSET[1].y, Vector2(2,2),
 				"Multiple attached card are placed in the right position in regards to their parent")
-		assert_eq(3,len(cards[0].attachments),
+		assert_eq(len(cards[0].attachments), 3,
 				"Parent attachments array is the right size")
 		card_prev_pos = card.global_position
 
@@ -71,7 +83,7 @@ class TestAttachAndSwitch:
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
-		await wait_seconds(0.3)
+		await wait_seconds(1)
 		assert_almost_ne(card_prev_pos,cards[3].global_position, Vector2(2,2),
 				"Card drop also drops attachments in the right position")
 		assert_almost_eq(cards[3].global_position,card.global_position
@@ -172,26 +184,33 @@ class TestMultiHostHover:
 		board.get_node("EnableAttach").button_pressed = false
 
 		card = cards[0]
-		await drag_drop(card,Vector2(100,100))
+		await drag_card(card,Vector2(100,100))
+		await drop_card(card,board._UT_mouse_position)
 
 		card = cards[1]
-		await drag_drop(card,Vector2(200,100))
+		await drag_card(card,Vector2(200,100))
+		await drop_card(card,board._UT_mouse_position)
 
 		card = cards[2]
-		await drag_drop(card,Vector2(150,100))
+		await drag_card(card,Vector2(150,100))
+		await drop_card(card,board._UT_mouse_position)
 
 		board.get_node("EnableAttach").button_pressed = true
 
 		card = cards[3]
 		await drag_card(card, Vector2(150,100))
+		await wait_frames(60)
 		board._UT_interpolate_mouse_move(Vector2(150,100),card.global_position,10)
-		await wait_seconds(0.3)
+		await wait_seconds(0.1)
 		assert_true(cards[2].highlight.visible,
 				"Card hovering over two or more with attachment flag on, highlights only the top one")
+		await wait_seconds(0.2)
 		board._UT_interpolate_mouse_move(Vector2(300,100),card.global_position,10)
-		await wait_seconds(0.3)
+		await wait_seconds(0.1)
 		assert_false(cards[2].highlight.visible,
 				"Card leaving the hovering of a card, turns attach highlights off")
+		#await wait_seconds(0.4)
+		#TODO As far as I can tell this works, but this test is just finicky
 		assert_true(cards[1].highlight.visible,
 				"Potential host highlight changes as it changes hover areas")
 		drop_card(card,board._UT_mouse_position)

@@ -180,11 +180,12 @@ class TestCardRotates:
 					"set_faceup": false}],
 				"filter_degrees": 0,
 				"trigger": "another"}}
-		table_move(target, Vector2(500,100))
+		await table_move(target, Vector2(500,100))
 		target.card_rotation = 90
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
+		#TODO: Check if awaiting table_move fixed the test
 		assert_signal_emitted_with_parameters(
 					target,"card_rotated",
 					[target,"card_rotated",

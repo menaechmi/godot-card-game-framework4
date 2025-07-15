@@ -29,10 +29,11 @@ class TestRotateCard:
 				"subject": "self",
 				"degrees": 90}]}}
 		table_move(card, Vector2(100,200))
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
+		#TODO: Ensure adding await card.execute_scripts() worked
 		assert_eq(card.card_rotation, 90,
 				"Card should be rotated 90 degrees")
 

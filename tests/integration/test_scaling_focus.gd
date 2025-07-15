@@ -50,26 +50,29 @@ class TestNeightbourPush:
 		cfc.game_settings.hand_use_oval_shape = false
 		cards[2]._on_Card_mouse_entered()
 		await wait_seconds(1)
-		assert_almost_eq(Vector2(25.75, 0),cards[0].position,Vector2(2,2),
+		assert_almost_eq(cards[0].position, Vector2(25.75, 0), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(134.5, 0),cards[1].position,Vector2(2,2),
+		assert_almost_eq(cards[1].position, Vector2(134.5, 0), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(689.5, 0),cards[3].position,Vector2(2,2),
+		#TODO: Check actual position and find the problem 
+		assert_almost_eq(cards[3].position, Vector2(689.5, 0), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(798.25, 0),cards[4].position,Vector2(2,2),
+		assert_almost_eq(cards[4].position, Vector2(798.25, 0), Vector2(2,2),
 				"Card dragged in correct global position")
 		cfc.game_settings.hand_use_oval_shape = true
+
 	func test_card_focus_neighbour_push_use_oval():
 		cfc.game_settings.hand_use_oval_shape = true
 		cards[2]._on_Card_mouse_entered()
 		await wait_seconds(1)
-		assert_almost_eq(Vector2(102.718, -22.392),cards[0].position,Vector2(2,2),
+		assert_almost_eq(cards[0].position, Vector2(102.718, -22.392), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(180.0, -40.0),cards[1].position,Vector2(2,2),
+		assert_almost_eq(cards[1].position, Vector2(180.0, -40.0), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(643.5, -40.0),cards[3].position,Vector2(2,2),
+		#TODO: Check actual position and find the problem 
+		assert_almost_eq(cards[3].position, Vector2(643.5, -40.0), Vector2(2,2),
 				"Card dragged in correct global position")
-		assert_almost_eq(Vector2(722.0, -22.5),cards[4].position,Vector2(2,2),
+		assert_almost_eq(cards[4].position, Vector2(722.0, -22.5), Vector2(2,2),
 				"Card dragged in correct global position")
 		cfc.game_settings.hand_use_oval_shape = true
 

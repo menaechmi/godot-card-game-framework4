@@ -274,15 +274,15 @@ class TestStateFilterRotation:
 				"Card on board matching rotation state should be rotated 90 degrees")
 
 	func test_state_filter_faceup():
-		table_move(cards[1], Vector2(500,200))
-		table_move(cards[2], Vector2(800,200))
+		await table_move(cards[1], Vector2(500,200))
+		await table_move(cards[2], Vector2(800,200))
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
 				"subject_count": "all",
 				"filter_state_seek": [{"filter_faceup": true}],
 				"degrees": 90}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		await wait_seconds(0.2)
 		cards[1].is_faceup = false
 		cards[2].is_faceup = false
@@ -293,10 +293,11 @@ class TestStateFilterRotation:
 				"subject_count": "all",
 				"filter_state_seek":[ {"filter_faceup": true}],
 				"degrees": 270}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.2)
+		#TODO: Check if adding awaits fixed this
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board matching flip state should be rotated 90 degrees")
 		assert_eq(cards[2].card_rotation, 90,
@@ -371,10 +372,11 @@ class TestFilterTokens:
 						]
 				}],
 				"degrees": 270}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		tween = cards[1]._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.2)
+		#TODO: check if awaiting scripts fixed this
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board not matching tokens stays 90 degrees")
 		assert_eq(cards[2].card_rotation, 270,

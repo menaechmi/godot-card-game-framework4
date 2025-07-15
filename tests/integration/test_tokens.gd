@@ -50,6 +50,7 @@ class TestBoardTokens:
 	#			"New token texture uses the correct file")
 
 		await move_mouse(card.global_position)
+		await wait_frames(30)
 		assert_true(tech_token.get_node("Name").visible,
 				"Token label should be visible when card hovered")
 		assert_true(tech_token.get_node("MarginContainer").visible,
@@ -166,8 +167,8 @@ class TestOffBoardTokens:
 				"Two tokens can use the same texture but different names")
 		assert_false(tech_token.get_node("Buttons").visible,
 				"Tokens buttons not shown when cfc.show_token_buttons == false")
-		await wait_seconds(0.2)
-		assert_eq(1.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		await wait_frames(30)
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 1.0,
 				"Drawer appears when card gets tokens while card focused")
 		await card.move_to(cfc.NMAP.discard)
 		assert_false(card.tokens.get_all_tokens().is_empty(),

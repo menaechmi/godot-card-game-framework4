@@ -64,7 +64,7 @@ func reshuffle_all_in_pile(pile: Pile = cfc.NMAP.deck):
 	if tween and tween.is_running():
 		await tween.finished
 	await get_tree().create_timer(0.2).timeout
-	pile.shuffle_cards()
+	await pile.shuffle_cards()
 
 
 # Button to change focus mode
