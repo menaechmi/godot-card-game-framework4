@@ -23,19 +23,18 @@ func test_table_hand_z_index():
 		cards.append(await hand.draw_card())
 		await wait_seconds(0.07) 
 	await wait_seconds(1) 
-	table_move(cards[0],Vector2(300,100))
-	table_move(cards[1],Vector2(300,200))
+	await table_move(cards[0],Vector2(300,100))
+	await table_move(cards[1],Vector2(300,200))
 	table_move(cards[5],Vector2(300,300))
 	table_move(cards[7],Vector2(300,400))
+	await wait_frames(10)
 	await drag_drop(cards[0],Vector2(300,600))
 	cards.append(await hand.draw_card())
-	await wait_seconds(0.1) 
+	await wait_seconds(0.1)
 	cards.append(await hand.draw_card())
 	await wait_seconds(0.7) 
 	await drag_drop(cards[1],Vector2(300,600))
 	await move_mouse(Vector2(0,0))
-	await wait_frames(30)
-	#TODO: See if waiting frames fixed this
 	assert_eq(hand.get_card_count(),8,"Correct amount of cards in hand")
 	for c in cards:
 		if c.get_parent() == cfc.NMAP.hand:
