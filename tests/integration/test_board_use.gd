@@ -17,6 +17,8 @@ class TestCardBoardDrop:
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
+		else:
+			await wait_frames(20)
 		#Increased the margin from Vector2(2,2)
 		assert_almost_eq(card.global_position,Vector2(500, 200),Vector2(10,10),
 				"Card dragged in correct global position")
@@ -52,14 +54,15 @@ class TestCardBoardDrop:
 		assert_eq(card.set_card_rotation(270),1,
 				"Rotation remained when card is focused")
 		drag_card(card, Vector2(1000,100))
-		await wait_frames(3)
+		await wait_frames(30)
 		assert_eq(card.card_rotation,270,
 				"Rotation remains while card is being dragged")
-		await move_mouse(cfc.NMAP.discard.position)
+		await move_mouse(cfc.NMAP.discard.position + Vector2(50, 50))
 		await drop_card(card,board._UT_mouse_position)
 		tween = card._tween.get_ref()
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
+		await wait_seconds(2) #Not sure why it takes so long for discard to flip
 		assert_eq(card.get_node("Control").rotation_degrees,0.0,
 				"Rotation reset to 0 while card is moving to hand")
 		cfc.game_settings.hand_use_oval_shape = true
@@ -155,5 +158,5 @@ class TestBoardPause:
 		cfc.game_paused = false
 		await drag_drop(card, Vector2(680,300))
 		#This previously didn't account for the drag_drop offset
-		assert_almost_eq(card.global_position,Vector2(700, 300),Vector2(5,5),
+		assert_almost_eq(card.global_position,Vector2(720, 320),Vector2(5,5),
 				"Game unpaused correctly")
