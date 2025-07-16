@@ -173,9 +173,6 @@ class TestTokenCost:
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		else:
-			await wait_frames(20)
-		#TODO: Check if waiting_frames(20) fixed the test
 		assert_eq(180,card.card_rotation,
 				"Card not rotated because negative token cost could not  be be paid")
 		assert_eq(1,card.tokens.get_token("bio").count,
@@ -400,9 +397,6 @@ class TestCountersCost:
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		else:
-			await wait_frames(30)
-		#TODO: Check if awaiting frames fixed the issue
 		assert_eq(180,card.card_rotation,
 				"Card not rotated because negative counter cost could not be be paid")
 		assert_eq(1, board.counters.get_counter("research"),
