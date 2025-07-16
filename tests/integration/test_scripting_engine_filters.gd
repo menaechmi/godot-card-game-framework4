@@ -250,6 +250,7 @@ class TestStateFilterRotation:
 	func test_state_filter_rotation():
 		table_move(cards[1], Vector2(500,200))
 		table_move(cards[2], Vector2(800,200))
+		await wait_for_signal(get_tree().process_frame, 1)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -257,7 +258,7 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_degrees": 0}],
 				"degrees": 90}]}}
 		card.execute_scripts()
-		wait_seconds(0.2)
+		await wait_seconds(0.2)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -274,8 +275,11 @@ class TestStateFilterRotation:
 				"Card on board matching rotation state should be rotated 90 degrees")
 
 	func test_state_filter_faceup():
-		await table_move(cards[1], Vector2(500,200))
-		await table_move(cards[2], Vector2(800,200))
+		#This test passes without this await alone, but will fail when run in sequence
+		await wait_for_signal(get_tree().process_frame, 1)
+		table_move(cards[1], Vector2(500,200))
+		table_move(cards[2], Vector2(800,200))
+		await wait_for_signal(get_tree().process_frame, 1)
 		card.scripts = {"manual": {"hand": [
 				{"name": "rotate_card",
 				"subject": "boardseek",
@@ -283,7 +287,6 @@ class TestStateFilterRotation:
 				"filter_state_seek": [{"filter_faceup": true}],
 				"degrees": 90}]}}
 		await card.execute_scripts()
-		await wait_seconds(0.2)
 		cards[1].is_faceup = false
 		cards[2].is_faceup = false
 		await wait_seconds(0.4)
@@ -297,7 +300,6 @@ class TestStateFilterRotation:
 		var tween = target._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.2)
-		#TODO: Check if adding awaits fixed this
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board matching flip state should be rotated 90 degrees")
 		assert_eq(cards[2].card_rotation, 90,
@@ -309,6 +311,7 @@ class TestFilterTokens:
 	func test_state_filter_tokens():
 		table_move(cards[1], Vector2(500,200))
 		table_move(cards[2], Vector2(800,200))
+		await wait_for_signal(get_tree().process_frame, 1)
 		cards[1].tokens.mod_token("void",5)
 		cards[2].tokens.mod_token("void",5)
 		card.scripts = {"manual": {"hand": [
@@ -319,7 +322,7 @@ class TestFilterTokens:
 					"filter_tokens": [
 						{"filter_token_name": "void"}]}],
 				"degrees": 90}]}}
-		card.execute_scripts()
+		await card.execute_scripts()
 		var tween = cards[1]._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.2)
@@ -372,11 +375,10 @@ class TestFilterTokens:
 						]
 				}],
 				"degrees": 270}]}}
-		await card.execute_scripts()
+		card.execute_scripts()
 		tween = cards[1]._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.2)
-		#TODO: check if awaiting scripts fixed this
 		assert_eq(cards[1].card_rotation, 90,
 				"Card on board not matching tokens stays 90 degrees")
 		assert_eq(cards[2].card_rotation, 270,
