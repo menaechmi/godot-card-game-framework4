@@ -6,13 +6,11 @@ class TestMoveToContainer:
 	func test_move_to_container():
 		var card: Card
 		card = cards[2]
+		#Drag_drop has trouble finding the discard
 		await drag_drop(card, cfc.NMAP.discard.position)
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		else:
-			await wait_frames(60)
-		#TODO: Check if waiting_frames fixed this test
 		assert_almost_eq(card.global_position,cfc.NMAP.discard.position,Vector2(2,2),
 				"Card's final position matches pile's position")
 		assert_eq(1,cfc.NMAP.discard.get_card_count(),
@@ -55,14 +53,17 @@ class TestMoveToContainer:
 	func test_move_from_board_to_deck_to_hand():
 		var card: Card
 		card = cards[2]
+		#Drag card to the board
 		await drag_drop(card, Vector2(1000,100))
-		await drag_drop(card, cfc.NMAP.deck.position)
-		var tween = card._tween.get_ref() as Tween
-		if tween:
-			await wait_for_signal(tween.finished, 0.5)
+		#Drag card back to deck. The deck drop position is over further
+		await drag_drop(card, cfc.NMAP.deck.position + Vector2(20,20))
+		#Less than 50 will cause this test to fail. I tried many options, but only this works
+		await wait_frames(60)
 	# warning-ignore:return_value_discarded
 		await hand.draw_card()
-		tween = card._tween.get_ref() as Tween
+		#Wait for the right tween
+		await wait_for_signal(get_tree().process_frame, 1)
+		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
 		assert_almost_eq(card.global_position,
@@ -130,7 +131,7 @@ class TestPopupView:
 		#This prevents a "p_elem->_root" by waiting for children to be removed
 		await wait_for_signal(get_tree().process_frame, 0.5)
 		await card.move_to(deck)
-		await wait_seconds(0.3)
+		#await wait_seconds(1)
 		assert_eq(Vector2(0,0),card.position,
 				"Moving card from popup back to the same pile, should do nothing")
 		assert_eq(Vector2(0.75,0.75),card.scale,
