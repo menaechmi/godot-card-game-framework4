@@ -13,9 +13,9 @@ func before_each():
 	board.get_node("BoardPlacementGrid").visible = true
 
 func test_highlight_priority():
-	await wait_frames(30)
 	var card : Card = cards[0]
-	table_move(cards[2], Vector2(550,500))
+	await table_move(cards[2], Vector2(550,500))
+	await wait_frames(60) #Wait so that the hand has time to rearrange
 	card.attachment_mode = Card.AttachmentMode.ATTACH_BEHIND
 	await drag_card(card, Vector2(600,500), "slow")
 	assert_null(grid.get_highlighted_slot(),
