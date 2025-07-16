@@ -103,7 +103,7 @@ func drag_card(card: Card, target_position: Vector2, interpolation_speed := "fas
 		await wait_seconds(4) # Allow for review
 	else:
 		await wait_seconds(0.3) # Wait to allow dragging to start
-	board._UT_interpolate_mouse_move(target_position,board._UT_mouse_position,mouse_speed)
+	board._UT_interpolate_mouse_move(target_position + extra_offset,board._UT_mouse_position,mouse_speed)
 	await wait_seconds(mouse_yield_wait)
 
 
