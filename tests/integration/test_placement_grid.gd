@@ -7,7 +7,7 @@ func before_each():
 	await setup_board()
 	board.get_node("BoardPlacementGrid").visible = true
 	cards = await draw_test_cards(5)
-	await wait_seconds(0.1)
+	await wait_seconds(0.5)
 	grid = board.get_node("BoardPlacementGrid")
 	grid.position = Vector2(200,200)
 	grid.visible = true
@@ -43,7 +43,9 @@ func test_placement_slots():
 	var tween = card._tween.get_ref() as Tween
 	if tween:
 		await wait_for_signal(tween.finished, 1)
-	assert_almost_eq(grid.get_slot(0).global_position, card.global_position, Vector2(2,2),
+	else:
+		await wait_frames(30)
+	assert_almost_eq(card.global_position, grid.get_slot(0).global_position, Vector2(2,2),
 			"Card moved to the slot placement")
 	assert_eq(card._placement_slot, grid.get_slot(0),
 			"card refers to its placement slot")
@@ -110,6 +112,7 @@ func test_occupied_slot():
 	var card: Card = cards[0]
 	card.board_placement = Card.BoardPlacement.ANY_GRID
 	await drag_drop(card,Vector2(500,300))
+	await wait_frames(60)
 	assert_eq(card.get_parent(), board,
 		"Card moved to board")
 	card = cards[3]
@@ -124,6 +127,7 @@ func test_occupied_slot():
 		"Card not moved to board when slot is occupied")
 
 func test_move_script_placed_card_out_of_grid():
+	#This test moves two cards to the grid through scripts, and then drag ones out of it
 	await wait_seconds(0.2) 
 	var card: Card = cards[1]
 	@warning_ignore("unused_variable")
@@ -137,14 +141,16 @@ func test_move_script_placed_card_out_of_grid():
 			{"name": "move_card_to_board",
 			"subject": "self",
 			"grid_name":  "BoardPlacementGrid"}]}}
-	cards[0].execute_scripts()
-	await wait_seconds(0.1) 
-	card.execute_scripts()
+	await cards[0].execute_scripts()
+	await wait_seconds(1)
+	await card.execute_scripts()
 	var tween = card._tween.get_ref() as Tween
 	if tween:
 		await wait_for_signal(tween.finished, 1)
+	else:
+		await wait_frames(60)
 	gut.p(card.board_placement)
-	await drag_drop(card,Vector2(1000,0))
+	await drag_drop(card,Vector2(1000,0), "slow")
 	await move_mouse(Vector2(0,0))
 	assert_null(card._placement_slot,
 			"Card should have moved outside grid slot")
@@ -170,10 +176,11 @@ func test_grid_auto_placement():
 		await wait_for_signal(tween.finished, 1)
 	assert_eq(card.get_parent(), board,
 		"Card moved to correct grid name")
-	#assert_eq(card._placement_slot. get_grid_name(), grid.name_label.text,
-		#"Card placed in correct grid")
+	assert_eq(card._placement_slot. get_grid_name(), grid.name_label.text,
+		"Card placed in correct grid")
+	await wait_frames(60)
 	var prev_slot = card._placement_slot
-	await drag_drop(card,Vector2(500,300))
+	await drag_drop(card,Vector2(500,300), "slow")
 	assert_ne(card._placement_slot, prev_slot,
 		"Card can be reorganized in the same grid")
 	await drag_drop(cards[1],Vector2(1000,0))
@@ -183,8 +190,8 @@ func test_grid_auto_placement():
 	await drag_drop(cards[3],Vector2(1000,0))
 	await move_mouse(Vector2(300,200))
 	await drag_drop(cards[4],Vector2(1000,0))
-	#assert_eq(cards[1]._placement_slot. get_grid_name(), grid.name_label.text,
-		#"Card placed in correct grid")
+	assert_eq(cards[1]._placement_slot. get_grid_name(), grid.name_label.text,
+		"Card placed in correct grid")
 	assert_eq(cards[4].get_parent(), hand,
 		"Last card not moved to board because grid is full")
 	grid.auto_extend = true
