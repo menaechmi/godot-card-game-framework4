@@ -840,21 +840,22 @@ func resize_recursively(control_node: Node, requested_scale: float) -> void:
 	if _original_layouts.has(control_node)\
 			and CFUtils.compare_floats(requested_scale, _original_layouts[control_node].get('scale')):
 		return
-	if control_node as Control and not _original_layouts.has(control_node):
+	if control_node is Control and not _original_layouts.has(control_node):
 		_original_layouts[control_node] = {}
 		_original_layouts[control_node]["size"] = control_node.custom_minimum_size
 		_original_layouts[control_node]["position"] = control_node.position
-		if control_node as MarginContainer:
+		if control_node is MarginContainer:
 			for margin in ["top","bottom", "left", "right"]:
 				_original_layouts[control_node]["margin_" + margin]\
 						= control_node.get("theme_override_constants/margin_" + margin)
 	for child in control_node.get_children():
 		resize_recursively(child, requested_scale)
-	if control_node as Control:
+	if control_node is Control:
 		control_node.custom_minimum_size = _original_layouts[control_node]["size"] * requested_scale
-		control_node.call_deferred('set_size', control_node.custom_minimum_size)
+		control_node.set_size(control_node.custom_minimum_size)
+		#control_node.call_deferred('set_size', control_node.custom_minimum_size)
 		control_node.position = _original_layouts[control_node]["position"] * requested_scale
-		if control_node as MarginContainer:
+		if control_node is MarginContainer:
 			for margin in ["top","bottom", "left", "right"]:
 				var current_margin = control_node.get("theme_override_constants/margin_" + margin)
 				if not current_margin:
@@ -876,9 +877,7 @@ func set_card_size(value: Vector2, ignore_area = false) -> void:
 	# correctly when hovering over the card.
 	for node in [highlight._left_right, highlight._top_bottom, highlight]:
 		node.custom_minimum_size = value + Vector2(6, 6)
-		# We cannot set the rect_size immediately after setting the min_size
-		# As the engine won't allow it, as the min_size change has not happened yet
-		node.call_deferred('set_size', node.custom_minimum_size)
+		node.set_size(node.custom_minimum_size)
 	highlight.position = Vector2(-3, -3)
 	if not ignore_area:
 		$CollisionShape2D.shape.extents = value / 2
