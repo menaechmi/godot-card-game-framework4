@@ -114,13 +114,13 @@ func _find_subjects(stored_integer := 0, sub = get_property(SP.KEY_SUBJECT)) -> 
 			subjects_array = _tutor_subjects(stored_integer)
 		SP.KEY_SUBJECT_V_INDEX:
 			subjects_array = _index_seek_subjects(stored_integer)
-		#SP.KEY_SUBJECT_V_TRIGGER:
-			## We check, just to make sure we didn't mess up
-			#if trigger_object:
-				#is_valid = SP.check_validity(trigger_object, script_definition, "subject")
-				#subjects_array.append(trigger_object)
-			#else:
-				#print_debug("WARNING: Subject: trigger requested, but no trigger card passed")
+		SP.KEY_SUBJECT_V_TRIGGER:
+			# We check, just to make sure we didn't mess up
+			if trigger_object:
+				is_valid = SP.check_validity(trigger_object, script_definition, "subject")
+				subjects_array.append(trigger_object)
+			else:
+				print_debug("WARNING: Subject: trigger requested, but no trigger card passed")
 		SP.KEY_SUBJECT_V_SELF:
 			is_valid = SP.check_validity(owner, script_definition, "subject")
 			subjects_array.append(owner)

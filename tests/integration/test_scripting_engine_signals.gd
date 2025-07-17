@@ -4,6 +4,7 @@ class TestSignals:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_signals():
+		await wait_seconds(2)
 		for sgn in  cfc.signal_propagator.known_card_signals:
 			assert_connected(card, cfc.signal_propagator, sgn,
 					"_on_signal_received")
@@ -17,10 +18,8 @@ class TestSignals:
 				"subject": "self",
 				"set_faceup": false}],
 				"trigger": "self"}}
-		table_move(card, Vector2(100,100))
+		await table_move(card, Vector2(100,100))
 		card.card_rotation = 90
-		if card._flip_tween:
-			await wait_for_signal(card._flip_tween.finished, 1)
 		assert_signal_emitted_with_parameters(
 					card,"card_flipped",[card,"card_flipped",{"is_faceup": false,
 					"tags": ["Scripted"]}])
@@ -32,10 +31,8 @@ class TestSignals:
 				{"name": "flip_card",
 				"subject": "self",
 				"set_faceup": false}]}}
-		table_move(target, Vector2(500,100))
+		await table_move(target, Vector2(500,100))
 		target.card_rotation = 90
-		if target._flip_tween:
-			await wait_for_signal(target._flip_tween.finished, 1)
 		assert_signal_emitted_with_parameters(
 					target,"card_flipped",[target,"card_flipped",
 					{"is_faceup": false,
@@ -152,6 +149,9 @@ class TestCardRotates:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_card_rotated():
+		#Moves a card to the table, adds scripts and rotates the card
+		await table_move(target, Vector2(500,100))
+		await wait_frames(30)
 		watch_signals(target)
 		card.scripts = {"card_rotated": {
 				"hand": [
@@ -180,12 +180,10 @@ class TestCardRotates:
 					"set_faceup": false}],
 				"filter_degrees": 0,
 				"trigger": "another"}}
-		await table_move(target, Vector2(500,100))
 		target.card_rotation = 90
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
-		#TODO: Check if awaiting table_move fixed the test
 		assert_signal_emitted_with_parameters(
 					target,"card_rotated",
 					[target,"card_rotated",
@@ -709,6 +707,7 @@ class TestSameSignalDiffTargets:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_same_signal_different_trigger():
+		await wait_frames(20)
 		card.scripts = {"card_moved_to_board": {
 				"board": [
 						{
