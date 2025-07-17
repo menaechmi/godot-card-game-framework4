@@ -9,10 +9,10 @@ class TestBoardTokens:
 		table_move(card, Vector2(600,200))
 		await move_mouse(card.global_position)
 		assert_false(card.tokens.is_drawer_open, "is_drawer_open flag should be false")
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer does not appear card hover when no card has no tokens")
-		assert_eq(Vector2(card.get_node("Control").size.x - 35,20),
-				card.get_node("Control/Tokens/Drawer").position,
+		assert_eq(card.get_node("Control/Tokens/Drawer").position,
+				Vector2(card.get_node("Control").size.x - 35,20),
 				"Drawer does not extend when card hover when no card has no tokens")
 		await move_mouse(Vector2(1100,200))
 
@@ -21,8 +21,8 @@ class TestBoardTokens:
 		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("tech"),
 				"Adding new token returns a CHANGED result")
 		var tech_token = card.tokens.get_token("tech")
-		assert_eq("tech", tech_token.name, "New token takes the correct name")
-		assert_eq("Tech", tech_token.get_node("Name").text,
+		assert_eq(tech_token.name, "tech", "New token takes the correct name")
+		assert_eq(tech_token.get_node("Name").text, "Tech",
 				"Token label is name capitalized")
 		assert_false(tech_token.get_node("Name").visible,
 				"Token label should be invisible when card not hovered")
@@ -30,26 +30,26 @@ class TestBoardTokens:
 				"MarginContainer should be invisible when card not hovered")
 		assert_false(tech_token.get_node("Buttons").visible,
 				"Token Buttons should be invisible when card not hovered")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("gold coin"),
+		assert_eq(card.tokens.mod_token("gold coin"), CFConst.ReturnCode.CHANGED,
 				"Can add tokens which include spaces")
-		assert_eq("Gold Coin", card.tokens.get_token("gold coin").get_node("Name").text,
+		assert_eq(card.tokens.get_token("gold coin").get_node("Name").text, "Gold Coin",
 				"Token with space in name label is name capitalized")
-		assert_eq(1,tech_token.count,"New token starts at 1 counter")
-		assert_eq("1",tech_token.get_node("CenterContainer/Count").text,
+		assert_eq(tech_token.count, 1,"New token starts at 1 counter")
+		assert_eq(tech_token.get_node("CenterContainer/Count").text, "1",
 				"New token 1 counter label has the correct number")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("tech"),
+		assert_eq(card.tokens.mod_token("tech"), CFConst.ReturnCode.CHANGED,
 				"Increasing token counter returns a CHANGED result")
-		assert_eq(2,tech_token.count,"Increased token at 2 counters")
-		assert_eq("2",tech_token.get_node("CenterContainer/Count").text,
+		assert_eq(tech_token.count, 2, "Increased token at 2 counters")
+		assert_eq(tech_token.get_node("CenterContainer/Count").text, "2",
 				"Token change increases label counter too")
-		assert_eq(2,card.tokens.get_all_tokens().size(),
+		assert_eq(card.tokens.get_all_tokens().size(), 2,
 				"tokens.get_all_tokens() returns correct dict keys")
 	# Below doesn' seem to work. Always returns emptry string
 	#	assert_eq(cfc.PATH_TOKENS + cfc.TOKENS_MAP["tech"],
 	#			tech_token.get_node("CenterContainer/TokenIcon").texture.resource_path,
 	#			"New token texture uses the correct file")
 
-		await move_mouse(card.global_position)
+		await move_mouse(card.global_position + Vector2(50,50))
 		await wait_frames(30)
 		assert_true(tech_token.get_node("Name").visible,
 				"Token label should be visible when card hovered")
@@ -57,45 +57,45 @@ class TestBoardTokens:
 				"MarginContainer should be visible when card hovered")
 		assert_true(tech_token.get_node("Buttons").visible,
 				"Token Buttons should be visible when card hovered")
-		assert_eq(99,card.get_node("Control/Tokens").z_index,"Drawer is drawn on top of other cards")
+		assert_eq(card.get_node("Control/Tokens").z_index, 99,"Drawer is drawn on top of other cards")
 		assert_true(card.tokens.is_drawer_open, "tokens.is_drawer_open flag should be false")
-		assert_eq(1.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 1.0,
 				"Drawer appears when card has tokens on mouse hover")
-		assert_almost_eq(Vector2(card.get_node("Control").size.x,20),
-				card.get_node("Control/Tokens/Drawer").position, Vector2(2,2),
+		assert_almost_eq(card.get_node("Control/Tokens/Drawer").position,
+				Vector2(card.get_node("Control").size.x,20), Vector2(2,2),
 				"Drawer extends on card hover card has tokens")
 		var prev_y = card.get_node("Control/Tokens/Drawer").size.y
 	# warning-ignore:return_value_discarded
 		card.tokens.mod_token("blood")
-		await wait_seconds(0.1) # Wait to allow drawer to expand
+		await wait_seconds(0.5) # Wait to allow drawer to expand
 		assert_lt(prev_y, card.get_node("Control/Tokens/Drawer").size.y,
 				"When adding more tokens, visible drawer size expands")
 		await move_mouse(Vector2(1000,600))
-		await wait_seconds(0.1)
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		await wait_seconds(0.5)
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer does not appear without card hover when card has tokens")
-		assert_almost_eq(Vector2(card.get_node("Control").size.x - 35,20),
-				card.get_node("Control/Tokens/Drawer").position, Vector2(2,2),
+		assert_almost_eq(card.get_node("Control/Tokens/Drawer").position,
+				Vector2(card.get_node("Control").size.x - 35,20), Vector2(2,2),
 				"Drawer does not extend without card hover when card has tokens")
-		assert_eq(CFConst.ReturnCode.FAILED,card.tokens.mod_token("Should Fail", -1),
+		assert_eq(card.tokens.mod_token("Should Fail", -1), CFConst.ReturnCode.FAILED,
 				"Removing non-defined token returns a fail")
-		assert_eq(CFConst.ReturnCode.FAILED,card.tokens.mod_token("Industry", -1),
+		assert_eq(card.tokens.mod_token("Industry", -1), CFConst.ReturnCode.FAILED,
 				"Removing non-existent token returns a fail")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("tech", -1),
+		assert_eq(card.tokens.mod_token("tech", -1), CFConst.ReturnCode.CHANGED,
 				"Removing token returns a CHANGED result")
-		assert_eq(1,tech_token.count,"remove_token() buttons decreases amount")
+		assert_eq(tech_token.count, 1, "remove_token() buttons decreases amount")
 		assert_eq("1",tech_token.get_node("CenterContainer/Count").text,
 				"Counter label has the reduced number")
 		prev_y = card.get_node("Control/Tokens/Drawer").size.y
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("tech", -1),
+		assert_eq(card.tokens.mod_token("tech", -1), CFConst.ReturnCode.CHANGED,
 				"Removing token to 0 returns a CHANGED result")
-		await wait_seconds(0.1) # Wait to allow node to be free'd
+		await wait_seconds(0.5) # Wait to allow node to be free'd
 		assert_freed(tech_token, "tech token")
 		assert_gt(prev_y, card.get_node("Control/Tokens/Drawer").size.y,
 				"When less tokens drawer size decreases")
 
 		await drag_card(card, Vector2(200,100))
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer closes when card is being dragged")
 		drop_card(card,board._UT_mouse_position)
 		await move_mouse(Vector2(1000,300))
@@ -103,41 +103,41 @@ class TestBoardTokens:
 		await wait_seconds(0.6) # Wait to allow drawer to expand
 		card.is_faceup = false
 		#await yield_to(card.get_node('Control/Tokens/Tween'), "finished", 0.5)
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer closes while Flip is ongoing")
 		#await yield_to(card.get_node('Control/Tokens/Tween'), "finished", 0.5)
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer reopens once Flip is completed")
 		await card.move_to(cfc.NMAP.discard)
-		assert_eq(0.0, card.get_node("Control/Tokens/Drawer").self_modulate[3],
+		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 0.0,
 				"Drawer closes on moveTo")
 		await wait_seconds(0.8)
-		assert_eq(0,card.tokens.get_all_tokens().size(),"Tokens removed when card leaves table")
+		assert_eq(card.tokens.get_all_tokens().size(), 0,"Tokens removed when card leaves table")
 
 
 		card = cards[3]
 		table_move(card, Vector2(200,300))
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("magic", 10),
+		assert_eq(card.tokens.mod_token("magic", 10), CFConst.ReturnCode.CHANGED,
 				"Adding new token with larger amount returns a CHANGED result")
 		var magic_token: Token = card.tokens.get_token("magic")
-		assert_eq(10,magic_token.count,"Token starts at specified counter")
+		assert_eq(magic_token.count, 10, "Token starts at specified counter")
 		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("magic", -5),
 				"Reducing token by a larger amount returns a CHANGED result")
-		assert_eq(5,magic_token.count,"Token reduced by 5")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("magic", -50),
+		assert_eq(magic_token.count,5,"Token reduced by 5")
+		assert_eq(card.tokens.mod_token("magic", -50), CFConst.ReturnCode.CHANGED,
 				"Reducing to less than 0, returns a CHANGED result")
 		await wait_seconds(0.1) # Wait to allow node to be free'd
 		assert_freed(magic_token, "magic token")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("void", 4, true),
+		assert_eq(card.tokens.mod_token("void", 4, true), CFConst.ReturnCode.CHANGED,
 				"Adding new token with a set amount returns a CHANGED result")
 		var void_token: Token = card.tokens.get_token("void")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("void", 28, true),
+		assert_eq(card.tokens.mod_token("void", 28, true), CFConst.ReturnCode.CHANGED,
 				"Changeing to larger set amount returns CHANGED result")
-		assert_eq(28,void_token.count,"Token set to specified higher amount")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("void", 18, true),
+		assert_eq(void_token.count,28,"Token set to specified higher amount")
+		assert_eq(card.tokens.mod_token("void", 18, true), CFConst.ReturnCode.CHANGED,
 				"Changeing to lower set amount returns CHANGED result")
-		assert_eq(18,void_token.count,"Token set to specified lower amount")
-		assert_eq(CFConst.ReturnCode.CHANGED, card.tokens.mod_token("void", -20, true),
+		assert_eq(void_token.count, 18,"Token set to specified lower amount")
+		assert_eq(card.tokens.mod_token("void", -20, true), CFConst.ReturnCode.CHANGED,
 				"Changeing to set amount lower than 0, returns CHANGED result")
 		await wait_seconds(0.1) # Wait to allow node to be free'd
 		assert_freed(void_token, "void token")
@@ -151,9 +151,9 @@ class TestOffBoardTokens:
 		cfc._ut_show_token_buttons = false
 		var card : Card
 		card = cards[3]
-		table_move(card, Vector2(1000,100))
+		await table_move(card, Vector2(1000,100))
+		await wait_frames(30)
 		card._on_Card_mouse_entered()
-		await wait_seconds(0.1)
 		# warning-ignore:return_value_discarded
 		card.tokens.mod_token("tech")
 		# warning-ignore:return_value_discarded
@@ -167,7 +167,7 @@ class TestOffBoardTokens:
 				"Two tokens can use the same texture but different names")
 		assert_false(tech_token.get_node("Buttons").visible,
 				"Tokens buttons not shown when cfc.show_token_buttons == false")
-		await wait_frames(30)
+		await wait_for_signal(get_tree().process_frame, 1)
 		assert_eq(card.get_node("Control/Tokens/Drawer").self_modulate[3], 1.0,
 				"Drawer appears when card gets tokens while card focused")
 		await card.move_to(cfc.NMAP.discard)
