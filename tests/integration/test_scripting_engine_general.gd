@@ -32,6 +32,7 @@ class TestStateExecutions:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_state_executions():
+		await wait_frames(60) #Another "Run All" issue
 		card.scripts = {"manual": {"hand": [
 				{"name": "flip_card",
 				"subject": "self",
@@ -93,8 +94,6 @@ class TestStateExecutions:
 		tween = card._tween.get_ref()
 		if tween:
 			await wait_for_signal(tween.finished, 0.5)
-		else:
-			await wait_frames(120)
 		assert_eq(card.global_position, Vector2(100,100),
 				"Card should have moved to specified position")
 		await card.move_to(cfc.NMAP.discard)
@@ -178,6 +177,7 @@ class TestTargetScriptOnDragFromHand:
 					"subject": "target",
 					"set_faceup": false}]}}
 		target = cards[2]
+		await move_mouse(Vector2(0,0)) #Move the mouse out of the way
 		await drag_card(card, Vector2(300,300))
 		assert_false(card.targeting_arrow.get_node("ArrowHead").visible,
 				"Targeting not started because costs cannot be paid")
@@ -196,6 +196,7 @@ class TestTargetScriptOnDragFromHand:
 					"modification": -10,
 					"is_cost": true,
 					"counter_name": "credits"}]}}
+		await move_mouse(Vector2(0,0)) #Move the mouse out of the way
 		await drag_card(card, Vector2(300,300))
 		assert_true(card.targeting_arrow.get_node("ArrowHead").visible,
 				"Targeting started because targeting is_cost")

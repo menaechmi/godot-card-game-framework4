@@ -2,7 +2,6 @@ extends "res://tests/UTcommon.gd"
 
 func before_each():
 	await setup_board()
-#TODO: The final card doesn't get added to the hand properly for some reason
 func test_single_card_draw_use_rectangle():
 	cfc.game_settings.hand_use_oval_shape = false
 	var card0: Card = await hand.draw_card()

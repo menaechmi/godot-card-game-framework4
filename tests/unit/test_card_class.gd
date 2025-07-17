@@ -211,7 +211,7 @@ func test_refresh_card_front():
 		"Power": "+3",
 	}
 	await new_card.refresh_card_front()
-	await wait_frames(20)
+	await wait_frames(45)
 	assert_eq(new_card.card_front.card_labels["Cost"].text,"U",
 			"Number Property refreshed as string")
 	assert_eq(new_card.card_front.card_labels["Power"].text, '3',

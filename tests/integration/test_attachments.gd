@@ -2,7 +2,7 @@ extends "res://tests/UTcommon.gd"
 
 class TestAttachAndSwitch:
 	extends "res://tests/Attachment_common.gd"
-
+	#TODO: Both of these should be broken into smaller tests
 	func test_attaching_and_switching_parent():
 		var card : Card
 		var card_prev_pos : Vector2
@@ -246,81 +246,86 @@ class TestAttachmentNodeOrder:
 		attached_cards[0].attachment_mode = Card.AttachmentMode.ATTACH_BEHIND
 		#Moves cards[1] onto cards[0]
 		await drag_drop(attached_cards[0], Vector2(330,330))
-		await move_mouse(cards[0].global_position)
+		await move_mouse(cards[0].global_position + Vector2(50,150))
 		await wait_frames(30)
-		
+
 		assert_true(host_card.get_index() > attached_cards[0].get_index(), 
 			"Card attached behind host card comes before host parent node heirarchy")
 
 		#Move cards[1] back into the hand
 		await drag_drop(attached_cards[0], Vector2(400,600))
-		await move_mouse(cards[0].global_position)
+		await move_mouse(cards[0].global_position + Vector2(50,150))
 		await wait_seconds(0.1)
-		
+
 		attached_cards[0].attachment_mode = Card.AttachmentMode.ATTACH_IN_FRONT
 		#Drag card[1] back onto card[0]
 		await drag_drop(attached_cards[0], Vector2(330,330))
-		await move_mouse(cards[0].global_position)
-		
+		await move_mouse(cards[0].global_position + Vector2(50,150))
+
 		assert_true(host_card.get_index() < attached_cards[0].get_index(), 
 			"Card attached above host card comes after host parent node heirarchy")
-			
+
+		#Drag card[1] into the hand
 		await drag_drop(attached_cards[0], Vector2(400,600))
 		await move_mouse(cards[0].global_position)
 		await wait_seconds(0.1)
-		
+
 		#Attach every card onto cards[0]
 		for attached_card in attached_cards:
 			attached_card.attachment_mode = Card.AttachmentMode.ATTACH_BEHIND
 			await drag_drop(attached_card, Vector2(330,330))
-			await move_mouse(cards[0].global_position)
+			await move_mouse(cards[0].global_position + Vector2(50,150))
 			await wait_seconds(0.2)
-		
-		await wait_frames(20)
-		assert_true(host_card.get_index() > attached_cards[0].get_index(),		
+
+		await wait_frames(45)
+		assert_true(host_card.get_index() > attached_cards[0].get_index(),
 			"Multiple attachments behind host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[0].get_index() > attached_cards[1].get_index(),		
+		assert_true(attached_cards[0].get_index() > attached_cards[1].get_index(),
 			"Multiple attachments behind host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[0].get_index() > attached_cards[2].get_index(),		
+		assert_true(attached_cards[0].get_index() > attached_cards[2].get_index(),
 			"Multiple attachments behind host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[1].get_index() > attached_cards[2].get_index(),		
+		assert_true(attached_cards[1].get_index() > attached_cards[2].get_index(),
 			"Multiple attachments behind host are correctly ordered relative to host in parent node heirarchy")
-		
+
 		host_card._on_Card_mouse_entered()
 		click_card(host_card)
 		await wait_seconds(0.5) # Wait to allow dragging to start
 		board._UT_interpolate_mouse_move(Vector2(500,300),host_card.global_position)
 		await wait_seconds(0.2)
-		assert_true(host_card.get_index() > attached_cards[0].get_index(),		
+		assert_true(host_card.get_index() > attached_cards[0].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[0].get_index() > attached_cards[1].get_index(),		
+		assert_true(attached_cards[0].get_index() > attached_cards[1].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[0].get_index() > attached_cards[2].get_index(),		
+		assert_true(attached_cards[0].get_index() > attached_cards[2].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[1].get_index() > attached_cards[2].get_index(),		
+		assert_true(attached_cards[1].get_index() > attached_cards[2].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
 		await wait_seconds(0.4)
 		drop_card(host_card,board._UT_mouse_position)
 		host_card._on_Card_mouse_exited()
-		
-		#move cards back to hand and then reattach with other attach mode
+
+		#move cards back to hand
 		for attached_card in attached_cards:
 			await drag_drop(attached_card, Vector2(400,600))
-		
+			await move_mouse(cards[0].global_position + Vector2(50,150))
+			await wait_seconds(0.1)
+
+		#Reattach with attach_in_front mode
 		for attached_card in attached_cards:
 			attached_card.attachment_mode = Card.AttachmentMode.ATTACH_IN_FRONT
 			await drag_drop(attached_card, Vector2(510,310))
+			await move_mouse(cards[0].global_position + Vector2(50,150))
 			await wait_seconds(0.1)
 
-		assert_true(host_card.get_index() < attached_cards[0].get_index(),		
+		assert_true(host_card.get_index() < attached_cards[0].get_index(),
 			"Multiple attachments in front of host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[0].get_index() < attached_cards[1].get_index(),		
+		assert_true(attached_cards[0].get_index() < attached_cards[1].get_index(),
 			"Multiple attachments in front of host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[0].get_index() < attached_cards[2].get_index(),		
+		assert_true(attached_cards[0].get_index() < attached_cards[2].get_index(),
 			"Multiple attachments in front of host are correctly ordered relative to host in parent node heirarchy")
-		assert_true(attached_cards[1].get_index() < attached_cards[2].get_index(),		
+		assert_true(attached_cards[1].get_index() < attached_cards[2].get_index(),
 			"Multiple attachments in front of host are correctly ordered relative to host in parent node heirarchy")
-			
+
 		#attachments are covering the card origin, so click with an offset
 		var click_offset = Vector2(0, (host_card.card_size.y * CFConst.PLAY_AREA_SCALE) - 20)
 		board._UT_interpolate_mouse_move(host_card.global_position + click_offset,
@@ -331,13 +336,13 @@ class TestAttachmentNodeOrder:
 		await wait_seconds(0.5) # Wait to allow dragging to start
 		board._UT_interpolate_mouse_move(Vector2(300,300)+click_offset,board._UT_mouse_position)
 		await wait_seconds(0.5)
-		assert_true(host_card.get_index() < attached_cards[0].get_index(),		
+		assert_true(host_card.get_index() < attached_cards[0].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[0].get_index() < attached_cards[1].get_index(),		
+		assert_true(attached_cards[0].get_index() < attached_cards[1].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[0].get_index() < attached_cards[2].get_index(),		
+		assert_true(attached_cards[0].get_index() < attached_cards[2].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
-		assert_true(attached_cards[1].get_index() < attached_cards[2].get_index(),		
+		assert_true(attached_cards[1].get_index() < attached_cards[2].get_index(),
 			"Multiple attachments are correctly ordered relative to host when dragging")
 		await wait_seconds(0.5)
 		drop_card(host_card,board._UT_mouse_position)

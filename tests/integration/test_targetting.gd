@@ -49,6 +49,7 @@ func test_targetting():
 	await move_mouse(Vector2(0,0)) #Card will still be highlighted if the mouse is on it
 	card.targeting_arrow.initiate_targeting()
 	#Because cards[2] position (top left) overlaps with cards[3], we target it
+	#NOTE If you target from the border, you can target from both cards 3x and 4x
 	board._UT_interpolate_mouse_move(cards[2].global_position,card.global_position,3)
 	await wait_seconds(0.5) #For mouse movement to finish
 	assert_true(cards[2].highlight.visible,

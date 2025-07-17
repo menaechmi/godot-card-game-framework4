@@ -4,6 +4,7 @@ class TestSubjectTarget:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_subject_target():
+		#Move card to board, add a script, execute it, target the card, target it a second time
 		table_move(card, Vector2(100,200))
 		card.scripts = {"manual": {"board": [
 				{"name": "rotate_card",
@@ -21,8 +22,12 @@ class TestSubjectTarget:
 			await wait_for_signal(tween.finished, 0.4)
 		assert_eq(card.card_rotation, 270,
 				"First rotation should happen before targetting second time")
-		await wait_frames(60)
-		target_card(card, card)
+		#Manually target the card because target_card(card,card) refuses to move the mouse here
+		await move_mouse(card.global_position)
+		card.targeting_arrow.initiate_targeting()
+		board._UT_interpolate_mouse_move(card.global_position + Vector2(50,50),card.global_position,3)
+		await wait_seconds(0.6)
+		card.targeting_arrow.complete_targeting()
 		tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 0.4)
