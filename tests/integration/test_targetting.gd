@@ -15,6 +15,7 @@ func before_each():
 
 
 func test_targetting():
+	await wait_frames(30)
 	var card: Card
 	card = cards[0]
 	card.targeting_arrow.initiate_targeting()
@@ -24,28 +25,27 @@ func test_targetting():
 			"test that TargetLine has length higher than 1 while active")
 	assert_true(card.targeting_arrow.get_node("ArrowHead").visible,
 			"test that arrowhead is visible on once active")
-	#TODO: Check that adding wait_frames worked
+	#TODO: check positioning of mouse
 	assert_true(cards[4].highlight.visible,
 			"Test that a target arrow hovering over another card, highlights it")
 	assert_eq(cards[4].highlight.modulate, CFConst.TARGET_HOVER_COLOUR,
 			"Test that a hovered target has the right colour highlight")
 	card.targeting_arrow.complete_targeting()
-	await wait_frames(30) #If I remember right, there's a signal we could wait for instead
 	assert_eq(card.targeting_arrow.target_object,cards[4],
 			"Test that card in hand can target card in hand")
 	assert_eq(0,card.targeting_arrow.get_point_count(),
 			"test that TargetLine has no points once inactive")
 	assert_false(card.targeting_arrow.get_node("ArrowHead").visible,
 			"test that arrowhead is not visible on once inactive")
+	await move_mouse(Vector2(0,0)) #Card will still be highlighted if the mouse is on it
 	assert_false(cards[4].highlight.visible,
 			"Test that a highlights disappears once targetting ends")
 
-	table_move(cards[3],Vector2(300,300))
-	table_move(cards[2],Vector2(350,400))
+	await table_move(cards[3],Vector2(300,300))
+	await table_move(cards[2],Vector2(350,400))
 	card.targeting_arrow.initiate_targeting()
 	board._UT_interpolate_mouse_move(cards[2].global_position,card.global_position,3)
-	#TODO: Check mouse position
-	await wait_seconds(0.6)
+	await wait_seconds(1)
 	assert_true(cards[2].highlight.visible,
 			"test that hovering over multiple cards selects the top one")
 	assert_false(cards[3].highlight.visible,
