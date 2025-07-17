@@ -8,8 +8,11 @@ const _TOKEN_SCENE_FILE = CFConst.PATH_CORE + "Token.tscn"
 const _TOKEN_SCENE = preload(_TOKEN_SCENE_FILE)
 
 # A flag on whether the token drawer is currently open
-var is_drawer_open := false: set = set_is_drawer_open
-
+var is_drawer_open := false:
+	set(value): set_is_drawer_open(value)
+	get: return _is_drawer_open
+#Private variable to workaround Godot get/set limitations
+var _is_drawer_open := false
 #@onready var _tween: Tween
 # Stores a reference to the Card that is hosting this node
 @onready var owner_card = get_parent().get_parent()
@@ -48,8 +51,9 @@ func token_drawer(requested_state := true) -> void:
 
 	var td := $Drawer
 	# We want to keep the drawer closed during the flip and movement
+	var tween = owner_card._tween.get_ref()
 	if not owner_card._flip_tween \
-			and not owner_card._tween:
+			and not tween:
 		var _tween = create_tween()
 		_tween.stop()
 		# We don't open the drawer if we don't have any tokens at all
@@ -64,7 +68,7 @@ func token_drawer(requested_state := true) -> void:
 				token.expand()
 			# Normally the drawer is invisible. We make it visible now
 			$Drawer.self_modulate.a = 1
-			is_drawer_open = true
+			_is_drawer_open = true
 			# warning-ignore:return_value_discarded
 			_tween.play()
 			# We need to make our tokens appear on top of other cards on the table
@@ -85,7 +89,7 @@ func token_drawer(requested_state := true) -> void:
 			for token in $Drawer/VBoxContainer.get_children():
 				token.retract()
 			$Drawer.self_modulate.a = 0
-			is_drawer_open = false
+			_is_drawer_open = false
 			z_index = 0
 
 
