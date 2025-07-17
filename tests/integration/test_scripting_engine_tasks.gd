@@ -33,7 +33,6 @@ class TestRotateCard:
 		var tween = card._tween.get_ref() as Tween
 		if tween:
 			await wait_for_signal(tween.finished, 1)
-		#TODO: Ensure adding await card.execute_scripts() worked
 		assert_eq(card.card_rotation, 90,
 				"Card should be rotated 90 degrees")
 
@@ -118,6 +117,7 @@ class TestMoveCardHandToBoard:
 	extends "res://tests/ScEng_common.gd"
 
 	func test_move_card_hand_to_board():
+		await wait_seconds(3) #Test fails in run all without this
 		card.scripts = {"manual": {"hand": [
 				{"name": "move_card_to_board",
 				"subject": "self",
@@ -224,7 +224,7 @@ class TestModToken:
 		card.execute_scripts()
 		await target_card(card,target)
 		# My scripts are slower now
-		#await wait_seconds(0.2)
+		await wait_seconds(0.2)
 		assert_eq(2,industry_token.count,"Token set to specified amount")
 
 class TestShuffleContainer:
