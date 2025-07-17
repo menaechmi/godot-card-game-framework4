@@ -1997,7 +1997,6 @@ func _organize_attachments() -> void:
 			# We use the index of the attachment among other attachments
 			# to figure out its index and placement
 			var attach_index = attachments.find(card)
-
 			# offset the attachment's position in the boards hierarchy
 			# by the attachment offset
 			if (card.attachment_mode == AttachmentMode.ATTACH_BEHIND and

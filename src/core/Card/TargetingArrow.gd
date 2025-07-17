@@ -135,13 +135,15 @@ func _draw_targeting_arrow() -> void:
 	set_points(curve.get_baked_points())
 	# We place the arrowhead to start from the last point in the line2D
 	$ArrowHead.position = get_point_position(
-			get_point_count( ) - 1)
-	# We delete the last 3 Line2D points, because the arrowhead will
+			get_point_count() - 1)
+	# We delete the last 2 Line2D points, because the arrowhead will
 	# be covering those areas
-	for _del in range(1,3):
-		remove_point(get_point_count( ) - 1)
+	#NOTE: This used to be 3, but would cause an out-of-index error.
+	#As far as I know, we only add 2, so I'm not sure why it didnt cause an error in 3x
+	for _del in range(1,2):
+		remove_point(get_point_count() - 1)
 	# We setup the angle the arrowhead is pointing by finding the angle of
 	# the last point on the line towards the mouse position
 	$ArrowHead.rotation = get_point_position(
-				get_point_count( ) - 1).direction_to(
+				get_point_count() - 1).direction_to(
 				to_local(position + card_half_size + final_point)).angle()

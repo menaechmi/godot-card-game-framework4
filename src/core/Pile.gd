@@ -113,14 +113,14 @@ func _on_ViewPopup_about_to_show() -> void:
 func _on_ViewPopup_popup_hide() -> void:
 	var tween = _tween.get_ref() as Tween
 	if tween and tween.is_running():
-		await tween.finished
+		tween.custom_step(5)
 	tween = create_tween()
 	tween.stop()
 	_tween = weakref(tween)
 	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,0), 0.5)
 	tween.play()
-	await tween.finished
+	#await tween.finished
 	#We removed the theme override here, so we don't try and override it again
 	$ViewPopup.remove_theme_stylebox_override("panel")
 	for card in pre_sorted_order:
