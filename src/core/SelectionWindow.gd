@@ -168,7 +168,7 @@ func initiate_selection(
 	#await get_tree().create_timer(0.2).timeout
 	var tween = _tween.get_ref() as Tween
 	if tween:
-		tween.custom_step(5)
+		tween.kill()
 	# We do a nice alpha-modulate tween
 	tween = create_tween()
 	tween.stop()

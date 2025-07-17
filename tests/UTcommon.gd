@@ -109,7 +109,7 @@ func drag_card(card: Card, target_position: Vector2, interpolation_speed := "fas
 
 func drop_card(card: Card, drop_location: Vector2) -> void:
 	var fc:= fake_click(false, drop_location)
-	card._on_Card_gui_input(fc)
+	await card._on_Card_gui_input(fc)
 	var tween = card._tween.get_ref() as Tween
 	if tween and tween.is_running():
 		await tween.finished
