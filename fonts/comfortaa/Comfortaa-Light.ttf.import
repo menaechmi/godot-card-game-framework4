@@ -15,7 +15,6 @@ dest_files=["res://.godot/imported/Comfortaa-Light.ttf-20f0059c52439253eb79eea37
 Rendering=null
 antialiasing=1
 generate_mipmaps=false
-disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48

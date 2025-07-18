@@ -15,7 +15,6 @@ dest_files=["res://.godot/imported/Oxanium-Light.ttf-a6f1a308e62649d23943de1e31a
 Rendering=null
 antialiasing=1
 generate_mipmaps=false
-disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
 msdf_pixel_range=8
 msdf_size=48
