@@ -440,8 +440,6 @@ class TestFilterParent:
 				"Card stayed face-up since filter_parent didn't match")
 		assert_false(cards[1].is_faceup,
 				"Card turned face-down since filter_parent matches")
-#FIXME: For some reason the tests don't like to continue from the last one to this one
-#I think TargetingArrow.gd:65 complete_targeting() doesn't complete in time and causes a crash
 
 class TestPerCounter:
 	extends "res://tests/ScEng_common.gd"

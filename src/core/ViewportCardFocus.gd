@@ -110,9 +110,6 @@ func focus_card(card: Card, show_preview := true) -> void:
 			dupe_focus.set_is_faceup(card.is_faceup, true)
 			dupe_focus.is_viewed = card.is_viewed
 		else:
-			#FIXME the cards are duplicated here, but are missing some things
-			#Most importantly, card_front and card_back
-			#DUPLICATE_USE_INSTANTIATION seems to be the default now
 			dupe_focus = card.duplicate(DUPLICATE_USE_INSTANTIATION)
 			dupe_focus.remove_from_group("cards")
 			# add_child removes the card_front and card_back properties, so it happens first
@@ -184,8 +181,6 @@ func focus_card(card: Card, show_preview := true) -> void:
 func unfocus(card: Card) -> void:
 	if _current_focus_source == card:
 		_current_focus_source = null
-		#TODO: Focus is a PopupPanel which is no longer a control
-		#but a window and does not have the modulate property
 		var tween = _tween.get_ref() as Tween
 		if tween:
 			tween.custom_step(5)

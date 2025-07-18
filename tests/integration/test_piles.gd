@@ -137,7 +137,7 @@ class TestPopupView:
 		#await wait_for_signal(deck.popup_closed, 5)
 		await wait_for_signal(get_tree().process_frame, 5)
 		await wait_frames(120)
-		#TODO: This fails becasue you can't currently move piles from popups
+		#TODO: This fails because you can't currently move piles from popups
 		assert_eq(card.is_faceup, deck.faceup_cards,
 				"Cards returning from popup should respect piles card facing")
 

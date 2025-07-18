@@ -83,7 +83,6 @@ func token_drawer(requested_state := true) -> void:
 			# We want to consider the drawer closed
 			# only when the animation finished
 			# Otherwise it might start to open immediately again
-			#TODO: This coroutine should be fine, but might mess up tests
 			await _tween.finished
 			# When it's closed, we hide token names
 			for token in $Drawer/VBoxContainer.get_children():

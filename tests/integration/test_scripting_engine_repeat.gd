@@ -36,6 +36,5 @@ class TestRepeatWithTarget:
 		await target_card(card,target)
 		# My scripts are slower now
 		await wait_seconds(0.2)
-		#FIXME: Invalid get index 'count'. industry_token is null
 		var industry_token: Token = target.tokens.get_token("industry")
 		assert_eq(6,industry_token.count,"Token set to specified amount")

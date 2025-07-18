@@ -162,6 +162,7 @@ func initiate_selection(
 			+ _card_grid.get("theme_override_constants/v_separation") * shown_columns
 	# The height will be automatically adjusted based on the amount of cards
 	size = Vector2(popup_size_x,0)
+	#FIXME: Error Required virtual method Texture2D::_get_width must be overridden before calling.
 	popup_centered_clamped()
 	# Spawning all the duplicates is a bit heavy
 	# So we delay showing the tween to avoid having it look choppy
@@ -172,9 +173,12 @@ func initiate_selection(
 	# We do a nice alpha-modulate tween
 	tween = create_tween()
 	tween.stop()
-	tween.tween_property(self,'modulate:a', 1, 0.5).from(0)\
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	_tween = weakref(_tween)
+	var styleBox: StyleBoxFlat = get_theme_stylebox("panel").duplicate()
+	add_theme_stylebox_override("panel", styleBox)
+	tween.tween_property(self,'theme_override_styles/panel:bg_color:a', 1, 0.5).from(0)\
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
 	tween.play()
 	emit_signal(
 			"selection_window_opened",

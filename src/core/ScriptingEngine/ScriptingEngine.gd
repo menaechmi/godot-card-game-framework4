@@ -222,9 +222,6 @@ func execute(_run_type := CFInt.RunType.NORMAL) -> void:
 					card.temp_properties_modifiers.erase(self)
 #	print_debug(str(card_owner) + 'Scripting: All done!') # Debug
 	all_tasks_completed = true
-	#FIXME: I think these errors can be fixed by removing unneeded awaits
-	#Resumed function 'execute_scripts' after await, but script is gone res:/src/core/CardTemplates.gd:1533
-	#ScriptingEngine.gd:225 @ execute(): Attempt to disconnect a nonexistent connection from '<RefCounted#-9223356146750841254>'. Signal: 'tasks_completed', callable: 'GDScriptFunctionState::_signal_callback'.
 	emit_signal("tasks_completed")
 	# checking costs on multiple targeted cards in the same script,
 	# is not supported at the moment due to the exponential complexities

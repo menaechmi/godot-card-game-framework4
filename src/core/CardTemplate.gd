@@ -356,7 +356,6 @@ func _init_card_layout() -> void:
 		card_front = card_front_instance
 		# We do not need to instance the card_back when card is seen
 		# in a preview card grid
-		#TODO: In version 4.3 Script.get_global_name will be exposed and this can be neater
 		if get_parent() is CVGridCardObject:
 			pass
 		else:
@@ -662,8 +661,6 @@ func modify_property(
 			if properties.get(property) == null\
 					or typeof(properties.get(property)) == typeof(value):
 				properties[property] = value
-			#FIXME: sometimes items without card_front get stuck here
-			# because dupes don't get card_front or card_back
 			if card_front and not card_front.card_labels.has(property):
 				if not property.begins_with("_"):
 					print_debug("Warning: ", property,
@@ -1515,8 +1512,6 @@ func execute_scripts(
 		choices_menu.queue_free()
 	# To avoid unnecessary operations
 	# we evoke the ScriptingEngine only if we have something to execute
-	# We do not statically type it as this causes a circular reference
-	#var sceng = null FIXME: see if this does cause circular reference
 	var sceng: ScriptingEngine
 	if len(state_scripts):
 		is_executing_scripts = true

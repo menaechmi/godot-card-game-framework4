@@ -54,8 +54,6 @@ func _ready():
 	$ViewPopup.connect("about_to_popup", Callable(self, '_on_ViewPopup_about_to_show'))
 	set_pile_name(pile_name)
 	# warning-ignore:return_value_discarded
-	#FIXME: This probably didn't work in Godot3, but in Godot4 it makes an error
-	#because CFControl's _on_signal_received expects a Card parameter.
 	connect("shuffle_completed", 
 		Callable(cfc.signal_propagator, 
 			"_on_signal_received")\
@@ -105,7 +103,7 @@ func _on_ViewPopup_about_to_show() -> void:
 	var styleBox: StyleBoxFlat = $ViewPopup.get_theme_stylebox("panel").duplicate()
 	$ViewPopup.add_theme_stylebox_override("panel", styleBox)
 	tween = create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
-	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,1), 0.5)
+	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color:a', 1, 0.5)
 	tween.play()
 	_tween = weakref(tween)
 
@@ -118,7 +116,7 @@ func _on_ViewPopup_popup_hide() -> void:
 	tween.stop()
 	_tween = weakref(tween)
 	tween.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color', Color(1,1,1,0), 0.5)
+	tween.tween_property($ViewPopup,'theme_override_styles/panel:bg_color:a', 1, 0.5)
 	tween.play()
 	#await tween.finished
 	#We removed the theme override here, so we don't try and override it again
