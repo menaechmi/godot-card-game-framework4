@@ -65,7 +65,7 @@ func set_label_text(node: Label, value, scale: float = 1):
 #	print_debug(scaled_fonts.get(node.name, 1))
 	var cached_font_size = get_cached_font_size(node,value,scale)
 	if cached_font_size:
-		add_theme_font_size_override("font_size", cached_font_size)
+		node.add_theme_font_size_override("font_size", cached_font_size)
 	else:
 		var working_value: String
 		# If the label node has been set to uppercase the text
@@ -81,16 +81,14 @@ func set_label_text(node: Label, value, scale: float = 1):
 		if not line_spacing:
 			line_spacing = 3
 		var starting_font_size = font_sizes[node.name]
-		#label_font.size = starting_font_size
+		node.add_theme_font_size_override("font_size", starting_font_size)
 		var font_adjustment := _adjust_font_size(label_font, working_value, node.custom_minimum_size, line_spacing)
 		
 	#	if  node.name == "Abilities": font_adjustment = -17
 		# We always start shrinking the size, starting from the original size.
 #		print_debug(scaled_fonts.get(node.name, 1))
 		_cache_font_size(node,value,starting_font_size + font_adjustment,scale)
-		#TODO: Figure out font stuff
 		node.add_theme_font_size_override("font_size", starting_font_size + font_adjustment)
-		#label_font.size = starting_font_size + font_adjustment
 	set_card_label_font(node, label_font)
 	node.text = value
 	resizing_labels.erase(node)
@@ -189,7 +187,7 @@ func set_rich_label_text(node: RichTextLabel, value: String, is_resize := false,
 		# Rich Text has no way to grab its total size without setting the bbcode first
 		# After we set the bbcode, we need to wait for the next frame for the label to adjust
 		# and then we can grab its height
-		await get_tree().process_frame
+		#await get_tree().process_frame
 		var _retries := 0
 		var bbcode_height = node.get_content_height()
 #		print_debug([bbcode_height, label_size.y])
